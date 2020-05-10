@@ -1,0 +1,10 @@
+displayName = Experience and Classes Revamp
+author = Saerus
+version = 0.1
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, *.xlsx, *.m, *.pptx, *.docx, *.tmp, *.zip, *.psd, *.sln, *.gitattributes, *.gitignore, Properties\*, Service References\*
+homepage = https://saerustierialis.github.io/tModLoader_Homepage/
+includePDB = true
+hideCode = false
+hideResources  = false
+includeSource = true
+side=Both
