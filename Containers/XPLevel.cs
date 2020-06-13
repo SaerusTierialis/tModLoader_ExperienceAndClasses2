@@ -18,11 +18,11 @@ namespace EAC2.Containers
         public uint XP { get { return XPContainer.Value; } }
         public uint XP_Needed { get; private set; }
 
-        public XPLevel(uint level_adjust = 0, uint tlevel = 1, uint max_tlevel = Requirements.MAX_tLEVEL, uint xp = 0)
+        public XPLevel(uint level_adjust = 0, uint tlevel = 1, uint max_tlevel = LevelRequirements.MAX_tLEVEL, uint xp = 0)
         {
             LevelAdjust = level_adjust;
             tLevel = tlevel;
-            Max_tLevel = Math.Min(max_tlevel, Requirements.MAX_tLEVEL);
+            Max_tLevel = Math.Min(max_tlevel, LevelRequirements.MAX_tLEVEL);
             XPContainer = new XP(xp);
             UpdateXPNeeded();
         }
@@ -88,9 +88,12 @@ namespace EAC2.Containers
 
         private void UpdateXPNeeded()
         {
-            XP_Needed = Requirements.XP_PER_tLEVEL[tLevel];
+            XP_Needed = LevelRequirements.XP_PER_tLEVEL[tLevel];
         }
 
+        /// <summary>
+        /// Called before AddXP or SettLevel returns
+        /// </summary>
         private void OnLevelChange()
         {
             //TODO
