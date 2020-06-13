@@ -9,9 +9,12 @@ namespace EAC2.Containers
 {
     public class XP
     {
-        public XP() { }
+        public uint Value { get; private set; }
 
-        public uint Value { get; private set; } = 0;
+        public XP(uint value = 0)
+        {
+            Value = value;
+        }
 
         public void Add(uint value)
         {

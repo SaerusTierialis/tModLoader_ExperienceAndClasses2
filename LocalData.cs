@@ -44,7 +44,7 @@ namespace EAC2
             //reset local data stored elsewhere...
 
             //xp lookup
-            Systems.Local.XPRewards.ClearLoookup();
+            Systems.Local.XP.NPCRewards.ClearLoookup();
         }
 
         public static void SetLocalPlayer(EACPlayer local_player)

@@ -34,7 +34,7 @@ namespace EAC2
 
         public override void OnChanged()
         {
-            Systems.Local.XPRewards.ClearLoookup();
+            Systems.Local.XP.NPCRewards.ClearLoookup();
         }
     }
 

@@ -9,9 +9,9 @@ using static EAC2.LocalData;
 using Terraria.ID;
 using EAC2.Utilities;
 
-namespace EAC2.Systems.Local
+namespace EAC2.Systems.Local.XP
 {
-    class XPRewards : GlobalNPC
+    class NPCRewards : GlobalNPC
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
