@@ -11,7 +11,7 @@ namespace EAC2
     /// <summary>
     /// Contains misc non-synced local data
     /// </summary>
-    public class LocalData
+    public static class LocalData
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         //Netmode
@@ -56,7 +56,6 @@ namespace EAC2
             LOCAL_PLAYER = local_player;
             LOCAL_PLAYER_VALID = true;
             WHO_AM_I = LOCAL_PLAYER.player.whoAmI;
-            LOCAL_PLAYER.PlayerData.Is_Local = true;
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
