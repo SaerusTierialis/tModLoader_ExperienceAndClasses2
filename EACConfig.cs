@@ -24,13 +24,21 @@ namespace EAC2
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
         //Rewards
-        [Header("$Mods.ExperienceAndClasses.Common.Config_Header_XP")]
+        [Header("$Mods.EAC2.Common.Config_Header_XP")]
 
-        [Label("$Mods.ExperienceAndClasses.Common.Config_XP_Rate_Label")]
+        [Label("$Mods.EAC2.Common.Config_XP_Rate_Label")]
         [Range(0f, 10f)]
         [Increment(.05f)]
         [DefaultValue(1f)]
         public float XPRate { get; set; }
+
+        //DEBUG
+        [Header("$Mods.EAC2.Common.Config_Header_Debug")]
+
+        [Label("$Mods.EAC2.Common.Config_Trace_Label")]
+        [Tooltip("$Mods.EAC2.Common.Config_Trace_Tooltip")]
+        [DefaultValue(false)]
+        public bool Trace { get; set; }
 
         public override void OnChanged()
         {
