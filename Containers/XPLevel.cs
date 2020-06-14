@@ -36,13 +36,28 @@ namespace EAC2.Containers
         /// <returns></returns>
         public bool AddXP(uint xp)
         {
-            XPContainer.Add(xp);
-            return CheckIfLevel();
+            if (!Is_Local)
+            {
+                Utilities.Logger.Error("Attempted AddXP on non-local XPLevel");
+                return false;
+            }
+            else
+            {
+                XPContainer.Add(xp);
+                return CheckIfLevel();
+            }
         }
 
         public void SubtractXP(uint xp)
         {
-            XPContainer.Subtract(xp);
+            if (!Is_Local)
+            {
+                Utilities.Logger.Error("Attempted SubtractXP on non-local XPLevel");
+            }
+            else
+            {
+                XPContainer.Subtract(xp);
+            }
         }
 
         /// <summary>
@@ -52,8 +67,16 @@ namespace EAC2.Containers
         /// <returns></returns>
         public bool SetXP(uint xp)
         {
-            XPContainer.Set(xp);
-            return CheckIfLevel();
+            if (!Is_Local)
+            {
+                Utilities.Logger.Error("Attempted SetXP on non-local XPLevel");
+                return false;
+            }
+            else
+            {
+                XPContainer.Set(xp);
+                return CheckIfLevel();
+            }
         }
 
         /// <summary>
@@ -72,17 +95,24 @@ namespace EAC2.Containers
         {
             bool leveled = false;
 
-            while (XP >= XP_Needed)
+            if (!Is_Local)
             {
-                XPContainer.Subtract(XP_Needed);
-                tLevel++;
-                UpdateXPNeeded();
-                leveled = true;
+                Utilities.Logger.Error("Attempted CheckIfLevel on non-local XPLevel");
             }
-
-            if (leveled)
+            else
             {
-                OnLevelChange();
+                while (XP >= XP_Needed)
+                {
+                    XPContainer.Subtract(XP_Needed);
+                    tLevel++;
+                    UpdateXPNeeded();
+                    leveled = true;
+                }
+
+                if (leveled)
+                {
+                    OnLevelChange();
+                }
             }
 
             return leveled;
@@ -90,7 +120,14 @@ namespace EAC2.Containers
 
         private void UpdateXPNeeded()
         {
-            XP_Needed = LevelRequirements.XP_PER_tLEVEL[tLevel];
+            if (!Is_Local)
+            {
+                Utilities.Logger.Error("Attempted UpdateXPNeeded on non-local XPLevel");
+            }
+            else
+            {
+                XP_Needed = LevelRequirements.XP_PER_tLEVEL[tLevel];
+            }
         }
 
         /// <summary>
