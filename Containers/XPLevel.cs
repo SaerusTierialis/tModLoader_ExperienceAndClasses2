@@ -9,8 +9,9 @@ namespace EAC2.Containers
 {
     public class XPLevel
     {
-        private uint LevelAdjust;
+        private readonly uint LevelAdjust;
         private readonly XP XPContainer;
+        public readonly bool Is_Local;
 
         public uint Level { get { return tLevel - LevelAdjust; } }
         public uint tLevel { get; private set; }
@@ -18,8 +19,9 @@ namespace EAC2.Containers
         public uint XP { get { return XPContainer.Value; } }
         public uint XP_Needed { get; private set; }
 
-        public XPLevel(uint level_adjust = 0, uint tlevel = 1, uint max_tlevel = LevelRequirements.MAX_tLEVEL, uint xp = 0)
+        public XPLevel(uint level_adjust = 0, uint tlevel = 1, uint max_tlevel = LevelRequirements.MAX_tLEVEL, uint xp = 0, bool is_local=true)
         {
+            Is_Local = is_local;
             LevelAdjust = level_adjust;
             tLevel = tlevel;
             Max_tLevel = Math.Min(max_tlevel, LevelRequirements.MAX_tLEVEL);
@@ -96,7 +98,10 @@ namespace EAC2.Containers
         /// </summary>
         private void OnLevelChange()
         {
-            //TODO
+            if (Is_Local)
+            {
+                //TODO - update UI, etc.
+            }
         }
     }
 }
