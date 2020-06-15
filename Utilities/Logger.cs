@@ -31,7 +31,7 @@ namespace EAC2.Utilities
                     Main.NewText("TRACE: " + message, UI.Constants.COLOUR_MESSAGE_TRACE);
                 }
             }
-            Shortcuts.MOD.Logger.Debug(message);
+            EAC2.MOD.Logger.Debug(message);
         }
 
         public static void Error(string message)
@@ -39,7 +39,7 @@ namespace EAC2.Utilities
             message = message + " (please report)";
             if (LocalData.IS_SERVER)
             {
-                message = "ExperienceAndClasses-ERROR from Server: " + message;
+                message = "EAC2-ERROR from Server: " + message;
                 Console.WriteLine(message);
                 NetMessage.BroadcastChatMessage(NetworkText.FromLiteral(message), UI.Constants.COLOUR_MESSAGE_ERROR);
             }
@@ -47,7 +47,7 @@ namespace EAC2.Utilities
             {
                 if (LocalData.IS_CLIENT)
                 {
-                    message = "ExperienceAndClasses-ERROR from Client#" + Main.LocalPlayer.whoAmI + ": " + message;
+                    message = "EAC2-ERROR from Client#" + Main.LocalPlayer.whoAmI + ": " + message;
                     Main.NewText("Sending " + message, UI.Constants.COLOUR_MESSAGE_ERROR);
                     PacketHandler.ClientBroadcast.Send(-1, (byte)Main.LocalPlayer.whoAmI, message, PacketHandler.ClientBroadcast.BROADCAST_TYPE.ERROR);
                 }
@@ -56,7 +56,7 @@ namespace EAC2.Utilities
                     Main.NewText("ExperienceAndClasses-ERROR: " + message, UI.Constants.COLOUR_MESSAGE_TRACE);
                 }
             }
-            Shortcuts.MOD.Logger.Error(message);
+            EAC2.MOD.Logger.Error(message);
         }
     }
 }

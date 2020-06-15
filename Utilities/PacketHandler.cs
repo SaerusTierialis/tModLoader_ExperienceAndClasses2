@@ -48,7 +48,7 @@ namespace EAC2.Utilities
 
             public ModPacket GetPacket(int origin)
             {
-                ModPacket packet = Shortcuts.MOD.GetPacket();
+                ModPacket packet = EAC2.MOD.GetPacket();
                 packet.Write(ID_Num);
                 packet.Write(origin);
                 return packet;

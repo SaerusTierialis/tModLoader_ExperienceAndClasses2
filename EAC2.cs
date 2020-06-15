@@ -8,10 +8,13 @@ namespace EAC2
 	{
 		public EAC2(){}
 
+        public static Mod MOD;
+
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load/Unload ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         public override void Load()
         {
+            MOD = ModLoader.GetMod("EAC2");
             LocalData.ResetLocalData();
         }
 
