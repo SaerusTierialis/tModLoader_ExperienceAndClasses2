@@ -19,8 +19,10 @@ using static Terraria.ModLoader.ModContent;
 
 namespace EAC2
 {
-    class ConfigServer : ModConfig
+    public class ConfigServer : ModConfig
     {
+        public static ConfigServer Instance { get { return GetInstance<ConfigServer>(); } }
+
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
         //Rewards
@@ -46,8 +48,10 @@ namespace EAC2
         }
     }
 
-    class ConfigClient : ModConfig
+    public class ConfigClient : ModConfig
     {
+        public static ConfigClient Instance { get { return GetInstance<ConfigClient>(); } }
+
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         

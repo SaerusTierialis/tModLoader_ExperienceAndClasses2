@@ -15,13 +15,13 @@ namespace EAC2.Systems.Local.XP
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        const double MINUTES_BETWEEN_CHECK_LOOKUP = 1;
         const double BONUS_XP_RATIO_PER_PLAYER = 0.1;
+        const uint TICKS_BETWEEN_CHECK_LOOKUP = 3600; //1 minute
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Static Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         private static Dictionary<int, double> XP_lookup = new Dictionary<int, double>();
-        private static DateTime time_last_check_lookup = DateTime.MinValue;
+        private static uint time_next_check_lookup = TICKS_BETWEEN_CHECK_LOOKUP;
 
         private static Containers.XP xp_overhead = new Containers.XP();
         private static int xp_overhead_index = Main.maxCombatText - 1;
@@ -122,7 +122,7 @@ namespace EAC2.Systems.Local.XP
             xp = Math.Ceiling(xp);
 
             //apply ModConfig rate
-            xp *= Utilities.Shortcuts.GetConfigServer.XPRate;
+            xp *= ConfigServer.Instance.XPRate;
 
             return xp;
         }
@@ -191,8 +191,9 @@ namespace EAC2.Systems.Local.XP
                 //calculate if not in lookup
                 XP_lookup[npc.type] = CalcBaseXP(npc);
             }
-            else if (Utilities.Shortcuts.Now.Subtract(time_last_check_lookup).TotalMinutes > MINUTES_BETWEEN_CHECK_LOOKUP)
+            else if (Main.GameUpdateCount > time_next_check_lookup)
             {
+                Main.NewText("CHECKING LOOKUP");
                 //every so often, check values in lookup - if mismatch then clear entire lookup
                 double current_value = CalcBaseXP(npc);
                 if (XP_lookup[npc.type] != current_value)
@@ -200,7 +201,7 @@ namespace EAC2.Systems.Local.XP
                     ClearLoookup();
                     XP_lookup[npc.type] = current_value;
                 }
-                time_last_check_lookup = Utilities.Shortcuts.Now.AddMinutes(MINUTES_BETWEEN_CHECK_LOOKUP);
+                time_next_check_lookup = Main.GameUpdateCount + TICKS_BETWEEN_CHECK_LOOKUP;
             }
 
             //return lookup value

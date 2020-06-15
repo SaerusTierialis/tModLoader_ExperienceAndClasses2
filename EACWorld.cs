@@ -10,10 +10,6 @@ namespace EAC2
 {
     class EACWorld : ModWorld
     {
-        public override void PreUpdate()
-        {
-            Shortcuts.UpdateTime();
-            base.PreUpdate();
-        }
+        
     }
 }

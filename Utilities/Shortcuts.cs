@@ -13,17 +13,11 @@ namespace EAC2.Utilities
     static class Shortcuts
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Static Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-        //Time (wall)
-        public static DateTime Now { get; private set; }
 
         //Mod Shortcut
         public static Mod MOD { get; private set; } //TODO
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Shortcuts ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-        //shortcuts to config so I don't have to keep adding ModContent
-        public static ConfigClient GetConfigClient { get { return GetInstance<ConfigClient>(); } }
-        public static ConfigServer GetConfigServer { get { return GetInstance<ConfigServer>(); } }
 
         public static int[] Version
         {
@@ -31,13 +25,6 @@ namespace EAC2.Utilities
             {
                 return new int[] { MOD.Version.Major, MOD.Version.Minor, MOD.Version.Build };
             }
-        }
-
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Timing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-        public static void UpdateTime()
-        {
-            Now = DateTime.Now;
         }
     }
 }

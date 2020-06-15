@@ -58,7 +58,7 @@ namespace EAC2.Utilities
             {
                 //do not read anything from reader here (called multiple times when processing full sync packet)
 
-                bool do_trace = Shortcuts.GetConfigServer.Trace && (ID != PACKET_TYPE.ClientBroadcast);
+                bool do_trace = ConfigServer.Instance.Trace && (ID != PACKET_TYPE.ClientBroadcast);
 
                 if (do_trace)
                 {
