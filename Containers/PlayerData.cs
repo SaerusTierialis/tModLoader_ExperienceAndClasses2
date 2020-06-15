@@ -13,9 +13,14 @@ namespace EAC2.Containers
     public class PlayerData
     {
         /// <summary>
+        /// Set true during load for local player and during first sync for non-local
+        /// </summary>
+        public bool Initialized { get; private set; } = false;
+
+        /// <summary>
         /// Defaults to false, set true during load
         /// </summary>
-        public bool Is_Local { get; private set; }
+        public bool Is_Local { get; private set; } = false;
 
         /// <summary>
         /// (LOCAL) TODO currently always false
@@ -32,6 +37,7 @@ namespace EAC2.Containers
         public void Load(TagCompound tag)
         {
             Is_Local = true;
+            Initialized = true;
         }
     }
 }
