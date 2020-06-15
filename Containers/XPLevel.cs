@@ -4,28 +4,44 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EAC2.Systems.Local.XP;
+using Terraria.ModLoader.IO;
 
 namespace EAC2.Containers
 {
     public class XPLevel
     {
-        private readonly uint LevelAdjust;
-        private readonly XP XPContainer;
+        private readonly uint tLevel_Adjust;
+        private readonly XP XP_Container;
+
         public readonly bool Is_Local;
+        public readonly byte Tier;
 
-        public uint Level { get { return tLevel - LevelAdjust; } }
-        public uint tLevel { get; private set; }
-        public uint Max_tLevel { get; private set; }
-        public uint XP { get { return XPContainer.Value; } }
+        public uint Level { get; private set; }
+        public uint tLevel { get { return Level + tLevel_Adjust; } }
+        public uint XP { get { return XP_Container.Value; } }
         public uint XP_Needed { get; private set; }
+        public bool Maxed { get { return Level == Max_Level; } }
+        public uint Max_Level { get { return LevelRequirements.MAX_TIER_LEVELS[Tier]; } }
 
-        public XPLevel(uint level_adjust = 0, uint tlevel = 1, uint max_tlevel = LevelRequirements.MAX_tLEVEL, uint xp = 0, bool is_local=true)
+        public XPLevel(byte tier = 0, uint level = 1, uint xp = 0, bool is_local=false)
         {
+            Tier = tier;
             Is_Local = is_local;
-            LevelAdjust = level_adjust;
-            tLevel = tlevel;
-            Max_tLevel = Math.Min(max_tlevel, LevelRequirements.MAX_tLEVEL);
-            XPContainer = new XP(xp);
+            Level = level;
+
+            tLevel_Adjust = 0;
+            for (int t=1; t<tier; t++)
+            {
+                tLevel_Adjust += LevelRequirements.MAX_TIER_LEVELS[t];
+            }
+
+            if (Level > Max_Level)
+            {
+                Utilities.Logger.Error("Initialized XPLevel with level greater than max. Level will be set to max.");
+                Level = Max_Level;
+            }
+
+            XP_Container = new XP(xp);
             UpdateXPNeeded();
         }
 
@@ -43,7 +59,7 @@ namespace EAC2.Containers
             }
             else
             {
-                XPContainer.Add(xp);
+                XP_Container.Add(xp);
                 return CheckIfLevel();
             }
         }
@@ -56,7 +72,7 @@ namespace EAC2.Containers
             }
             else
             {
-                XPContainer.Subtract(xp);
+                XP_Container.Subtract(xp);
             }
         }
 
@@ -74,19 +90,28 @@ namespace EAC2.Containers
             }
             else
             {
-                XPContainer.Set(xp);
+                XP_Container.Set(xp);
                 return CheckIfLevel();
             }
         }
 
         /// <summary>
-        /// Set new tLvl and reset current XP
+        /// Set new level and reset current XP
         /// </summary>
-        /// <param name="tlevel"></param>
-        public void SettLevel(uint tlevel)
+        /// <param name="level"></param>
+        public void SetLevel(uint level)
         {
-            tLevel = tlevel;
-            XPContainer.Reset();
+            if (level > Max_Level)
+            {
+                Utilities.Logger.Error("Attempted set level above max. Will set level to max instead.");
+                Level = Max_Level;
+            }
+            else
+            {
+                Level = level;
+            }
+
+            XP_Container.Reset();
             UpdateXPNeeded();
             OnLevelChange();
         }
@@ -101,10 +126,10 @@ namespace EAC2.Containers
             }
             else
             {
-                while (XP >= XP_Needed)
+                while (!Maxed && (XP >= XP_Needed))
                 {
-                    XPContainer.Subtract(XP_Needed);
-                    tLevel++;
+                    XP_Container.Subtract(XP_Needed);
+                    Level++;
                     UpdateXPNeeded();
                     leveled = true;
                 }
@@ -124,6 +149,10 @@ namespace EAC2.Containers
             {
                 Utilities.Logger.Error("Attempted UpdateXPNeeded on non-local XPLevel");
             }
+            else if (Maxed)
+            {
+                XP_Needed = 0;
+            }
             else
             {
                 XP_Needed = LevelRequirements.XP_PER_tLEVEL[tLevel];
@@ -139,6 +168,18 @@ namespace EAC2.Containers
             {
                 //TODO - update UI, etc.
             }
+        }
+
+        public class XPLevelSerializer : TagSerializer<XPLevel, TagCompound>
+        {
+            public override TagCompound Serialize(XPLevel value) => new TagCompound
+            {
+                ["tier"] = value.Tier,
+                ["level"] = value.Level,
+                ["xp"] = value.XP,
+            };
+
+            public override XPLevel Deserialize(TagCompound tag) => new XPLevel(tag.GetByte("tier"), tag.Get<uint>("level"), tag.Get<uint>("xp"), true);
         }
     }
 }

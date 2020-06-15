@@ -14,7 +14,13 @@ namespace EAC2
 
         public override void Load()
         {
+            //shortcut to mod
             MOD = ModLoader.GetMod("EAC2");
+
+            //add serializers
+            Terraria.ModLoader.IO.TagSerializer.AddSerializer(new Containers.XPLevel.XPLevelSerializer());
+
+            //reset local data
             LocalData.ResetLocalData();
         }
 
