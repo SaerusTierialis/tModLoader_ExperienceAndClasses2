@@ -17,9 +17,11 @@ namespace EAC2.Containers
         public readonly byte Tier;
 
         public uint Level { get; private set; }
+        public uint XP_Needed { get; private set; }
+
+        public bool Unlocked { get { return Level > 0; } }
         public uint tLevel { get { return Level + tLevel_Adjust; } }
         public uint XP { get { return XP_Container.Value; } }
-        public uint XP_Needed { get; private set; }
         public bool Maxed { get { return Level == Max_Level; } }
         public uint Max_Level { get { return LevelRequirements.MAX_TIER_LEVELS[Tier]; } }
 
