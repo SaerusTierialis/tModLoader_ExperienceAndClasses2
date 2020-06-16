@@ -150,7 +150,7 @@ namespace EAC2.Containers
             }
             else
             {
-                XP_Needed = LevelRequirements.XP_PER_tLEVEL[tLevel];
+                XP_Needed = Requirements.XP_PER_tLEVEL[tLevel];
             }
         }
 

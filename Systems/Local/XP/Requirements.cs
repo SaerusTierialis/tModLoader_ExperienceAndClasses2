@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace EAC2.Systems.Local.XP
 {
-    public static class LevelRequirements
+    public static class Requirements
     {
         public static readonly uint[] XP_PER_tLEVEL = new uint[1 + Limits.MAX_tLEVEL];
 
-        static LevelRequirements()
+        static Requirements()
         {
             //tier 1 (predefined)
             uint[] xp_predef = new uint[] { 0, 10, 15, 20, 30, 40, 50, 60, 80, 100 }; //length+1 must be UI.UI.MAX_LEVEL[1]
