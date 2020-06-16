@@ -17,6 +17,7 @@ namespace EAC2.Utilities
         public enum PACKET_TYPE : byte
         {
             ClientBroadcast,
+            FishXP,
 
             NUMBER_OF_TYPES, //must be last
         };
@@ -87,6 +88,8 @@ namespace EAC2.Utilities
         /// </summary>
         public sealed class ClientBroadcast : Handler
         {
+            private const PACKET_TYPE ptype = PACKET_TYPE.ClientBroadcast;
+
             public enum BROADCAST_TYPE : byte
             {
                 MESSAGE,
@@ -94,12 +97,12 @@ namespace EAC2.Utilities
                 ERROR
             }
 
-            public ClientBroadcast() : base(PACKET_TYPE.ClientBroadcast) { }
+            public ClientBroadcast() : base(ptype) { }
 
             public static void Send(int target, int origin, string message, BROADCAST_TYPE type)
             {
                 //get packet containing header
-                ModPacket packet = LOOKUP[(byte)PACKET_TYPE.ClientBroadcast].GetPacket(origin);
+                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
 
                 //type
                 packet.Write((byte)type);
@@ -139,6 +142,42 @@ namespace EAC2.Utilities
 
                 //also write in console
                 Console.WriteLine(message);
+            }
+        }
+
+        public sealed class FishXP : Handler
+        {
+            private const PACKET_TYPE ptype = PACKET_TYPE.FishXP;
+
+            public FishXP() : base(ptype) { }
+
+            public static void Send(int target, int origin, int type)
+            {
+                //get packet containing header
+                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
+
+                //item type
+                packet.Write(type);
+
+                //send
+                packet.Send(target, origin);
+            }
+
+            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            {
+                //type
+                int type = reader.ReadInt32();
+
+                if (LocalData.IS_SERVER)
+                {
+                    //relay
+                    Send(-1, origin, type);
+                }
+                else //client
+                {
+                    //get xp for type
+                    Systems.Local.XP.Fishing.GiveReward(type);
+                }
             }
         }
     }
