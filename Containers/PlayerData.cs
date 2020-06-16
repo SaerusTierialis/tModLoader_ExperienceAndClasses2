@@ -12,6 +12,8 @@ namespace EAC2.Containers
     /// </summary>
     public class PlayerData
     {
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
         /// <summary>
         /// Set true during load for local player and during first sync for non-local
         /// </summary>
@@ -27,10 +29,27 @@ namespace EAC2.Containers
         /// </summary>
         public bool In_Combat = false;
 
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        public XPLevel Character { get; private set; }
+
+        public void AddXP(uint xp)
+        {
+            if (!Is_Local)
+            {
+                Utilities.Logger.Error("Attempted AddXP in non-local PlayerData");
+            }
+            else
+            {
+                Character.AddXP(xp);
+            }
+        }
+
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Save/Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         public TagCompound Save(TagCompound tag)
         {
+            tag.Add(Utilities.SaveLoad.TAG_NAMES.CHARACTER_LEVEL, Character);
             return tag;
         }
 
@@ -38,6 +57,7 @@ namespace EAC2.Containers
         {
             Is_Local = true;
             Initialized = true;
+            Character = Utilities.SaveLoad.TagTryGet(tag, Utilities.SaveLoad.TAG_NAMES.CHARACTER_LEVEL, new XPLevel(0, 1, 0, true));
         }
     }
 }

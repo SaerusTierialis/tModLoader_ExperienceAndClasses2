@@ -15,21 +15,12 @@ namespace EAC2.Systems.Local.XP
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        const double BONUS_XP_RATIO_PER_PLAYER = 0.1;
-        const uint TICKS_BETWEEN_CHECK_LOOKUP = 3600; //1 minute
+        private const uint TICKS_BETWEEN_CHECK_LOOKUP = 3600; //1 minute
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Static Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        private static Dictionary<int, double> XP_lookup = new Dictionary<int, double>();
+        private static Dictionary<int, uint> XP_lookup = new Dictionary<int, uint>();
         private static uint time_next_check_lookup = TICKS_BETWEEN_CHECK_LOOKUP;
-
-        private static Containers.XP xp_overhead = new Containers.XP();
-        private static int xp_overhead_index = Main.maxCombatText - 1;
-
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Instance Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-        private double base_xp_value = 0;
-        private bool treat_as_boss = false;
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Overrides ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -42,44 +33,16 @@ namespace EAC2.Systems.Local.XP
         {
             base.SetDefaults(npc);
             //calculate xp value on base stats (uses non-expert, single-player stats)
-            treat_as_boss = TreatAsBoss(npc);
-            base_xp_value = GetBaseXP(npc);
+            UpdateXPValue(npc);
         }
 
         public override bool CheckDead(NPC npc)
         {
             bool dying = base.CheckDead(npc);
 
-            if (dying && IS_PLAYER && LOCAL_PLAYER_VALID)
+            if (dying && IS_PLAYER && LOCAL_PLAYER_VALID && (XP_lookup[npc.type] > 0))
             {
-                //gives xp...
-                if (base_xp_value > 0)
-                {
-                    //start with default
-                    double xp = base_xp_value;
-
-                    //multiplayer...
-                    if (IS_CLIENT)
-                    {
-                        //how many players will gain xp?
-                        int number_players = CountEligiblePlayers(npc);
-
-                        //apply bonus xp per player after the first
-                        xp *= 1 + ((number_players - 1) * BONUS_XP_RATIO_PER_PLAYER);
-
-                        //divide xp by number of players
-                        xp /= number_players;
-                    }
-
-                    //round up
-                    uint xp_final = (uint)Math.Ceiling(xp);
-
-                    //display xp
-                    DisplayXPReward(xp_final, npc.getRect());
-                    
-                    //give xp
-                    //TODO
-                }
+                Rewards.GiveXP(XP_lookup[npc.type], npc.getRect());
             }
 
             return dying;
@@ -87,10 +50,31 @@ namespace EAC2.Systems.Local.XP
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Private ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        private static double CalcBaseXP(NPC npc)
+        private static void UpdateXPValue(NPC npc)
+        {
+            //get base xp
+            if (!XP_lookup.ContainsKey(npc.type))
+            {
+                //calculate if not in lookup
+                XP_lookup[npc.type] = CalcNPCValue(npc);
+            }
+            else if (Main.GameUpdateCount > time_next_check_lookup)
+            {
+                //every so often, check values in lookup - if mismatch then clear entire lookup
+                uint current_value = CalcNPCValue(npc);
+                if (XP_lookup[npc.type] != current_value)
+                {
+                    ClearLoookup();
+                    XP_lookup[npc.type] = current_value;
+                }
+                time_next_check_lookup = Main.GameUpdateCount + TICKS_BETWEEN_CHECK_LOOKUP;
+            }
+        }
+
+        private static uint CalcNPCValue(NPC npc)
         {
             //no exp from statue, critter, or friendly
-            if (npc.SpawnedFromStatue || npc.lifeMax <= 5 || npc.friendly || !npc.active) return 0f;
+            if (npc.SpawnedFromStatue || npc.lifeMax <= 5 || npc.friendly || !npc.active) return 0;
 
             //calculate
             double xp = 0;
@@ -106,107 +90,23 @@ namespace EAC2.Systems.Local.XP
             switch (npc.type)
             {
                 case NPCID.EaterofWorldsHead:
-                    xp *= 1.801792115f;
+                    xp *= 1.801792115d;
                     break;
 
                 case NPCID.EaterofWorldsBody:
-                    xp *= 1.109713024f;
+                    xp *= 1.109713024d;
                     break;
 
                 case NPCID.EaterofWorldsTail:
-                    xp *= 0.647725809f;
+                    xp *= 0.647725809d;
                     break;
             }
 
-            //round up
-            xp = Math.Ceiling(xp);
-
-            //apply ModConfig rate
-            xp *= ConfigServer.Instance.XPRate;
-
-            return xp;
-        }
-
-        /// <summary>
-        /// Returns the number players eligible for rewards including the local player
-        /// </summary>
-        /// <param name="npc"></param>
-        /// <returns></returns>
-        private int CountEligiblePlayers(NPC npc)
-        {
-            return Commons.GetEACPlayers(false).Count;
-        }
-
-        private static bool TreatAsBoss(NPC npc)
-        {
-            if (npc.boss)
-                return true;
-            else
-            {
-                switch (npc.type)
-                {
-                    case NPCID.EaterofWorldsHead:
-                    case NPCID.EaterofWorldsBody:
-                    case NPCID.EaterofWorldsTail:
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        }
-
-        private void DisplayXPReward(uint amount, Microsoft.Xna.Framework.Rectangle location, bool bonus = false)
-        {
-            if (Main.combatText[xp_overhead_index].active)
-            {
-                //update text
-                Main.combatText[xp_overhead_index].active = false;
-            }
-            else
-            {
-                //new text
-                xp_overhead.Reset();
-            }
-
-            //add to counter
-            xp_overhead.Add(amount);
-
-            //change location to player if too far
-            if (location.Distance(Main.LocalPlayer.position) > 1000f) //TODO use current screen size and check if on-scren rather than cutoff distance
-            {
-                location = Main.LocalPlayer.getRect();
-            }
-            
-            //display
-            xp_overhead_index = CombatText.NewText(location, UI.Constants.COLOUR_XP_BRIGHT, "+" + xp_overhead.Value + " XP");
-            Main.combatText[xp_overhead_index].crit = true;
+            //round up and return
+            return (uint)Math.Ceiling(xp);
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Public ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-        public static double GetBaseXP(NPC npc)
-        {
-            if (!XP_lookup.ContainsKey(npc.type))
-            {
-                //calculate if not in lookup
-                XP_lookup[npc.type] = CalcBaseXP(npc);
-            }
-            else if (Main.GameUpdateCount > time_next_check_lookup)
-            {
-                Main.NewText("CHECKING LOOKUP");
-                //every so often, check values in lookup - if mismatch then clear entire lookup
-                double current_value = CalcBaseXP(npc);
-                if (XP_lookup[npc.type] != current_value)
-                {
-                    ClearLoookup();
-                    XP_lookup[npc.type] = current_value;
-                }
-                time_next_check_lookup = Main.GameUpdateCount + TICKS_BETWEEN_CHECK_LOOKUP;
-            }
-
-            //return lookup value
-            return XP_lookup[npc.type];
-        }
 
         public static void ClearLoookup()
         {

@@ -8,7 +8,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Systems\Sync\" />
+    <Folder Include="Systems\Deterministic\" />
+    <Folder Include="Systems\Synced\" />
   </ItemGroup>
   <Target Name="BuildMod" AfterTargets="Build">
     <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />

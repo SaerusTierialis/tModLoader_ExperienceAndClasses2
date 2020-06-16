@@ -10,7 +10,6 @@ namespace EAC2.Containers
 {
     public class XPLevel
     {
-        private readonly uint tLevel_Adjust;
         private readonly XP XP_Container;
 
         public readonly bool Is_Local;
@@ -20,22 +19,16 @@ namespace EAC2.Containers
         public uint XP_Needed { get; private set; }
 
         public bool Unlocked { get { return Level > 0; } }
-        public uint tLevel { get { return Level + tLevel_Adjust; } }
+        public uint tLevel { get { return Level + Limits.TIER_tLEVEL_ADJUST[Tier]; } }
         public uint XP { get { return XP_Container.Value; } }
         public bool Maxed { get { return Level == Max_Level; } }
-        public uint Max_Level { get { return LevelRequirements.MAX_TIER_LEVELS[Tier]; } }
+        public uint Max_Level { get { return Limits.TIER_MAX_LEVEL[Tier]; } }
 
         public XPLevel(byte tier = 0, uint level = 1, uint xp = 0, bool is_local=false)
         {
             Tier = tier;
             Is_Local = is_local;
             Level = level;
-
-            tLevel_Adjust = 0;
-            for (int t=1; t<tier; t++)
-            {
-                tLevel_Adjust += LevelRequirements.MAX_TIER_LEVELS[t];
-            }
 
             if (Level > Max_Level)
             {
@@ -166,9 +159,16 @@ namespace EAC2.Containers
         /// </summary>
         private void OnLevelChange()
         {
+            //on any level change, all players recalc xp rate for catchup system
+            if (LocalData.IS_PLAYER)
+            {
+                Systems.Local.XP.Rewards.UpdateXPMultiplier();
+            }
+
+            //if local, update ui etc.
             if (Is_Local)
             {
-                //TODO - update UI, etc.
+                //TODO
             }
         }
 

@@ -34,6 +34,11 @@ namespace EAC2
         [DefaultValue(1f)]
         public float XPRate { get; set; }
 
+        [Label("$Mods.EAC2.Common.Config_XP_Catchup_Label")]
+        [Tooltip("$Mods.EAC2.Common.Config_XP_Catchup_Tooltip")]
+        [DefaultValue(true)]
+        public bool AllowXPCatchup { get; set; }
+
         //DEBUG
         [Header("$Mods.EAC2.Common.Config_Header_Debug")]
 
@@ -44,7 +49,7 @@ namespace EAC2
 
         public override void OnChanged()
         {
-            Systems.Local.XP.NPCRewards.ClearLoookup();
+            Systems.Local.XP.Rewards.UpdateXPMultiplier();
         }
     }
 

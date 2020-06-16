@@ -18,7 +18,7 @@ namespace EAC2
         /// </summary>
         public Containers.PlayerData PlayerData { get; private set; }
 
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init/Deinit ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         public override void Initialize()
         {
             PlayerData = new Containers.PlayerData();
@@ -31,6 +31,32 @@ namespace EAC2
 
             //initialize local data
             LocalData.SetLocalPlayer(this);
+
+            //calc XP mult
+            Systems.Local.XP.Rewards.UpdateXPMultiplier();
+        }
+
+        public override void PlayerConnect(Player player)
+        {
+            base.PlayerConnect(player);
+            Systems.Local.XP.Rewards.UpdateXPMultiplier();
+        }
+
+        public override void PlayerDisconnect(Player player)
+        {
+            base.PlayerDisconnect(player);
+            Systems.Local.XP.Rewards.UpdateXPMultiplier();
+        }
+
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Temp ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        public override void PreUpdate()
+        {
+            base.PreUpdate();
+            if (LocalData.IS_PLAYER)
+            {
+                //Main.NewText(player.name + " Level " + PlayerData.Character.Level + ": " + PlayerData.Character.XP + " / " + PlayerData.Character.XP_Needed);
+            }
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Save/Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

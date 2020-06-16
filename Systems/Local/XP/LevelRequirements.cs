@@ -8,9 +8,7 @@ namespace EAC2.Systems.Local.XP
 {
     public static class LevelRequirements
     {
-        public const uint MAX_tLEVEL = 255;
-        public static readonly uint[] MAX_TIER_LEVELS = { MAX_tLEVEL, 10, 50, 100 };
-        public static readonly uint[] XP_PER_tLEVEL = new uint[1 + MAX_tLEVEL];
+        public static readonly uint[] XP_PER_tLEVEL = new uint[1 + Limits.MAX_tLEVEL];
 
         static LevelRequirements()
         {
