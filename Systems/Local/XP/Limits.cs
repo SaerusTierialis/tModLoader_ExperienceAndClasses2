@@ -10,6 +10,10 @@ namespace EAC2.Systems.Local.XP
     {
         public const byte MAX_TIER = 3;
         public const uint MAX_tLEVEL = 255;
+
+        /// <summary>
+        /// tier 0 is for character level
+        /// </summary>
         public static readonly uint[] TIER_MAX_LEVEL = { MAX_tLEVEL, 10, 50, 100 };
 
         /// <summary>
