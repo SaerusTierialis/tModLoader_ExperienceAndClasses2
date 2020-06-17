@@ -39,11 +39,14 @@ namespace EAC2.Systems.Local.XP
             Item item = new Item();
             item.SetDefaults(type);
 
-            //TODO
-            uint xp = 1;
+            //calc
+            uint xp = (uint)(Math.Abs(item.rare + 1.0) + 1.0);
 
             //apply
-            Rewards.GiveXP(xp, Main.LocalPlayer.getRect());
+            if (xp > 0)
+            {
+                Rewards.GiveXP(xp, Main.LocalPlayer.getRect());
+            }
         }
 
     }
