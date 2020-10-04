@@ -9,6 +9,10 @@ using Terraria.ModLoader;
 
 namespace EAC2.Systems.Local.XP
 {
+    /// <summary>
+    /// Rewards for local player's catches are handled locally, but must be synced for other players.
+    /// </summary>
+    
     public class Fishing : GlobalItem
     {
         /// <summary>
