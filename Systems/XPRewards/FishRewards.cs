@@ -13,7 +13,7 @@ namespace EAC2.Systems.XPRewards
     /// Rewards for local player's catches are handled locally, but must be synced for other players.
     /// </summary>
     
-    public class Fishing : GlobalItem
+    public class FishRewards : GlobalItem
     {
         /// <summary>
         /// in multiplayer, only called by the client that catches

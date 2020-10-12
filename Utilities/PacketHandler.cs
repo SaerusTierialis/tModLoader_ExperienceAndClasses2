@@ -176,7 +176,7 @@ namespace EAC2.Utilities
                 else //client
                 {
                     //get xp for type
-                    Systems.XPRewards.Fishing.GiveReward(type);
+                    Systems.XPRewards.FishRewards.GiveReward(type);
                 }
             }
         }
