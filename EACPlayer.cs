@@ -34,6 +34,12 @@ namespace EAC2
 
             //calc XP mult
             Systems.XPRewards.Rewards.UpdateXPMultiplier();
+
+            //request world data from server
+            if (LocalData.IS_CLIENT)
+            {
+                PacketHandler.ClientRequestWorldData.Send(-1, LocalData.WHO_AM_I);
+            }
         }
 
         public override void PlayerConnect(Player player)

@@ -17,7 +17,10 @@ namespace EAC2.Utilities
         public enum PACKET_TYPE : byte
         {
             ClientBroadcast,
-            FishXP,
+            ClientFishXP,
+            ClientPlaceValueTile,
+            ClientRequestWorldData,
+            ServerPlacedValueTiles,
 
             NUMBER_OF_TYPES, //must be last
         };
@@ -145,11 +148,11 @@ namespace EAC2.Utilities
             }
         }
 
-        public sealed class FishXP : Handler
+        public sealed class ClientFishXP : Handler
         {
-            private const PACKET_TYPE ptype = PACKET_TYPE.FishXP;
+            private const PACKET_TYPE ptype = PACKET_TYPE.ClientFishXP;
 
-            public FishXP() : base(ptype) { }
+            public ClientFishXP() : base(ptype) { }
 
             public static void Send(int target, int origin, int type)
             {
@@ -178,6 +181,102 @@ namespace EAC2.Utilities
                     //get xp for type
                     Systems.XPRewards.FishRewards.GiveReward(type);
                 }
+            }
+        }
+
+        public sealed class ClientPlaceValueTile : Handler
+        {
+            private const PACKET_TYPE ptype = PACKET_TYPE.ClientPlaceValueTile;
+
+            public ClientPlaceValueTile() : base(ptype) { }
+
+            public static void Send(int target, int origin, int i, int j)
+            {
+                //get packet containing header
+                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
+
+                //tile coord
+                packet.Write(i);
+                packet.Write(j);
+
+                //send
+                packet.Send(target, origin);
+            }
+
+            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            {
+                //tile coord
+                int i = reader.ReadInt32();
+                int j = reader.ReadInt32();
+
+                if (LocalData.IS_SERVER)
+                {
+                    //relay to clients
+                    Send(-1, origin, i, j);
+                }
+
+                //set coord as placed (client + server)
+                Systems.XPRewards.TileRewards.PlaceTile(i, j);
+            }
+        }
+
+        public sealed class ClientRequestWorldData : Handler
+        {
+            private const PACKET_TYPE ptype = PACKET_TYPE.ClientRequestWorldData;
+
+            public ClientRequestWorldData() : base(ptype) { }
+
+            public static void Send(int target, int origin)
+            {
+                //get packet containing header
+                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
+
+                //send
+                packet.Send(target, origin);
+            }
+
+            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            {
+                //send list of plaved value times
+                ServerPlacedValueTiles.Send(origin, -1);
+            }
+        }
+
+        public sealed class ServerPlacedValueTiles : Handler
+        {
+            private const PACKET_TYPE ptype = PACKET_TYPE.ServerPlacedValueTiles;
+
+            public ServerPlacedValueTiles() : base(ptype) { }
+
+            public static void Send(int target, int origin)
+            {
+                //get packet containing header
+                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
+
+                //tile coord
+                List<int> coords = Systems.XPRewards.TileRewards.GetCoordList();
+                packet.Write(coords.Count);
+                foreach (int c in coords)
+                {
+                    packet.Write(c);
+                }
+
+                //send
+                packet.Send(target, origin);
+            }
+
+            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            {
+                //read tile coord
+                int count = reader.ReadInt32();
+                List<int> coords = new List<int>();
+                for (int i=0; i<count; i++)
+                {
+                    coords.Add(reader.ReadInt32());
+                }
+
+                //set coord
+                Systems.XPRewards.TileRewards.SetTilesPlaced(coords);
             }
         }
     }

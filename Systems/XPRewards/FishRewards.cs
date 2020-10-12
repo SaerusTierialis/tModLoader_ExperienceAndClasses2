@@ -32,7 +32,7 @@ namespace EAC2.Systems.XPRewards
                 //xp for other clients
                 if (LocalData.IS_CLIENT)
                 {
-                    Utilities.PacketHandler.FishXP.Send(-1, LocalData.WHO_AM_I, type);
+                    Utilities.PacketHandler.ClientFishXP.Send(-1, LocalData.WHO_AM_I, type);
                 }
             }
         }
