@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EAC2.Systems.Local.XP
+namespace EAC2.Systems.XPRewards
 {
     public static class Limits
     {

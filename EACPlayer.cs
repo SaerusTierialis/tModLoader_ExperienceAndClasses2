@@ -33,19 +33,19 @@ namespace EAC2
             LocalData.SetLocalPlayer(this);
 
             //calc XP mult
-            Systems.Local.XP.Rewards.UpdateXPMultiplier();
+            Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
 
         public override void PlayerConnect(Player player)
         {
             base.PlayerConnect(player);
-            Systems.Local.XP.Rewards.UpdateXPMultiplier();
+            Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
 
         public override void PlayerDisconnect(Player player)
         {
             base.PlayerDisconnect(player);
-            Systems.Local.XP.Rewards.UpdateXPMultiplier();
+            Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Temp ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

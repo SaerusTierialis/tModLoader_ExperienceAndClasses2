@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EAC2.Systems.Local.XP;
+using EAC2.Systems.XPRewards;
 using Terraria.ModLoader.IO;
 
 namespace EAC2.Containers
@@ -162,7 +162,7 @@ namespace EAC2.Containers
             //on any level change, all players recalc xp rate for catchup system
             if (LocalData.IS_PLAYER)
             {
-                Systems.Local.XP.Rewards.UpdateXPMultiplier();
+                Systems.XPRewards.Rewards.UpdateXPMultiplier();
             }
 
             //if local, update ui etc.

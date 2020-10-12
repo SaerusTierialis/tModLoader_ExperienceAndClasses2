@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 
-namespace EAC2.Systems.Local.XP
+namespace EAC2.Systems.XPRewards
 {
     public static class Rewards
     {

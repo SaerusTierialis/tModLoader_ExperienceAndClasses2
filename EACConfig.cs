@@ -49,7 +49,7 @@ namespace EAC2
 
         public override void OnChanged()
         {
-            Systems.Local.XP.Rewards.UpdateXPMultiplier();
+            Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
     }
 

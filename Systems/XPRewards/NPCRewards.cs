@@ -9,7 +9,7 @@ using static EAC2.LocalData;
 using Terraria.ID;
 using EAC2.Utilities;
 
-namespace EAC2.Systems.Local.XP
+namespace EAC2.Systems.XPRewards
 {
     class NPCRewards : GlobalNPC
     {

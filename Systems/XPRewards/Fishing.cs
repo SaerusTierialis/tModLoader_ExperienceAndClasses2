@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace EAC2.Systems.Local.XP
+namespace EAC2.Systems.XPRewards
 {
     /// <summary>
     /// Rewards for local player's catches are handled locally, but must be synced for other players.
