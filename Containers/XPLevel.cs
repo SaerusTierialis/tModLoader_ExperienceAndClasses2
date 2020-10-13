@@ -37,7 +37,9 @@ namespace EAC2.Containers
             }
 
             XP_Container = new XP(xp);
-            UpdateXPNeeded();
+
+            if (Is_Local)
+                UpdateXPNeeded();
         }
 
         /// <summary>
@@ -107,7 +109,10 @@ namespace EAC2.Containers
             }
 
             XP_Container.Reset();
-            UpdateXPNeeded();
+
+            if (Is_Local)
+                UpdateXPNeeded();
+
             OnLevelChange();
         }
 
