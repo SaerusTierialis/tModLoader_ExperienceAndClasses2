@@ -29,12 +29,10 @@ namespace EAC2.Utilities
 
         static PacketHandler()
         {
-            string str;
             LOOKUP = new ArrayByEnum<Handler, PACKET_TYPE>();
-            for (byte i = 0; i < LOOKUP.Length; i++)
+            foreach (PACKET_TYPE type in Enum.GetValues(typeof(PACKET_TYPE)))
             {
-                str = Enum.GetName(typeof(PACKET_TYPE), i);
-                LOOKUP[i] = Utilities.Commons.CreateObjectFromName<Handler>(str, typeof(PacketHandler));
+                LOOKUP[type] = Utilities.Commons.CreateObjectFromName<Handler>(Enum.GetName(typeof(PACKET_TYPE), type), typeof(PacketHandler));
             }
         }
 
