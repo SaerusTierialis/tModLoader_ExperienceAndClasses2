@@ -31,7 +31,7 @@ namespace EAC2.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public XPLevel Character { get; private set; }
+        public XPLevel Character { get; private set; } = new XPLevel(0, 1, 0);
 
         public void AddXP(uint xp)
         {
