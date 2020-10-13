@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace EAC2.Containers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="E"></typeparam>
-    public class ArrayByEnum<T,E> where E : Enum
+    public class ArrayByEnum<T,E> : IEnumerable where E : Enum
     {
         private readonly T[] _data;
         private readonly int _first;
@@ -36,6 +37,11 @@ namespace EAC2.Containers
         {
             get { return _data[key - _first]; }
             set { _data[key - _first] = value; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return Enum.GetValues(typeof(E)).Cast<E>().Select(i => this[i]).GetEnumerator();
         }
     }
 }
