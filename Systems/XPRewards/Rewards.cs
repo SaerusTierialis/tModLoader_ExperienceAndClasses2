@@ -12,6 +12,7 @@ namespace EAC2.Systems.XPRewards
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         private const float BONUS_XP_RATIO_PER_PLAYER = 0.1f;
+        private const float WELL_FED_MULTIPLIER = 1.05f;
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -134,6 +135,11 @@ namespace EAC2.Systems.XPRewards
         private static float CalcFinalXP(float base_xp)
         {
             base_xp *= XP_MULTIPLIER;
+
+            if (Main.LocalPlayer.wellFed)
+            {
+                base_xp *= WELL_FED_MULTIPLIER;
+            }
 
             return base_xp;
         }
