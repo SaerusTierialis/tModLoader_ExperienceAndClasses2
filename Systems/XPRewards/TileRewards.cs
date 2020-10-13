@@ -187,7 +187,7 @@ namespace EAC2.Systems.XPRewards
                     }
 
                     //give xp (client)
-                    Rewards.GiveXP((uint)value, Main.LocalPlayer.getRect()); //TODO float
+                    Rewards.GiveXP(value, Main.LocalPlayer.getRect());
                 }
             }
         }

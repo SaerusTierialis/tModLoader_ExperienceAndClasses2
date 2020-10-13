@@ -44,7 +44,7 @@ namespace EAC2.Systems.XPRewards
             item.SetDefaults(type);
 
             //calc
-            uint xp = (uint)(Math.Abs(item.rare + 1.0) + 1.0);
+            float xp = (float)(Math.Abs(item.rare + 1.0) + 1.0);
 
             //apply
             if (xp > 0)

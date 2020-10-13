@@ -19,7 +19,7 @@ namespace EAC2.Systems.XPRewards
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Static Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        private static Dictionary<int, uint> XP_lookup = new Dictionary<int, uint>();
+        private static Dictionary<int, float> XP_lookup = new Dictionary<int, float>();
         private static uint time_next_check_lookup = TICKS_BETWEEN_CHECK_LOOKUP;
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Overrides ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -61,7 +61,7 @@ namespace EAC2.Systems.XPRewards
             else if (Main.GameUpdateCount > time_next_check_lookup)
             {
                 //every so often, check values in lookup - if mismatch then clear entire lookup
-                uint current_value = CalcNPCValue(npc);
+                float current_value = CalcNPCValue(npc);
                 if (XP_lookup[npc.type] != current_value)
                 {
                     ClearLoookup();
@@ -71,39 +71,39 @@ namespace EAC2.Systems.XPRewards
             }
         }
 
-        private static uint CalcNPCValue(NPC npc)
+        private static float CalcNPCValue(NPC npc)
         {
             //no exp from statue, critter, or friendly
             if (npc.SpawnedFromStatue || npc.lifeMax <= 5 || npc.friendly || !npc.active) return 0;
 
             //calculate
-            double xp = 0;
+            float xp = 0;
             if (npc.defense >= 1000)
-                xp = (npc.lifeMax / 80d) * (1d + (npc.damage / 20d));
+                xp = (npc.lifeMax / 80.0f) * (1.0f + (npc.damage / 20.0f));
             else
-                xp = (npc.lifeMax / 100d) * (1d + (npc.defense / 10d)) * (1d + (npc.damage / 25d));
+                xp = (npc.lifeMax / 100.0f) * (1.0f + (npc.defense / 10.0f)) * (1.0f + (npc.damage / 25.0f));
 
             //adjustment to keep xp approx where it was pre-revamp
-            xp *= 3.0;
+            xp *= 3.0f;
 
             //special cases
             switch (npc.type)
             {
                 case NPCID.EaterofWorldsHead:
-                    xp *= 1.801792115d;
+                    xp *= 1.801792115f;
                     break;
 
                 case NPCID.EaterofWorldsBody:
-                    xp *= 1.109713024d;
+                    xp *= 1.109713024f;
                     break;
 
                 case NPCID.EaterofWorldsTail:
-                    xp *= 0.647725809d;
+                    xp *= 0.647725809f;
                     break;
             }
 
-            //round up and return
-            return (uint)Math.Ceiling(xp);
+            //return
+            return xp;
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Public ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

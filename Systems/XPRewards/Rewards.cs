@@ -11,7 +11,7 @@ namespace EAC2.Systems.XPRewards
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        private const double BONUS_XP_RATIO_PER_PLAYER = 0.1;
+        private const float BONUS_XP_RATIO_PER_PLAYER = 0.1f;
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -20,23 +20,34 @@ namespace EAC2.Systems.XPRewards
         /// </summary>
         public static bool CATCHUP_ACTIVE { get; private set; } = false;
 
-        private static double XP_MULTIPLIER = 1.0;
+        private static float XP_MULTIPLIER = 1.0f;
 
         private static Containers.XP xp_overhead = new Containers.XP();
         private static int xp_overhead_index = Main.maxCombatText - 1;
 
+        private static float incomplete_xp = 0;
+
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Public ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public static void GiveXP(uint xp, Microsoft.Xna.Framework.Rectangle location)
+        public static void GiveXP(float xp, Microsoft.Xna.Framework.Rectangle location)
         {
             //apply final modifiers
             xp = CalcFinalXP(xp);
 
-            //give xp
-            LocalData.LOCAL_PLAYER.PlayerData.AddXP(xp);
+            //apply incomplete xp and calcualte final uint value
+            xp += incomplete_xp;
+            uint xp_final = (uint)Math.Floor(xp);
+            incomplete_xp = xp - xp_final;
 
-            //display
-            DisplayXPReward(xp, location);
+            //if at least 1 xp...
+            if (xp_final > 0)
+            {
+                //give xp
+                LocalData.LOCAL_PLAYER.PlayerData.AddXP(xp_final);
+
+                //display
+                DisplayXPReward(xp_final, location);
+            }
         }
 
         public static void UpdateXPMultiplier()
@@ -44,7 +55,7 @@ namespace EAC2.Systems.XPRewards
             if (LocalData.IS_PLAYER && LocalData.LOCAL_PLAYER_VALID)
             {
                 //calc new mult...
-                XP_MULTIPLIER = 1.0;
+                XP_MULTIPLIER = 1.0f;
 
                 //default to no catchup
                 CATCHUP_ACTIVE = false;
@@ -54,7 +65,7 @@ namespace EAC2.Systems.XPRewards
                 {
                     //adjust for number of players
                     int number_players = CountEligiblePlayers();
-                    XP_MULTIPLIER *= 1 + ((number_players - 1) * BONUS_XP_RATIO_PER_PLAYER);
+                    XP_MULTIPLIER *= 1.0f + ((number_players - 1.0f) * BONUS_XP_RATIO_PER_PLAYER);
                     XP_MULTIPLIER /= number_players;
 
                     //catch-up system
@@ -71,7 +82,7 @@ namespace EAC2.Systems.XPRewards
                         if (level_difference >= 5)
                         {
                             CATCHUP_ACTIVE = true;
-                            XP_MULTIPLIER *= 3.0 + ((level_difference - 5.0) / 50.0); //300% multiplier plus 2%/level
+                            XP_MULTIPLIER *= 3.0f + ((level_difference - 5.0f) / 50.0f); //300% multiplier plus 2%/level
                         }
                     }
                 }
@@ -120,9 +131,11 @@ namespace EAC2.Systems.XPRewards
             Main.combatText[xp_overhead_index].crit = true;
         }
 
-        private static uint CalcFinalXP(uint base_xp)
+        private static float CalcFinalXP(float base_xp)
         {
-            return (uint)Math.Ceiling(base_xp * XP_MULTIPLIER);
+            base_xp *= XP_MULTIPLIER;
+
+            return base_xp;
         }
 
     }
