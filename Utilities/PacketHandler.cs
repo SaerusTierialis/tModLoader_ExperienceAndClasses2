@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Localization;
+using EAC2.Containers;
 
 namespace EAC2.Utilities
 {
@@ -21,16 +22,15 @@ namespace EAC2.Utilities
             ClientPlaceValueTile,
             ClientRequestWorldData,
             ServerPlacedValueTiles,
-
-            NUMBER_OF_TYPES, //must be last
         };
 
         //lookup for receiving of packets
-        public static Handler[] LOOKUP { get; private set; }
+        public static ArrayByEnum<Handler, PACKET_TYPE> LOOKUP { get; private set; }
+
         static PacketHandler()
         {
             string str;
-            LOOKUP = new Handler[(byte)PACKET_TYPE.NUMBER_OF_TYPES];
+            LOOKUP = new ArrayByEnum<Handler, PACKET_TYPE>();
             for (byte i = 0; i < LOOKUP.Length; i++)
             {
                 str = Enum.GetName(typeof(PACKET_TYPE), i);
@@ -105,7 +105,7 @@ namespace EAC2.Utilities
             public static void Send(int target, int origin, string message, BROADCAST_TYPE type)
             {
                 //get packet containing header
-                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
+                ModPacket packet = LOOKUP[ptype].GetPacket(origin);
 
                 //type
                 packet.Write((byte)type);

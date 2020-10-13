@@ -37,7 +37,7 @@ namespace EAC2
             byte packet_type = reader.ReadByte();
             int origin = reader.ReadInt32();
 
-            if (packet_type >= 0 && packet_type < (byte)Utilities.PacketHandler.PACKET_TYPE.NUMBER_OF_TYPES)
+            if (packet_type >= 0 && packet_type < PacketHandler.LOOKUP.Length)
             {
                 Utilities.PacketHandler.LOOKUP[packet_type].Recieve(reader, origin);
             }
