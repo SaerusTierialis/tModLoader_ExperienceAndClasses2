@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace EAC2.Containers
 {
+    /// <summary>
+    /// Array of T index by enum E. Query by enum or equivalent int.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="E"></typeparam>
     public class ArrayByEnum<T,E> where E : Enum
     {
         private readonly T[] _data;
@@ -27,10 +32,10 @@ namespace EAC2.Containers
             set { _data[Convert.ToInt32(key) - _first] = value; }
         }
 
-        public T this[int index]
+        public T this[int key]
         {
-            get { return _data[index]; }
-            set { _data[index] = value; }
+            get { return _data[key - _first]; }
+            set { _data[key - _first] = value; }
         }
     }
 }
