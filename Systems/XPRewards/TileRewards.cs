@@ -90,9 +90,45 @@ namespace EAC2.Systems.XPRewards
             if (IsTreeTile(type))
                 value = 0.1f;
             else if (IsPotTile(type))
-                value = 5f;
+                value = 3.0f;
             else if (IsOreTile(type))
-                value = Main.tileValue[type] / 100.0f;
+            {
+                switch (type)
+                {
+                    case TileID.Amethyst:
+                        value = 5.0f;
+                        break;
+
+                    case TileID.Topaz:
+                        value = 6.0f;
+                        break;
+
+                    case TileID.Sapphire:
+                        value = 7.0f;
+                        break;
+
+                    case TileID.Emerald:
+                        value = 8.0f;
+                        break;
+
+                    case TileID.Ruby:
+                        value = 9.0f;
+                        break;
+
+                    case TileID.Diamond:
+                        value = 15.0f;
+                        break;
+
+                    //TODO 1.4 amber tile (doesn't exist yet)
+
+                    default:
+                        value = Main.tileValue[type] / 100.0f;
+                        break;
+                }
+
+                //min value of 2
+                value = Math.Max(2.0f, value);
+            }
 
             return value;
         }
