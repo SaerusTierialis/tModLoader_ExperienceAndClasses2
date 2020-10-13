@@ -14,10 +14,6 @@ namespace EAC2.Systems.XPRewards
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Track Placed Tiles ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        //TODO
-        // 1. save to world
-        // 2. send to clients on join
-        // 3. clients set when recieved
         public static List<Tuple<int, int>> Tiles_Placed { get; private set; } = new List<Tuple<int, int>>();
 
         private static bool TileIsPlaced(int x, int y)
