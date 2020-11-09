@@ -36,7 +36,8 @@ namespace EAC2.Utilities
                 eacplayer = player.GetModPlayer<EACPlayer>();
 
                 //all good
-                if ((eacplayer != null) && eacplayer.PlayerData.Initialized)
+                //if ((eacplayer != null) && eacplayer.PlayerData.Initialized)
+                if (eacplayer != null)  
                 {
                     players.Add(eacplayer);
                 }

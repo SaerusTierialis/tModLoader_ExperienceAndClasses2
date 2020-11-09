@@ -76,10 +76,10 @@ namespace EAC2.Systems.XPRewards
                         int highest_level = 0;
                         foreach (EACPlayer eacplayer in Utilities.Commons.GetEACPlayers())
                         {
-                            highest_level = (int)Math.Max(highest_level, eacplayer.PlayerData.Character.Level);
+                            highest_level = (int)Math.Max(highest_level, eacplayer.PlayerData.Character.Character_Level.value);
                         }
 
-                        int level_difference = (int)(highest_level - LocalData.LOCAL_PLAYER.PlayerData.Character.Level);
+                        int level_difference = (int)(highest_level - LocalData.LOCAL_PLAYER.PlayerData.Character.Character_Level.value);
                         if (level_difference >= 5)
                         {
                             CATCHUP_ACTIVE = true;

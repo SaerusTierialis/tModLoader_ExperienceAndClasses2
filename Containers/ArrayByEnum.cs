@@ -14,29 +14,37 @@ namespace EAC2.Containers
     /// <typeparam name="E"></typeparam>
     public class ArrayByEnum<T,E> : IEnumerable where E : Enum
     {
-        private readonly T[] _data;
+        public readonly T[] Array;
         private readonly int _first;
 
         public readonly int Length;
 
         public ArrayByEnum()
         {
-            _first = Convert.ToInt32(Enum.GetValues(typeof(E)).Cast<E>().Min());
-            int last = Convert.ToInt32(Enum.GetValues(typeof(E)).Cast<E>().Max());
-            _data = new T[1 + last - _first];
-            Length = _data.Length;
+            if (Enum.GetValues(typeof(E)).Length < 1)
+            {
+                Array = new T[0];
+                Length = 0;
+            }
+            else
+            {
+                _first = Convert.ToInt32(Enum.GetValues(typeof(E)).Cast<E>().Min());
+                int last = Convert.ToInt32(Enum.GetValues(typeof(E)).Cast<E>().Max());
+                Array = new T[1 + last - _first];
+                Length = Array.Length;
+            }
         }
 
         public T this[E key]
         {
-            get { return _data[Convert.ToInt32(key) - _first]; }
-            set { _data[Convert.ToInt32(key) - _first] = value; }
+            get { return Array[Convert.ToInt32(key) - _first]; }
+            set { Array[Convert.ToInt32(key) - _first] = value; }
         }
 
         public T this[int key]
         {
-            get { return _data[key - _first]; }
-            set { _data[key - _first] = value; }
+            get { return Array[key - _first]; }
+            set { Array[key - _first] = value; }
         }
 
         public IEnumerator GetEnumerator()

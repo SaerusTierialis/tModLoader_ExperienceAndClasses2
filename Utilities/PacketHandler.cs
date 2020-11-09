@@ -17,6 +17,7 @@ namespace EAC2.Utilities
         //IMPORTANT: each type MUST have a class with the exact same name
         public enum PACKET_TYPE : byte
         {
+            ClientAutoData,
             ClientBroadcast,
             ClientFishXP,
             ClientPlaceValueTile,
@@ -82,6 +83,96 @@ namespace EAC2.Utilities
             }
 
             protected abstract void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer);
+        }
+
+        public sealed class ClientAutoData : Handler
+        {
+            private const PACKET_TYPE ptype = PACKET_TYPE.ClientAutoData;
+
+            public ClientAutoData() : base(ptype) { }
+
+            public static void Send<T>(int target, int origin, byte module_index, PlayerModule.DATATYPE datatype, byte data_index, T value)
+            {
+                //get packet containing header
+                ModPacket packet = LOOKUP[ptype].GetPacket(origin);
+
+                //byte module index
+                packet.Write(module_index);
+
+                //byte datatype
+                packet.Write((byte)datatype);
+
+                //byte data index in module
+                packet.Write(data_index);
+
+                //write value
+                switch (datatype)
+                {
+                    case PlayerModule.DATATYPE.BOOL:
+                        packet.Write(Convert.ToBoolean(value));
+                        break;
+                    case PlayerModule.DATATYPE.BYTE:
+                        packet.Write(Convert.ToByte(value));
+                        break;
+                    case PlayerModule.DATATYPE.FLOAT:
+                        packet.Write(Convert.ToSingle(value));
+                        break;
+                    case PlayerModule.DATATYPE.INT32:
+                        packet.Write(Convert.ToInt32(value));
+                        break;
+                    case PlayerModule.DATATYPE.UINT32:
+                        packet.Write(Convert.ToUInt32(value));
+                        break;
+                    default:
+                        Logger.Error($"Attempted to send AutoData packet of unsupported type {datatype}");
+                        return;
+                }
+
+                //send
+                packet.Send(target, origin);
+            }
+
+            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            {
+                //byte module index
+                byte module_index = reader.ReadByte();
+
+                //byte datatype
+                PlayerModule.DATATYPE datatype = (PlayerModule.DATATYPE)reader.ReadByte();
+
+                //byte data index in module
+                byte data_index = reader.ReadByte();
+
+                switch (datatype)
+                {
+                    case PlayerModule.DATATYPE.BOOL:
+                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadBoolean());
+                        break;
+                    case PlayerModule.DATATYPE.BYTE:
+                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadByte());
+                        break;
+                    case PlayerModule.DATATYPE.FLOAT:
+                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadSingle());
+                        break;
+                    case PlayerModule.DATATYPE.INT32:
+                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadInt32());
+                        break;
+                    case PlayerModule.DATATYPE.UINT32:
+                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadUInt32());
+                        break;
+                    default:
+                        Logger.Error($"Received AutoData packet of unsupported type {datatype}");
+                        return;
+                }
+            }
+
+            private static void HandleValue<T>(int origin, EACPlayer origin_eacplayer, byte module_index, PlayerModule.DATATYPE datatype, byte data_index, T value)
+            {
+                origin_eacplayer.PlayerData.SetAutoData(module_index, datatype, data_index, value);
+                //if server, relay to other clients
+                if (LocalData.IS_SERVER)
+                    Send(-1, origin, module_index, datatype, data_index, value);
+            }
         }
 
         /// <summary>

@@ -40,7 +40,7 @@ namespace EAC2.Systems.XPRewards
         {
             bool dying = base.CheckDead(npc);
 
-            if (dying && IS_PLAYER && LOCAL_PLAYER_VALID && (XP_lookup[npc.type] > 0))
+            if (dying && IS_PLAYER && LOCAL_PLAYER_VALID && !npc.friendly && (XP_lookup[npc.type] > 0))
             {
                 Rewards.GiveXP(XP_lookup[npc.type], npc.getRect());
             }

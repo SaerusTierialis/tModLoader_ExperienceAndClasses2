@@ -1,4 +1,5 @@
-﻿using EAC2.Utilities;
+﻿using EAC2.Containers;
+using EAC2.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace EAC2
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init/Deinit ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         public override void Initialize()
         {
-            PlayerData = new Containers.PlayerData();
+            PlayerData = new Containers.PlayerData(player.whoAmI == Main.LocalPlayer.whoAmI);
             base.Initialize();
         }
 
@@ -54,11 +55,24 @@ namespace EAC2
             Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
 
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Sync ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            base.SendClientChanges(clientPlayer);
+            PlayerData.DoSyncs();
+        }
+
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Temp ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         public override void PreUpdate()
         {
             base.PreUpdate();
+
+            //reset values that are calculated each cycle
+            PlayerData.Update();
+
+
             if (LocalData.IS_PLAYER)
             {
                 //Main.NewText(player.name + " Level " + PlayerData.Character.Level + ": " + PlayerData.Character.XP + " / " + PlayerData.Character.XP_Needed);
