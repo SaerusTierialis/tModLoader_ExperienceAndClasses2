@@ -21,24 +21,24 @@ namespace EAC2.Containers
             Character,
         }
 
-        public readonly bool Is_Local;
-        private readonly ArrayByEnum<PlayerModule,Modules> _modules;
+        public EACPlayer EACPlayer;
+        public bool Is_Local { get; private set; } = false;
+        private readonly ArrayByEnum<PlayerModule,Modules> _modules = new ArrayByEnum<PlayerModule, Modules>();
 
         public Character Character { get { return (Character)_modules[Modules.Character]; } }
         //ADD OTHER MODULE SHORTCUTS HERE
 
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Defaults ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public PlayerData(bool local)
+        public PlayerData(EACPlayer eacplayer)
         {
-            Is_Local = local;
-            _modules = new ArrayByEnum<PlayerModule, Modules>();
+            EACPlayer = eacplayer;
             foreach (Modules m in (Modules[])Enum.GetValues(typeof(Modules)))
             {
                 switch (m)
                 {
                     case Modules.Character:
-                        _modules[Modules.Character] = new Character(this, (byte)m, Is_Local, true);
+                        _modules[Modules.Character] = new Character(this, (byte)m, true);
                         break;
 
                     //ADD OTHER MODULE INITS HERE
@@ -82,7 +82,25 @@ namespace EAC2.Containers
             }
         }
 
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Actions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        public void FullSync()
+        {
+            if (!Is_Local)
+            {
+                Utilities.Logger.Error("Attempted FullSync in non-local PlayerData");
+            }
+            else
+            {
+                foreach (PlayerModule m in _modules)
+                {
+                    m.FullSync();
+                }
+            }
+        }
+
+        public void SetAsLocal()
+        {
+            Is_Local = true;
+        }
 
         public void AddXP(uint xp)
         {

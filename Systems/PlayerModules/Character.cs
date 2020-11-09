@@ -49,10 +49,11 @@ namespace EAC2.Systems.PlayerModules
         private enum AutoUInt : byte
         {
             Character_Level,
+            Character_XP,
         }
         public AutoData<uint> Character_Level => _uints[AutoUInt.Character_Level];
+        public AutoData<uint> Character_XP => _uints[AutoUInt.Character_XP];
 
-        
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Other Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -63,14 +64,15 @@ namespace EAC2.Systems.PlayerModules
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public Character(PlayerData parent, byte module_index, bool is_local, bool active = true) : base(parent, module_index, is_local, active)
+        public Character(PlayerData parent, byte module_index, bool active = true) : base(parent, module_index, active)
         {
             //any specific init
             local_XPLevel = new XPLevel(0, 1, 0, Is_Local);
 
             //each AutoData must be initialized
-            _bools[AutoBool.In_Combat] = new AutoData<bool>(this, (byte)AutoBool.In_Combat, Is_Local, false, true);
-            _uints[AutoUInt.Character_Level] = new AutoData<uint>(this, (byte)AutoUInt.Character_Level, Is_Local, 1, true);
+            _bools[AutoBool.In_Combat] = new AutoData<bool>(this, (byte)AutoBool.In_Combat, false, true);
+            _uints[AutoUInt.Character_Level] = new AutoData<uint>(this, (byte)AutoUInt.Character_Level, 1, true);
+            _uints[AutoUInt.Character_XP] = new TestValue(this, (byte)AutoUInt.Character_XP, 0, true);
 
             //check for uninitialized AutoData
             CheckAutoData();
@@ -88,6 +90,7 @@ namespace EAC2.Systems.PlayerModules
         public override void OnUpdateLocal()
         {
             Character_Level.value = local_XPLevel.Level;
+            Character_XP.value = local_XPLevel.XP;
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Save/Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

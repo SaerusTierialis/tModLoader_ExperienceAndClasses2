@@ -56,6 +56,9 @@ namespace EAC2
             LOCAL_PLAYER = local_player;
             LOCAL_PLAYER_VALID = true;
             WHO_AM_I = LOCAL_PLAYER.player.whoAmI;
+
+            //set data to indicate local
+            LOCAL_PLAYER.PlayerData.SetAsLocal();
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

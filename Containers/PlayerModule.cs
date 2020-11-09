@@ -17,8 +17,9 @@ namespace EAC2.Containers
         protected abstract AutoData<byte>[] GetBytes();
         protected abstract AutoData<int>[] GetInts();
         protected abstract AutoData<uint>[] GetUInts();
-        protected readonly bool Is_Local;
         public readonly byte Module_Index;
+
+        public bool Is_Local => ParentPlayerData.Is_Local;
 
         public enum DATATYPE : byte
         {
@@ -38,10 +39,9 @@ namespace EAC2.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public PlayerModule(PlayerData parent, byte module_index, bool is_local, bool active)
+        public PlayerModule(PlayerData parent, byte module_index, bool active)
         {
             ParentPlayerData = parent;
-            Is_Local = is_local;
             Active = active;
             Module_Index = module_index;
         }
@@ -118,7 +118,7 @@ namespace EAC2.Containers
         }
 
         /// <summary>
-        /// Called by local.
+        /// Called by local on each cycle. Triggers sync of syncing data if changed.
         /// </summary>
         public void DoSyncs()
         {
@@ -126,7 +126,7 @@ namespace EAC2.Containers
             {
                 if (!Is_Local)
                 {
-                    Utilities.Logger.Error("Attempted DoSyncs in non-local PlayerModule");
+                    Utilities.Logger.Error($"Attempted DoSyncs in non-local PlayerModule {Module_Index}");
                 }
                 else
                 {
@@ -136,6 +136,25 @@ namespace EAC2.Containers
                     foreach (var d in GetInts()) { d.SyncIfChanged(); }
                     foreach (var d in GetUInts()) { d.SyncIfChanged(); }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Called by local. Triggers sync of syncing data regardless of change.
+        /// </summary>
+        public void FullSync()
+        {
+            if (!Is_Local)
+            {
+                Utilities.Logger.Error($"Attempted FullSync in non-local PlayerModule {Module_Index}");
+            }
+            else
+            {
+                foreach (var d in GetFloats()) { d.SyncIfSyncs(); }
+                foreach (var d in GetBools()) { d.SyncIfSyncs(); }
+                foreach (var d in GetBytes()) { d.SyncIfSyncs(); }
+                foreach (var d in GetInts()) { d.SyncIfSyncs(); }
+                foreach (var d in GetUInts()) { d.SyncIfSyncs(); }
             }
         }
 

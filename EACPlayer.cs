@@ -22,7 +22,7 @@ namespace EAC2
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init/Deinit ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         public override void Initialize()
         {
-            PlayerData = new Containers.PlayerData(player.whoAmI == Main.LocalPlayer.whoAmI);
+            PlayerData = new Containers.PlayerData(this);
             base.Initialize();
         }
 

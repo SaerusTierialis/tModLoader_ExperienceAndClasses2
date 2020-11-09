@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 
 namespace EAC2.Containers
 {
@@ -16,22 +17,23 @@ namespace EAC2.Containers
 
         public readonly PlayerModule.DATATYPE DataType;
 
-        protected readonly bool Syncs, Resets, Is_Local;
+        protected readonly bool Syncs, Resets;
         protected readonly T Value_Default;
         protected readonly byte ID;
 
-        public AutoData(PlayerModule parent, byte id, bool is_local, T value_initial, bool syncs = false, bool resets = false)
+        protected bool Is_Local => ParentPlayerModule.Is_Local;
+
+        public AutoData(PlayerModule parent, byte id, T value_initial, bool syncs = false, bool resets = false)
         {
             ParentPlayerModule = parent;
             ID = id;
-            Is_Local = is_local;
 
             value = value_initial;
             Value_Prior = value_initial;
             Value_Default = value_initial;
             HasChanged = false;
 
-            Syncs = syncs && Is_Local; //non-local never sync
+            Syncs = syncs;
             Resets = resets;
 
             //detect datatype code
@@ -95,7 +97,18 @@ namespace EAC2.Containers
         /// </summary>
         public void SyncIfChanged()
         {
-            if (Syncs && HasChanged)
+            if (Syncs && HasChanged && Is_Local)
+            {
+                DoSync();
+            }
+        }
+
+        /// <summary>
+        /// Force sync if data is syncing type (for new player joining, etc.)
+        /// </summary>
+        public void SyncIfSyncs()
+        {
+            if (Syncs && Is_Local)
             {
                 DoSync();
             }
@@ -118,5 +131,21 @@ namespace EAC2.Containers
 
         protected virtual void OnChange() { }
         protected virtual void OnChangeLocal() { }
+    }
+
+    public class TestValue : AutoData<uint>
+    {
+        public TestValue(PlayerModule parent, byte id, uint value_initial, bool syncs = false, bool resets = false) : base(parent, id, value_initial, syncs, resets)
+        {
+        }
+
+        protected override void OnChange()
+        {
+            string str = $"{ParentPlayerModule.ParentPlayerData.EACPlayer.player.name} ({Is_Local}) value set to {value}";
+            if (LocalData.IS_PLAYER)
+                Main.NewText(str);
+            else
+                Console.WriteLine(str);
+        }
     }
 }
