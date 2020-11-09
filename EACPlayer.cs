@@ -43,15 +43,25 @@ namespace EAC2
             }
         }
 
+        /// <summary>
+        /// Each client calls this on each prior player. Server does not call this. 
+        /// </summary>
+        /// <param name="player"></param>
         public override void PlayerConnect(Player player)
         {
             base.PlayerConnect(player);
+            //TODO fix can be triggered multiple times (could add flag or time last)
             Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
 
+        /// <summary>
+        /// Each client calls this on each prior player. Server does not call this. 
+        /// </summary>
+        /// <param name="player"></param>
         public override void PlayerDisconnect(Player player)
         {
             base.PlayerDisconnect(player);
+            //TODO fix can be triggered multiple times (could add flag or time last)
             Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
 
