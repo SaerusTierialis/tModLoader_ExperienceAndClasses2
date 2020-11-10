@@ -71,7 +71,7 @@ namespace EAC2.Systems.PlayerModules
 
             //each AutoData must be initialized
             _bools[AutoBool.In_Combat] = new AutoData<bool>(this, (byte)AutoBool.In_Combat, false, true);
-            _uints[AutoUInt.Character_Level] = new AutoData<uint>(this, (byte)AutoUInt.Character_Level, 1, true);
+            _uints[AutoUInt.Character_Level] = new CharacterLevel(this, (byte)AutoUInt.Character_Level, 1, true);
             _uints[AutoUInt.Character_XP] = new TestValue(this, (byte)AutoUInt.Character_XP, 0, true);
 
             //check for uninitialized AutoData
