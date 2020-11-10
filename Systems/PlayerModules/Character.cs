@@ -64,7 +64,7 @@ namespace EAC2.Systems.PlayerModules
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public Character(PlayerData parent, byte module_index) : base(parent, module_index)
+        public Character(PlayerData parent, byte module_index) : base(parent, module_index, true)
         {
             //any specific init
             local_XPLevel = new XPLevel(0, 1, 0, Is_Local);

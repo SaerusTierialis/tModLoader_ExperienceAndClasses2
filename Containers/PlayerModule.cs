@@ -17,7 +17,16 @@ namespace EAC2.Containers
         protected abstract AutoData<byte>[] GetBytes();
         protected abstract AutoData<int>[] GetInts();
         protected abstract AutoData<uint>[] GetUInts();
+
+        /// <summary>
+        /// Index in PlayerData
+        /// </summary>
         public readonly byte Module_Index;
+
+        /// <summary>
+        /// Core modules cannot be deactivated
+        /// </summary>
+        public readonly bool Core_Module;
 
         public bool Is_Local => ParentPlayerData.Is_Local;
 
@@ -39,10 +48,11 @@ namespace EAC2.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public PlayerModule(PlayerData parent, byte module_index)
+        public PlayerModule(PlayerData parent, byte module_index, bool core_module)
         {
             ParentPlayerData = parent;
             Module_Index = module_index;
+            Core_Module = core_module;
         }
 
         /// <summary>
@@ -95,9 +105,19 @@ namespace EAC2.Containers
                 FullSync();
         }
 
+        /// <summary>
+        /// Core modules cannot be deactivated
+        /// </summary>
         public void Deactivate()
         {
-            Active = false;
+            if (Core_Module)
+            {
+                Utilities.Logger.Error($"Attempted Deactivate in core PlayerModule {Module_Index}");
+            }
+            else
+            {
+                Active = false;
+            }
         }
 
         /// <summary>
