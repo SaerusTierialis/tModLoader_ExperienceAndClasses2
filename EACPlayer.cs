@@ -50,7 +50,6 @@ namespace EAC2
         /// Server never calls this.
         /// </summary>
         /// <param name="player"></param>
-        private uint tick_last_player_connect = uint.MaxValue;
         public override void PlayerConnect(Player player)
         {
             base.PlayerConnect(player);
