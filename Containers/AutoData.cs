@@ -149,20 +149,4 @@ namespace EAC2.Containers
             Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
     }
-
-    public class TestValue : AutoData<uint>
-    {
-        public TestValue(PlayerModule parent, byte id, uint value_initial, bool syncs = false, bool resets = false) : base(parent, id, value_initial, syncs, resets)
-        {
-        }
-
-        protected override void OnChange()
-        {
-            string str = $"{ParentPlayerModule.ParentPlayerData.EACPlayer.player.name} ({Is_Local}) value set to {value}";
-            if (LocalData.IS_PLAYER)
-                Main.NewText(str);
-            else
-                Console.WriteLine(str);
-        }
-    }
 }
