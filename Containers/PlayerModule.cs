@@ -33,16 +33,15 @@ namespace EAC2.Containers
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         /// <summary>
-        /// Inactive modules do not update or sync.
+        /// Inactive modules do not update or sync. All modules start as inactive to prevent sycning incorrect values during setup.
         /// </summary>
-        public bool Active { get; protected set; }
+        public bool Active { get; protected set; } = false;
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public PlayerModule(PlayerData parent, byte module_index, bool active)
+        public PlayerModule(PlayerData parent, byte module_index)
         {
             ParentPlayerData = parent;
-            Active = active;
             Module_Index = module_index;
         }
 
@@ -90,6 +89,10 @@ namespace EAC2.Containers
         public void Activate()
         {
             Active = true;
+
+            //always resync upon activation
+            if (Is_Local)
+                FullSync();
         }
 
         public void Deactivate()
@@ -139,22 +142,44 @@ namespace EAC2.Containers
             }
         }
 
+        public void DoTargetedSyncFromServer(int toWho)
+        {
+            if (Active)
+            {
+                if (!LocalData.IS_SERVER)
+                {
+                    Utilities.Logger.Error($"Attempted DoTargetedSyncFromServer in non-server PlayerModule {Module_Index}");
+                }
+                else
+                {
+                    foreach (var d in GetFloats()) { d.SyncIfSyncs(true, toWho); }
+                    foreach (var d in GetBools()) { d.SyncIfSyncs(true, toWho); }
+                    foreach (var d in GetBytes()) { d.SyncIfSyncs(true, toWho); }
+                    foreach (var d in GetInts()) { d.SyncIfSyncs(true, toWho); }
+                    foreach (var d in GetUInts()) { d.SyncIfSyncs(true, toWho); }
+                }
+            }
+        }
+
         /// <summary>
         /// Called by local. Triggers sync of syncing data regardless of change.
         /// </summary>
         public void FullSync()
         {
-            if (!Is_Local)
+            if (Active)
             {
-                Utilities.Logger.Error($"Attempted FullSync in non-local PlayerModule {Module_Index}");
-            }
-            else
-            {
-                foreach (var d in GetFloats()) { d.SyncIfSyncs(); }
-                foreach (var d in GetBools()) { d.SyncIfSyncs(); }
-                foreach (var d in GetBytes()) { d.SyncIfSyncs(); }
-                foreach (var d in GetInts()) { d.SyncIfSyncs(); }
-                foreach (var d in GetUInts()) { d.SyncIfSyncs(); }
+                if (!Is_Local)
+                {
+                    Utilities.Logger.Error($"Attempted FullSync in non-local PlayerModule {Module_Index}");
+                }
+                else
+                {
+                    foreach (var d in GetFloats()) { d.SyncIfSyncs(); }
+                    foreach (var d in GetBools()) { d.SyncIfSyncs(); }
+                    foreach (var d in GetBytes()) { d.SyncIfSyncs(); }
+                    foreach (var d in GetInts()) { d.SyncIfSyncs(); }
+                    foreach (var d in GetUInts()) { d.SyncIfSyncs(); }
+                }
             }
         }
 

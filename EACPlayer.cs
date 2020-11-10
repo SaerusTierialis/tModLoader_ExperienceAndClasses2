@@ -44,33 +44,62 @@ namespace EAC2
         }
 
         /// <summary>
-        /// Each client calls this on each prior player. Server does not call this. 
+        /// When a client joins a world that already has at least once client, each client calls this.
+        /// The joining client will call this once per existing player (duplicate calls).
+        /// Passed Player and EACPlayer are not yet initialized (doesn't even have name, whoami, etc.)
+        /// Server never calls this.
         /// </summary>
         /// <param name="player"></param>
+        private uint tick_last_player_connect = uint.MaxValue;
         public override void PlayerConnect(Player player)
         {
             base.PlayerConnect(player);
-            //TODO fix can be triggered multiple times (could add flag or time last)
+
+            //anything here may be called several times in a row by a client joining a populated server
             Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
 
         /// <summary>
-        /// Each client calls this on each prior player. Server does not call this. 
+        /// Each client calls this when a different client leaves. Player and EACPlayer data are correct.
+        /// Server never calls this.
         /// </summary>
         /// <param name="player"></param>
         public override void PlayerDisconnect(Player player)
         {
             base.PlayerDisconnect(player);
-            //TODO fix can be triggered multiple times (could add flag or time last)
             Systems.XPRewards.Rewards.UpdateXPMultiplier();
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Sync ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+        /// <summary>
+        /// Called by each client on each cycle. Mean to detect and send changes.
+        /// </summary>
+        /// <param name="clientPlayer"></param>
         public override void SendClientChanges(ModPlayer clientPlayer)
         {
             base.SendClientChanges(clientPlayer);
             PlayerData.DoSyncs();
+        }
+
+        /// <summary>
+        /// Server calls this in two steps.
+        ///     1. Send data for new client to prior clients (to -1), but there probably isn't much to send at that point
+        ///     2. Then, send data from EACH prior client to just the new client (not to -1).
+        /// 
+        /// Clients seem to never call this. newPlayer doesn't appear to be used.
+        /// </summary>
+        /// <param name="toWho"></param>
+        /// <param name="fromWho"></param>
+        /// <param name="newPlayer"></param>
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            base.SyncPlayer(toWho, fromWho, newPlayer);
+            if (toWho != -1)
+            {
+                //sending this player's data to the new client
+                PlayerData.DoTargetedSyncFromServer(toWho);
+            }
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Temp ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

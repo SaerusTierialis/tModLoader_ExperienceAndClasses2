@@ -14,19 +14,26 @@ namespace EAC2.Containers
     /// </summary>
     public class PlayerData
     {
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        private readonly uint TiCKS_FULL_SYNC = Utilities.Commons.TicksPerTime(2);
+
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+        public readonly EACPlayer EACPlayer;
+        public bool Is_Local { get; private set; } = false;
+
+        private readonly ArrayByEnum<PlayerModule, Modules> _modules = new ArrayByEnum<PlayerModule, Modules>();
         private enum Modules : byte
         {
             Character,
         }
-
-        public EACPlayer EACPlayer;
-        public bool Is_Local { get; private set; } = false;
-        private readonly ArrayByEnum<PlayerModule,Modules> _modules = new ArrayByEnum<PlayerModule, Modules>();
-
         public Character Character { get { return (Character)_modules[Modules.Character]; } }
         //ADD OTHER MODULE SHORTCUTS HERE
+
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        private uint _ticks_until_full_sync;
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -38,7 +45,7 @@ namespace EAC2.Containers
                 switch (m)
                 {
                     case Modules.Character:
-                        _modules[Modules.Character] = new Character(this, (byte)m, true);
+                        _modules[Modules.Character] = new Character(this, (byte)m);
                         break;
 
                     //ADD OTHER MODULE INITS HERE
@@ -61,6 +68,25 @@ namespace EAC2.Containers
 
         public void Update()
         {
+            //check if first update
+            if (!Character.Active)
+            {
+                //do any frist update setup
+                Character.Activate();
+                _ticks_until_full_sync = TiCKS_FULL_SYNC;
+            }
+
+            //local actions at real time intervals
+            if (Is_Local)
+            {
+                if ((_ticks_until_full_sync--) == 0)
+                {
+                    FullSync();
+                    _ticks_until_full_sync = TiCKS_FULL_SYNC;
+                }
+            }
+
+            //actions on each cycle...
             foreach (PlayerModule m in _modules)
             {
                 m.Update();
@@ -78,6 +104,21 @@ namespace EAC2.Containers
                 foreach (PlayerModule m in _modules)
                 {
                     m.DoSyncs();
+                }
+            }
+        }
+
+        public void DoTargetedSyncFromServer(int toWho)
+        {
+            if (!LocalData.IS_SERVER)
+            {
+                Utilities.Logger.Error("Attempted DoTargetedSyncFromServer in non-server PlayerData");
+            }
+            else
+            {
+                foreach (PlayerModule m in _modules)
+                {
+                    m.DoTargetedSyncFromServer(toWho);
                 }
             }
         }

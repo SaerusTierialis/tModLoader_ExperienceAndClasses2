@@ -11,6 +11,15 @@ namespace EAC2.Utilities
 {
     static class Commons
     {
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Timing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        private const uint TICKS_PER_SECOND = 60;
+        public static uint TicksPerTime(double minutes, double seconds = 0)
+        {
+            seconds += (minutes * 60);
+            return (uint)Math.Round(seconds * TICKS_PER_SECOND);
+        }
+
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Searches ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         public static List<EACPlayer> GetEACPlayers(bool require_alive = false, Vector2 position = new Vector2(), float range = -1)

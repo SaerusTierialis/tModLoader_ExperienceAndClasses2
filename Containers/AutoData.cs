@@ -105,23 +105,28 @@ namespace EAC2.Containers
 
         /// <summary>
         /// Force sync if data is syncing type (for new player joining, etc.)
+        /// Can be sent from non-local if from server
         /// </summary>
-        public void SyncIfSyncs()
+        public void SyncIfSyncs(bool from_server = false, int server_to_who = -1)
         {
-            if (Syncs && Is_Local)
+            if (Syncs)
             {
-                DoSync();
+                if ((Is_Local) || (from_server && LocalData.IS_SERVER))
+                {
+                    DoSync(from_server, server_to_who);
+                }
             }
         }
 
         /// <summary>
         /// Can be called by AutoData that do not normally sync.
         /// </summary>
-        private void DoSync()
+        private void DoSync(bool from_server = false, int toWho = -1)
         {
-            if (Is_Local)
+            if ((Is_Local) || (from_server && LocalData.IS_SERVER))
             {
-                Utilities.PacketHandler.ClientAutoData.Send<T>(-1, LocalData.WHO_AM_I, ParentPlayerModule.Module_Index, DataType, ID, value);
+                int fromWho = from_server ? ParentPlayerModule.ParentPlayerData.EACPlayer.player.whoAmI : LocalData.WHO_AM_I;
+                Utilities.PacketHandler.ClientAutoData.Send<T>(toWho, fromWho, ParentPlayerModule.Module_Index, DataType, ID, value);
             }
             else
             {

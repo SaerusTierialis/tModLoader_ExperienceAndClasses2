@@ -53,7 +53,7 @@ namespace EAC2.Systems.PlayerModules
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public Template(PlayerData parent, byte module_index, bool active = false) : base(parent, module_index, active)
+        public Template(PlayerData parent, byte module_index) : base(parent, module_index)
         {
             //any specific init
 
