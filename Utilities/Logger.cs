@@ -31,7 +31,8 @@ namespace EAC2.Utilities
                     Main.NewText("TRACE: " + message, UI.Constants.COLOUR_MESSAGE_TRACE);
                 }
             }
-            EAC2.MOD.Logger.Debug(message);
+            if (EAC2.MOD != null)
+                EAC2.MOD.Logger.Debug(message);
         }
 
         public static void Error(string message)
