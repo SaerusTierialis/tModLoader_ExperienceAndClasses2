@@ -89,19 +89,23 @@ namespace EAC2.Systems.XPRewards
             switch (type)
             {
                 case TileID.DemonAltar:
-                    value = 300.0f;
+                    value = 300.0f / 4.0f; //triggers 4 times
                     break;
 
                 case TileID.ShadowOrbs:
-                    value = 75.0f;
-                    break;
-
-                case TileID.LifeFruit:
-                    value = 30.0f;
+                    value = 50.0f / 4.0f; //triggers 4 times
                     break;
 
                 case TileID.Heart:
-                    value = 20.0f;
+                    value = 20.0f / 4.0f; //triggers 4 times
+                    break;
+
+                case TileID.LifeFruit:
+                    value = 30.0f / 4.0f; //triggers 4 times
+                    break;
+
+                case TileID.Larva:
+                    value = 75.0f / 4.0f; //triggers 4 times
                     break;
 
                 case TileID.BloomingHerbs:
