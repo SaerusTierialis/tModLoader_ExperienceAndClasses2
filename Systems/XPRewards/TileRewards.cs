@@ -171,6 +171,12 @@ namespace EAC2.Systems.XPRewards
             {
                 case TileID.Hellstone:
                     return true;
+                case TileID.Meteorite:
+                    return true;
+                case TileID.Crimtane:
+                    return true;
+                case TileID.Demonite:
+                    return true;
 
                 default:
                     return Main.tileSpelunker[type] && !Main.tileContainer[type] && !IsPotTile(type); //&& Main.tileMergeDirt[type];
