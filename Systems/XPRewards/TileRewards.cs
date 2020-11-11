@@ -116,6 +116,10 @@ namespace EAC2.Systems.XPRewards
                     value = 2.0f;
                     break;
 
+                case TileID.DesertFossil:
+                    value = 4.0f; //if included as ore, value would be 2
+                    break;
+
                 case TileID.Amethyst:
                     value = 5.0f;
                     break;
