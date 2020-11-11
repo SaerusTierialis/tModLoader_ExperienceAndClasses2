@@ -138,9 +138,21 @@ namespace EAC2.Systems.XPRewards
             return Main.tileAxe[type];
         }
 
+        /// <summary>
+        /// True if ore or ore-like (e.g., hellstone). False for gems, containers, pots, etc.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private static bool IsOreTile(int type)
         {
-            return Main.tileSpelunker[type] && !Main.tileContainer[type] && !IsPotTile(type); //&& Main.tileMergeDirt[type];
+            switch (type)
+            {
+                case TileID.Hellstone:
+                    return true;
+
+                default:
+                    return Main.tileSpelunker[type] && !Main.tileContainer[type] && !IsPotTile(type); //&& Main.tileMergeDirt[type];
+            }
         }
 
         private static bool IsPotTile(int type)
