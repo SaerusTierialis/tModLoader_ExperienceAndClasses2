@@ -123,14 +123,17 @@ namespace EAC2.Containers
         /// </summary>
         private void DoSync(bool from_server = false, int toWho = -1)
         {
-            if ((Is_Local) || (from_server && LocalData.IS_SERVER))
+            if (!LocalData.IS_SINGLEPLAYER)
             {
-                int fromWho = from_server ? ParentPlayerModule.ParentPlayerData.EACPlayer.player.whoAmI : LocalData.WHO_AM_I;
-                Utilities.PacketHandler.ClientAutoData.Send<T>(toWho, fromWho, ParentPlayerModule.Module_Index, DataType, ID, value);
-            }
-            else
-            {
-                Utilities.Logger.Error("AutoData DoSync called by non-local");
+                if ((Is_Local) || (from_server && LocalData.IS_SERVER))
+                {
+                    int fromWho = from_server ? ParentPlayerModule.ParentPlayerData.EACPlayer.player.whoAmI : LocalData.WHO_AM_I;
+                    Utilities.PacketHandler.ClientAutoData.Send<T>(toWho, fromWho, ParentPlayerModule.Module_Index, DataType, ID, value);
+                }
+                else
+                {
+                    Utilities.Logger.Error("AutoData DoSync called by non-local");
+                }
             }
         }
 
