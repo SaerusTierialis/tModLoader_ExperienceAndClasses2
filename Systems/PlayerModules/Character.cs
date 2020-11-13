@@ -27,7 +27,7 @@ namespace EAC2.Systems.PlayerModules
         {
             In_Combat,
         }
-        public AutoData<bool> In_Combat => _bools[AutoBool.In_Combat];
+        public AutoDataPlayer<bool> In_Combat => _bools[AutoBool.In_Combat];
 
 
         private ArrayByEnum<AutoDataPlayer<byte>, AutoByte> _bytes = new ArrayByEnum<AutoDataPlayer<byte>, AutoByte>();
@@ -50,7 +50,7 @@ namespace EAC2.Systems.PlayerModules
         {
             Character_Level,
         }
-        public AutoData<uint> Character_Level => _uints[AutoUInt.Character_Level];
+        public AutoDataPlayer<uint> Character_Level => _uints[AutoUInt.Character_Level];
 
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Other Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
