@@ -49,10 +49,8 @@ namespace EAC2.Systems.PlayerModules
         private enum AutoUInt : byte
         {
             Character_Level,
-            Character_XP,
         }
         public AutoData<uint> Character_Level => _uints[AutoUInt.Character_Level];
-        public AutoData<uint> Character_XP => _uints[AutoUInt.Character_XP];
 
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Other Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -72,7 +70,6 @@ namespace EAC2.Systems.PlayerModules
             //each AutoData must be initialized
             _bools[AutoBool.In_Combat] = new AutoData<bool>(this, (byte)AutoBool.In_Combat, false, true);
             _uints[AutoUInt.Character_Level] = new CharacterLevel(this, (byte)AutoUInt.Character_Level, 1, true);
-            _uints[AutoUInt.Character_XP] = new TestValue(this, (byte)AutoUInt.Character_XP, 0, true);
 
             //check for uninitialized AutoData
             CheckAutoData();
@@ -90,7 +87,6 @@ namespace EAC2.Systems.PlayerModules
         public override void OnUpdateLocal()
         {
             Character_Level.value = local_XPLevel.Level;
-            Character_XP.value = local_XPLevel.XP;
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Save/Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

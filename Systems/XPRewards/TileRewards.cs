@@ -86,48 +86,74 @@ namespace EAC2.Systems.XPRewards
         private static float GetValue(int type)
         {
             float value = 0;
-
-            if (IsTreeTile(type))
-                value = 0.1f;
-            else if (IsPotTile(type))
-                value = 3.0f;
-            else if (IsOreTile(type))
+            switch (type)
             {
-                switch (type)
-                {
-                    case TileID.Amethyst:
-                        value = 5.0f;
-                        break;
+                case TileID.DemonAltar:
+                    value = 300.0f / 4.0f; //triggers 4 times
+                    break;
 
-                    case TileID.Topaz:
-                        value = 6.0f;
-                        break;
+                case TileID.ShadowOrbs:
+                    value = 50.0f / 4.0f; //triggers 4 times
+                    break;
 
-                    case TileID.Sapphire:
-                        value = 7.0f;
-                        break;
+                case TileID.Heart:
+                    value = 20.0f / 4.0f; //triggers 4 times
+                    break;
 
-                    case TileID.Emerald:
-                        value = 8.0f;
-                        break;
+                case TileID.LifeFruit:
+                    value = 30.0f / 4.0f; //triggers 4 times
+                    break;
 
-                    case TileID.Ruby:
-                        value = 9.0f;
-                        break;
+                case TileID.Larva:
+                    value = 75.0f / 4.0f; //triggers 4 times
+                    break;
 
-                    case TileID.Diamond:
-                        value = 15.0f;
-                        break;
+                case TileID.BloomingHerbs:
+                    value = 10.0f;
+                    break;
 
-                    //TODO 1.4 amber tile (doesn't exist yet)
+                case TileID.MatureHerbs:
+                    value = 2.0f;
+                    break;
 
-                    default:
-                        value = Main.tileValue[type] / 100.0f;
-                        break;
-                }
+                case TileID.DesertFossil:
+                    value = 4.0f; //if included as ore, value would be 2
+                    break;
 
-                //min value of 2
-                value = Math.Max(2.0f, value);
+                case TileID.Amethyst:
+                    value = 5.0f;
+                    break;
+
+                case TileID.Topaz:
+                    value = 6.0f;
+                    break;
+
+                case TileID.Sapphire:
+                    value = 7.0f;
+                    break;
+
+                case TileID.Emerald:
+                    value = 8.0f;
+                    break;
+
+                case TileID.Ruby:
+                    value = 9.0f;
+                    break;
+
+                case TileID.Diamond:
+                    value = 15.0f;
+                    break;
+
+                //TODO 1.4 amber tile (doesn't exist yet)
+
+                default:
+                    if (IsTreeTile(type))
+                        value = 0.1f;
+                    else if (IsPotTile(type))
+                        value = 3.0f;
+                    else if (IsOreTile(type))
+                        value = Math.Max(2.0f, Main.tileValue[type] / 100.0f);
+                    break;
             }
 
             return value;
@@ -138,9 +164,27 @@ namespace EAC2.Systems.XPRewards
             return Main.tileAxe[type];
         }
 
+        /// <summary>
+        /// True if ore or ore-like (e.g., hellstone). False for gems, containers, pots, etc.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private static bool IsOreTile(int type)
         {
-            return Main.tileSpelunker[type] && !Main.tileContainer[type] && !IsPotTile(type); //&& Main.tileMergeDirt[type];
+            switch (type)
+            {
+                case TileID.Hellstone:
+                    return true;
+                case TileID.Meteorite:
+                    return true;
+                case TileID.Crimtane:
+                    return true;
+                case TileID.Demonite:
+                    return true;
+
+                default:
+                    return Main.tileSpelunker[type] && !Main.tileContainer[type] && !IsPotTile(type); //&& Main.tileMergeDirt[type];
+            }
         }
 
         private static bool IsPotTile(int type)
