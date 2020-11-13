@@ -17,7 +17,7 @@ namespace EAC2.Utilities
         //IMPORTANT: each type MUST have a class with the exact same name
         public enum PACKET_TYPE : byte
         {
-            ClientAutoData,
+            ClientAutoDataPlayer,
             ClientBroadcast,
             ClientFishXP,
             ClientPlaceValueTile,
@@ -85,13 +85,13 @@ namespace EAC2.Utilities
             protected abstract void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer);
         }
 
-        public sealed class ClientAutoData : Handler
+        public sealed class ClientAutoDataPlayer : Handler
         {
-            private const PACKET_TYPE ptype = PACKET_TYPE.ClientAutoData;
+            private const PACKET_TYPE ptype = PACKET_TYPE.ClientAutoDataPlayer;
 
-            public ClientAutoData() : base(ptype) { }
+            public ClientAutoDataPlayer() : base(ptype) { }
 
-            public static void Send<T>(int target, int origin, byte module_index, PlayerModule.DATATYPE datatype, byte data_index, T value)
+            public static void Send<T>(int target, int origin, byte module_index, DATATYPE datatype, byte data_index, T value)
             {
                 //get packet containing header
                 ModPacket packet = LOOKUP[ptype].GetPacket(origin);
@@ -108,19 +108,19 @@ namespace EAC2.Utilities
                 //write value
                 switch (datatype)
                 {
-                    case PlayerModule.DATATYPE.BOOL:
+                    case DATATYPE.BOOL:
                         packet.Write(Convert.ToBoolean(value));
                         break;
-                    case PlayerModule.DATATYPE.BYTE:
+                    case DATATYPE.BYTE:
                         packet.Write(Convert.ToByte(value));
                         break;
-                    case PlayerModule.DATATYPE.FLOAT:
+                    case DATATYPE.FLOAT:
                         packet.Write(Convert.ToSingle(value));
                         break;
-                    case PlayerModule.DATATYPE.INT32:
+                    case DATATYPE.INT32:
                         packet.Write(Convert.ToInt32(value));
                         break;
-                    case PlayerModule.DATATYPE.UINT32:
+                    case DATATYPE.UINT32:
                         packet.Write(Convert.ToUInt32(value));
                         break;
                     default:
@@ -138,26 +138,26 @@ namespace EAC2.Utilities
                 byte module_index = reader.ReadByte();
 
                 //byte datatype
-                PlayerModule.DATATYPE datatype = (PlayerModule.DATATYPE)reader.ReadByte();
+                DATATYPE datatype = (DATATYPE)reader.ReadByte();
 
                 //byte data index in module
                 byte data_index = reader.ReadByte();
 
                 switch (datatype)
                 {
-                    case PlayerModule.DATATYPE.BOOL:
+                    case DATATYPE.BOOL:
                         HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadBoolean());
                         break;
-                    case PlayerModule.DATATYPE.BYTE:
+                    case DATATYPE.BYTE:
                         HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadByte());
                         break;
-                    case PlayerModule.DATATYPE.FLOAT:
+                    case DATATYPE.FLOAT:
                         HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadSingle());
                         break;
-                    case PlayerModule.DATATYPE.INT32:
+                    case DATATYPE.INT32:
                         HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadInt32());
                         break;
-                    case PlayerModule.DATATYPE.UINT32:
+                    case DATATYPE.UINT32:
                         HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadUInt32());
                         break;
                     default:
@@ -166,7 +166,7 @@ namespace EAC2.Utilities
                 }
             }
 
-            private static void HandleValue<T>(int origin, EACPlayer origin_eacplayer, byte module_index, PlayerModule.DATATYPE datatype, byte data_index, T value)
+            private static void HandleValue<T>(int origin, EACPlayer origin_eacplayer, byte module_index, DATATYPE datatype, byte data_index, T value)
             {
                 origin_eacplayer.PlayerData.SetAutoData(module_index, datatype, data_index, value);
                 //if server, relay to other clients

@@ -12,11 +12,11 @@ namespace EAC2.Containers
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         public readonly PlayerData ParentPlayerData;
-        protected abstract AutoData<float>[] GetFloats();
-        protected abstract AutoData<bool>[] GetBools();
-        protected abstract AutoData<byte>[] GetBytes();
-        protected abstract AutoData<int>[] GetInts();
-        protected abstract AutoData<uint>[] GetUInts();
+        protected abstract AutoDataPlayer<float>[] GetFloats();
+        protected abstract AutoDataPlayer<bool>[] GetBools();
+        protected abstract AutoDataPlayer<byte>[] GetBytes();
+        protected abstract AutoDataPlayer<int>[] GetInts();
+        protected abstract AutoDataPlayer<uint>[] GetUInts();
 
         /// <summary>
         /// Index in PlayerData
@@ -29,15 +29,6 @@ namespace EAC2.Containers
         public readonly bool Core_Module;
 
         public bool Is_Local => ParentPlayerData.Is_Local;
-
-        public enum DATATYPE : byte
-        {
-            FLOAT,
-            BOOL,
-            BYTE,
-            INT32,
-            UINT32,
-        }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

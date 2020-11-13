@@ -59,7 +59,7 @@ namespace EAC2.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Sync Access ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public void SetAutoData<T>(byte module_index, PlayerModule.DATATYPE datatype, byte data_index, T value)
+        public void SetAutoData<T>(byte module_index, DATATYPE datatype, byte data_index, T value)
         {
             _modules[module_index].SetAutoData<T>(datatype, data_index, value);
         }

@@ -12,36 +12,36 @@ namespace EAC2.Systems.PlayerModules
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AutoData ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        private ArrayByEnum<AutoData<float>, AutoFloat> _floats = new ArrayByEnum<AutoData<float>, AutoFloat>();
-        protected override AutoData<float>[] GetFloats() => _floats.Array;
+        private ArrayByEnum<AutoDataPlayer<float>, AutoFloat> _floats = new ArrayByEnum<AutoDataPlayer<float>, AutoFloat>();
+        protected override AutoDataPlayer<float>[] GetFloats() => _floats.Array;
         private enum AutoFloat : byte
         {
         }
 
 
-        private ArrayByEnum<AutoData<bool>, AutoBool> _bools = new ArrayByEnum<AutoData<bool>, AutoBool>();
-        protected override AutoData<bool>[] GetBools() => _bools.Array;
+        private ArrayByEnum<AutoDataPlayer<bool>, AutoBool> _bools = new ArrayByEnum<AutoDataPlayer<bool>, AutoBool>();
+        protected override AutoDataPlayer<bool>[] GetBools() => _bools.Array;
         private enum AutoBool : byte
         {
         }
 
 
-        private ArrayByEnum<AutoData<byte>, AutoByte> _bytes = new ArrayByEnum<AutoData<byte>, AutoByte>();
-        protected override AutoData<byte>[] GetBytes() => _bytes.Array;
+        private ArrayByEnum<AutoDataPlayer<byte>, AutoByte> _bytes = new ArrayByEnum<AutoDataPlayer<byte>, AutoByte>();
+        protected override AutoDataPlayer<byte>[] GetBytes() => _bytes.Array;
         private enum AutoByte : byte
         {
         }
 
 
-        private ArrayByEnum<AutoData<int>, AutInt> _ints = new ArrayByEnum<AutoData<int>, AutInt>();
-        protected override AutoData<int>[] GetInts() => _ints.Array;
+        private ArrayByEnum<AutoDataPlayer<int>, AutInt> _ints = new ArrayByEnum<AutoDataPlayer<int>, AutInt>();
+        protected override AutoDataPlayer<int>[] GetInts() => _ints.Array;
         private enum AutInt : byte
         {
         }
 
 
-        private ArrayByEnum<AutoData<uint>, AutoUInt> _uints = new ArrayByEnum<AutoData<uint>, AutoUInt>();
-        protected override AutoData<uint>[] GetUInts() => _uints.Array;
+        private ArrayByEnum<AutoDataPlayer<uint>, AutoUInt> _uints = new ArrayByEnum<AutoDataPlayer<uint>, AutoUInt>();
+        protected override AutoDataPlayer<uint>[] GetUInts() => _uints.Array;
         private enum AutoUInt : byte
         {
         }

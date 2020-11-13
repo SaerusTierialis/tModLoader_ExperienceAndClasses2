@@ -7,25 +7,31 @@ using Terraria;
 
 namespace EAC2.Containers
 {
-    public class AutoData<T>
+    public enum DATATYPE : byte
     {
-        public readonly PlayerModule ParentPlayerModule;
+        FLOAT,
+        BOOL,
+        BYTE,
+        INT32,
+        UINT32,
+    }
 
+    public abstract class AutoData<T>
+    {
         public T value;
         public T Value_Prior { get; private set; }
         public bool HasChanged { get; private set; }
 
-        public readonly PlayerModule.DATATYPE DataType;
+        public readonly DATATYPE DataType;
 
         protected readonly bool Syncs, Resets;
         protected readonly T Value_Default;
         protected readonly byte ID;
 
-        protected bool Is_Local => ParentPlayerModule.Is_Local;
+        protected abstract bool Is_Local();
 
-        public AutoData(PlayerModule parent, byte id, T value_initial, bool syncs = false, bool resets = false)
+        public AutoData(byte id, T value_initial, bool syncs = false, bool resets = false)
         {
-            ParentPlayerModule = parent;
             ID = id;
 
             value = value_initial;
@@ -40,23 +46,23 @@ namespace EAC2.Containers
             switch (Type.GetTypeCode(typeof(T)))
             {
                 case TypeCode.Single:
-                    DataType = PlayerModule.DATATYPE.FLOAT;
+                    DataType = DATATYPE.FLOAT;
                     break;
 
                 case TypeCode.Boolean:
-                    DataType = PlayerModule.DATATYPE.BOOL;
+                    DataType = DATATYPE.BOOL;
                     break;
 
                 case TypeCode.Byte:
-                    DataType = PlayerModule.DATATYPE.BYTE;
+                    DataType = DATATYPE.BYTE;
                     break;
 
                 case TypeCode.Int32:
-                    DataType = PlayerModule.DATATYPE.INT32;
+                    DataType = DATATYPE.INT32;
                     break;
 
                 case TypeCode.UInt32:
-                    DataType = PlayerModule.DATATYPE.UINT32;
+                    DataType = DATATYPE.UINT32;
                     break;
 
                 default:
@@ -82,7 +88,7 @@ namespace EAC2.Containers
             if (HasChanged)
             {
                 OnChange();
-                if (Is_Local) OnChangeLocal();
+                if (Is_Local()) OnChangeLocal();
             }
         }
 
@@ -97,9 +103,9 @@ namespace EAC2.Containers
         /// </summary>
         public void SyncIfChanged()
         {
-            if (Syncs && HasChanged && Is_Local)
+            if (Syncs && HasChanged && Is_Local())
             {
-                DoSync();
+                Sync();
             }
         }
 
@@ -111,9 +117,9 @@ namespace EAC2.Containers
         {
             if (Syncs)
             {
-                if ((Is_Local) || (from_server && LocalData.IS_SERVER))
+                if ((Is_Local()) || (from_server && LocalData.IS_SERVER))
                 {
-                    DoSync(from_server, server_to_who);
+                    Sync(from_server, server_to_who);
                 }
             }
         }
@@ -121,23 +127,45 @@ namespace EAC2.Containers
         /// <summary>
         /// Can be called by AutoData that do not normally sync.
         /// </summary>
-        private void DoSync(bool from_server = false, int toWho = -1)
+        private void Sync(bool from_server = false, int toWho = -1)
         {
             if (!LocalData.IS_SINGLEPLAYER)
             {
-                if ((Is_Local) || (from_server && LocalData.IS_SERVER))
+                if ((Is_Local()) || (from_server && LocalData.IS_SERVER))
                 {
-                    int fromWho = from_server ? ParentPlayerModule.ParentPlayerData.EACPlayer.player.whoAmI : LocalData.WHO_AM_I;
-                    Utilities.PacketHandler.ClientAutoData.Send<T>(toWho, fromWho, ParentPlayerModule.Module_Index, DataType, ID, value);
+                    DoSync(from_server, toWho);
                 }
                 else
                 {
-                    Utilities.Logger.Error("AutoData DoSync called by non-local");
+                    Utilities.Logger.Error("AutoData Sync called by non-local");
                 }
             }
         }
 
+        protected virtual void DoSync(bool from_server, int toWho)
+        {
+            Utilities.Logger.Error("AutoData DoSync not implemented for this object type");
+        }
+
         protected virtual void OnChange() { }
         protected virtual void OnChangeLocal() { }
+    }
+
+    public class AutoDataPlayer<T> : AutoData<T>
+    {
+        public readonly PlayerModule ParentPlayerModule;
+
+        protected override bool Is_Local() => ParentPlayerModule.Is_Local;
+
+        public AutoDataPlayer(PlayerModule parent, byte id, T value_initial, bool syncs = false, bool resets = false) : base(id, value_initial, syncs, resets)
+        {
+            ParentPlayerModule = parent;
+        }
+
+        protected override void DoSync(bool from_server, int toWho)
+        {
+            int fromWho = from_server ? ParentPlayerModule.ParentPlayerData.EACPlayer.player.whoAmI : LocalData.WHO_AM_I;
+            Utilities.PacketHandler.ClientAutoDataPlayer.Send<T>(toWho, fromWho, ParentPlayerModule.Module_Index, DataType, ID, value);
+        }
     }
 }
