@@ -140,16 +140,4 @@ namespace EAC2.Containers
         protected virtual void OnChange() { }
         protected virtual void OnChangeLocal() { }
     }
-
-    public class CharacterLevel : AutoData<uint>
-    {
-        public CharacterLevel(PlayerModule parent, byte id, uint value_initial, bool syncs = false, bool resets = false) : base(parent, id, value_initial, syncs, resets)
-        {
-        }
-
-        protected override void OnChange()
-        {
-            Systems.XPRewards.Rewards.UpdateXPMultiplier();
-        }
-    }
 }
