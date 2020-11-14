@@ -16,25 +16,6 @@ namespace EAC2.Systems.XPRewards
 
         public static List<Tuple<int, int>> Tiles_Placed { get; private set; } = new List<Tuple<int, int>>();
 
-        private static Dictionary<int, float> _value_exceptions = new Dictionary<int, float>()
-        {
-            [TileID.DemonAltar]     = 300.0f / 4.0f,    //triggers 4 times (includes crimson variant)
-            [TileID.ShadowOrbs]     = 50.0f / 4.0f,     //triggers 4 times (includes crimson variant)
-            [TileID.Heart]          = 20.0f / 4.0f,     //triggers 4 times
-            [TileID.LifeFruit]      = 30.0f / 4.0f,     //triggers 4 times
-            [TileID.Larva]          = 75.0f / 4.0f,     //triggers 4 times
-            [TileID.BloomingHerbs]  = 10,
-            [TileID.MatureHerbs]    = 2,
-            [TileID.DesertFossil]   = 4,
-            [TileID.Amethyst]       = 5,
-            [TileID.Topaz]          = 6,
-            [TileID.Sapphire]       = 7,
-            [TileID.Emerald]        = 8,
-            [TileID.Ruby]           = 9,
-            [TileID.Diamond]        = 15,
-            //TODO 1.4 amber tile (doesn't exist yet)
-        };
-
         private static bool TileIsPlaced(int x, int y)
         {
             return TileIsPlaced(new Tuple<int, int>(x, y));
@@ -101,6 +82,25 @@ namespace EAC2.Systems.XPRewards
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Tile Value ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        private static Dictionary<int, float> _value_exceptions = new Dictionary<int, float>()
+        {
+            [TileID.DemonAltar] = 300.0f / 4.0f,    //triggers 4 times (includes crimson variant)
+            [TileID.ShadowOrbs] = 50.0f / 4.0f,     //triggers 4 times (includes crimson variant)
+            [TileID.Heart] = 20.0f / 4.0f,     //triggers 4 times
+            [TileID.LifeFruit] = 30.0f / 4.0f,     //triggers 4 times
+            [TileID.Larva] = 75.0f / 4.0f,     //triggers 4 times
+            [TileID.BloomingHerbs] = 10,
+            [TileID.MatureHerbs] = 2,
+            [TileID.DesertFossil] = 4,
+            [TileID.Amethyst] = 5,
+            [TileID.Topaz] = 6,
+            [TileID.Sapphire] = 7,
+            [TileID.Emerald] = 8,
+            [TileID.Ruby] = 9,
+            [TileID.Diamond] = 15,
+            //TODO 1.4 amber tile (doesn't exist yet)
+        };
 
         private static float GetValue(int type)
         {
