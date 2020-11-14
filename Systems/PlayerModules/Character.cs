@@ -50,7 +50,7 @@ namespace EAC2.Systems.PlayerModules
         {
             Character_Level,
         }
-        public AutoDataPlayer<uint> Character_Level => _uints[AutoUInt.Character_Level];
+        public CharacterLevel Character_Level => (CharacterLevel)_uints[AutoUInt.Character_Level];
 
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Other Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
