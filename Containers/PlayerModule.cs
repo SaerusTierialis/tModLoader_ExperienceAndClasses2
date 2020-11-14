@@ -51,7 +51,7 @@ namespace EAC2.Containers
         /// </summary>
         protected void CheckAutoData()
         {
-            foreach (var d in GetFloats()) { if (d==null) Utilities.Logger.Error($"Empty AutoFloat in module {Module_Index}"); }
+            foreach (var d in GetFloats()) { if (d == null) Utilities.Logger.Error($"Empty AutoFloat in module {Module_Index}"); }
             foreach (var d in GetBools()) { if (d == null) Utilities.Logger.Error($"Empty AutoBool in module {Module_Index}"); }
             foreach (var d in GetBytes()) { if (d == null) Utilities.Logger.Error($"Empty AutoByte in module {Module_Index}"); }
             foreach (var d in GetInts()) { if (d == null) Utilities.Logger.Error($"Empty AutoInt in module {Module_Index}"); }
@@ -118,11 +118,11 @@ namespace EAC2.Containers
         {
             if (Active)
             {
-                foreach (var d in GetFloats()) { d.Update(); }
-                foreach (var d in GetBools()) { d.Update(); }
-                foreach (var d in GetBytes()) { d.Update(); }
-                foreach (var d in GetInts()) { d.Update(); }
-                foreach (var d in GetUInts()) { d.Update(); }
+                foreach (var d in GetFloats()) { d?.Update(); }
+                foreach (var d in GetBools()) { d?.Update(); }
+                foreach (var d in GetBytes()) { d?.Update(); }
+                foreach (var d in GetInts()) { d?.Update(); }
+                foreach (var d in GetUInts()) { d?.Update(); }
                 OnUpdate();
                 if (Is_Local)
                 {
@@ -144,11 +144,11 @@ namespace EAC2.Containers
                 }
                 else
                 {
-                    foreach (var d in GetFloats()) { d.SyncIfChanged(); }
-                    foreach (var d in GetBools()) { d.SyncIfChanged(); }
-                    foreach (var d in GetBytes()) { d.SyncIfChanged(); }
-                    foreach (var d in GetInts()) { d.SyncIfChanged(); }
-                    foreach (var d in GetUInts()) { d.SyncIfChanged(); }
+                    foreach (var d in GetFloats()) { d?.SyncIfChanged(); }
+                    foreach (var d in GetBools()) { d?.SyncIfChanged(); }
+                    foreach (var d in GetBytes()) { d?.SyncIfChanged(); }
+                    foreach (var d in GetInts()) { d?.SyncIfChanged(); }
+                    foreach (var d in GetUInts()) { d?.SyncIfChanged(); }
                 }
             }
         }
@@ -163,11 +163,11 @@ namespace EAC2.Containers
                 }
                 else
                 {
-                    foreach (var d in GetFloats()) { d.SyncIfSyncs(true, toWho); }
-                    foreach (var d in GetBools()) { d.SyncIfSyncs(true, toWho); }
-                    foreach (var d in GetBytes()) { d.SyncIfSyncs(true, toWho); }
-                    foreach (var d in GetInts()) { d.SyncIfSyncs(true, toWho); }
-                    foreach (var d in GetUInts()) { d.SyncIfSyncs(true, toWho); }
+                    foreach (var d in GetFloats()) { d?.SyncIfSyncs(true, toWho); }
+                    foreach (var d in GetBools()) { d?.SyncIfSyncs(true, toWho); }
+                    foreach (var d in GetBytes()) { d?.SyncIfSyncs(true, toWho); }
+                    foreach (var d in GetInts()) { d?.SyncIfSyncs(true, toWho); }
+                    foreach (var d in GetUInts()) { d?.SyncIfSyncs(true, toWho); }
                 }
             }
         }
@@ -185,11 +185,11 @@ namespace EAC2.Containers
                 }
                 else
                 {
-                    foreach (var d in GetFloats()) { d.SyncIfSyncs(); }
-                    foreach (var d in GetBools()) { d.SyncIfSyncs(); }
-                    foreach (var d in GetBytes()) { d.SyncIfSyncs(); }
-                    foreach (var d in GetInts()) { d.SyncIfSyncs(); }
-                    foreach (var d in GetUInts()) { d.SyncIfSyncs(); }
+                    foreach (var d in GetFloats()) { d?.SyncIfSyncs(); }
+                    foreach (var d in GetBools()) { d?.SyncIfSyncs(); }
+                    foreach (var d in GetBytes()) { d?.SyncIfSyncs(); }
+                    foreach (var d in GetInts()) { d?.SyncIfSyncs(); }
+                    foreach (var d in GetUInts()) { d?.SyncIfSyncs(); }
                 }
             }
         }

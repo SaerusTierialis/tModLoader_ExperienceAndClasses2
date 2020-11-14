@@ -40,20 +40,15 @@ namespace EAC2.Containers
         public PlayerData(EACPlayer eacplayer)
         {
             EACPlayer = eacplayer;
+
+            //init all UIs...
+            _modules[Modules.Character] = new Character(this, (byte)Modules.Character);
+
+            //warn if any not set
             foreach (Modules m in (Modules[])Enum.GetValues(typeof(Modules)))
             {
-                switch (m)
-                {
-                    case Modules.Character:
-                        _modules[Modules.Character] = new Character(this, (byte)m);
-                        break;
-
-                    //ADD OTHER MODULE INITS HERE
-
-                    default:
-                        Utilities.Logger.Error("Attempted to create non-implemented PlayerModule " + m);
-                        break;
-                }
+                if (_modules[m] == null)
+                    Utilities.Logger.Error($"Did not initialize PlayerModule {m}");
             }
         }
 
@@ -89,7 +84,7 @@ namespace EAC2.Containers
             //actions on each cycle...
             foreach (PlayerModule m in _modules)
             {
-                m.Update();
+                m?.Update();
             }
         }
 
@@ -103,7 +98,7 @@ namespace EAC2.Containers
             {
                 foreach (PlayerModule m in _modules)
                 {
-                    m.DoSyncs();
+                    m?.DoSyncs();
                 }
             }
         }
@@ -118,7 +113,7 @@ namespace EAC2.Containers
             {
                 foreach (PlayerModule m in _modules)
                 {
-                    m.DoTargetedSyncFromServer(toWho);
+                    m?.DoTargetedSyncFromServer(toWho);
                 }
             }
         }
@@ -133,7 +128,7 @@ namespace EAC2.Containers
             {
                 foreach (PlayerModule m in _modules)
                 {
-                    m.FullSync();
+                    m?.FullSync();
                 }
             }
         }
@@ -162,7 +157,7 @@ namespace EAC2.Containers
         {
             foreach (PlayerModule m in _modules)
             {
-                tag = m.Save(tag);
+                tag = m?.Save(tag);
             }
             return tag;
         }
@@ -171,7 +166,7 @@ namespace EAC2.Containers
         {
             foreach (PlayerModule m in _modules)
             {
-                m.Load(tag);
+                m?.Load(tag);
             }
         }
     }
