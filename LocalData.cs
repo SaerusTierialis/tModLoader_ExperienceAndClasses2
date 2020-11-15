@@ -26,6 +26,9 @@ namespace EAC2
         public static EACPlayer LOCAL_PLAYER { get; private set; }
         public static bool LOCAL_PLAYER_VALID { get; private set; }
 
+        //xp
+        public static XP xp_overhead;
+
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         /// <summary>
@@ -40,6 +43,9 @@ namespace EAC2
             LOCAL_PLAYER = null;
             LOCAL_PLAYER_VALID = false;
             WHO_AM_I = -1;
+
+            //xp
+            xp_overhead = null;
 
             //reset local data stored elsewhere...
 
@@ -59,6 +65,14 @@ namespace EAC2
 
             //set data to indicate local
             LOCAL_PLAYER.PlayerData.SetAsLocal();
+
+            //initialize things that a player (non-server) will need
+            InitializePlayerData();
+
+            void InitializePlayerData() {
+                //xp
+                xp_overhead = new XP();
+            }
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

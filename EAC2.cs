@@ -26,6 +26,7 @@ namespace EAC2
 
         public override void Unload()
         {
+            MOD = null;
             LocalData.ResetLocalData(); //should help with garbage collection
         }
 
