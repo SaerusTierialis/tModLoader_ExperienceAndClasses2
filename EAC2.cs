@@ -20,17 +20,17 @@ namespace EAC2
             //add serializers
             Terraria.ModLoader.IO.TagSerializer.AddSerializer(new Containers.XPLevel.XPLevelSerializer());
 
-            //load textures
-            Textures.TextureLoader.Load();
-
             //reset local data
             LocalData.ResetLocalData();
+
+            //load textures
+            Assets.Load();
         }
 
         public override void Unload()
         {
             MOD = null;
-            Textures.TextureLoader.Unload();
+            Assets.Unload();
             LocalData.ResetLocalData(); //should help with garbage collection
         }
 
