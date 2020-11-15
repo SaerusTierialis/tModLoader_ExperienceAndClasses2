@@ -40,15 +40,20 @@ namespace EAC2.Containers
         public PlayerData(EACPlayer eacplayer)
         {
             EACPlayer = eacplayer;
+            PopulateModules();
 
-            //init all UIs...
-            _modules[Modules.Character] = new Character(this, (byte)Modules.Character);
-
-            //warn if any not set
-            foreach (Modules m in (Modules[])Enum.GetValues(typeof(Modules)))
+            void PopulateModules()
             {
-                if (_modules[m] == null)
-                    Utilities.Logger.Error($"Did not initialize PlayerModule {m}");
+                //init all modules...
+                _modules[Modules.Character] = new Character(this, (byte)Modules.Character);
+                //ADD FUTURE MODULES HERE <------------------------------------
+
+                //warn if any not set
+                foreach (Modules m in (Modules[])Enum.GetValues(typeof(Modules)))
+                {
+                    if (_modules[m] == null)
+                        Utilities.Logger.Error($"Did not initialize PlayerModule {m}");
+                }
             }
         }
 
