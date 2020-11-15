@@ -14,7 +14,7 @@ namespace EAC2.Sounds
             //add new IDs
         }
 
-        private static Dictionary<ID, string> _paths = new Dictionary<ID, string>()
+        private readonly Dictionary<ID, string> _paths = new Dictionary<ID, string>()
         {
             //add path to new IDs
         };

@@ -18,7 +18,7 @@ namespace EAC2.Textures
             //add new IDs
         }
 
-        private static Dictionary<ID, string> _paths = new Dictionary<ID, string>()
+        private readonly Dictionary<ID, string> _paths = new Dictionary<ID, string>()
         {
             [ID.Unknown] = "Misc/Unknown",
             [ID.Blank] = "Misc/Blank",
