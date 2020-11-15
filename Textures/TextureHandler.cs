@@ -27,7 +27,7 @@ namespace EAC2.Textures
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Shouldn't need to change anything below here ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public ArrayByEnum<Texture2D, ID> Lookup { get; private set; } = new ArrayByEnum<Texture2D, ID>();
+        public Dictionary<ID, Texture2D> Lookup { get; private set; } = new Dictionary<ID, Texture2D>();
 
         public TextureHandler()
         {

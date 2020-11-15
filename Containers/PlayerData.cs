@@ -23,7 +23,7 @@ namespace EAC2.Containers
         public readonly EACPlayer EACPlayer;
         public bool Is_Local { get; private set; } = false;
 
-        private readonly ArrayByEnum<PlayerModule, Modules> _modules = new ArrayByEnum<PlayerModule, Modules>();
+        private readonly Dictionary<Modules, PlayerModule> _modules = new Dictionary<Modules, PlayerModule>();
         private enum Modules : byte
         {
             Character,
@@ -61,7 +61,7 @@ namespace EAC2.Containers
 
         public void SetAutoData<T>(byte module_index, DATATYPE datatype, byte data_index, T value)
         {
-            _modules[module_index].SetAutoData<T>(datatype, data_index, value);
+            _modules[(Modules)module_index].SetAutoData<T>(datatype, data_index, value);
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Actions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -87,7 +87,7 @@ namespace EAC2.Containers
             }
 
             //actions on each cycle...
-            foreach (PlayerModule m in _modules)
+            foreach (PlayerModule m in _modules.Values)
             {
                 m?.Update();
             }
@@ -101,7 +101,7 @@ namespace EAC2.Containers
             }
             else
             {
-                foreach (PlayerModule m in _modules)
+                foreach (PlayerModule m in _modules.Values)
                 {
                     m?.DoSyncs();
                 }
@@ -116,7 +116,7 @@ namespace EAC2.Containers
             }
             else
             {
-                foreach (PlayerModule m in _modules)
+                foreach (PlayerModule m in _modules.Values)
                 {
                     m?.DoTargetedSyncFromServer(toWho);
                 }
@@ -131,7 +131,7 @@ namespace EAC2.Containers
             }
             else
             {
-                foreach (PlayerModule m in _modules)
+                foreach (PlayerModule m in _modules.Values)
                 {
                     m?.FullSync();
                 }
@@ -160,7 +160,7 @@ namespace EAC2.Containers
 
         public TagCompound Save(TagCompound tag)
         {
-            foreach (PlayerModule m in _modules)
+            foreach (PlayerModule m in _modules.Values)
             {
                 tag = m?.Save(tag);
             }
@@ -169,7 +169,7 @@ namespace EAC2.Containers
 
         public void Load(TagCompound tag)
         {
-            foreach (PlayerModule m in _modules)
+            foreach (PlayerModule m in _modules.Values)
             {
                 m?.Load(tag);
             }

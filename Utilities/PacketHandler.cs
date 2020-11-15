@@ -26,14 +26,13 @@ namespace EAC2.Utilities
         };
 
         //lookup for receiving of packets
-        public static ArrayByEnum<Handler, PACKET_TYPE> LOOKUP { get; private set; }
+        public static readonly Dictionary<PACKET_TYPE, Handler> LOOKUP = new Dictionary<PACKET_TYPE, Handler>();
 
         static PacketHandler()
         {
-            LOOKUP = new ArrayByEnum<Handler, PACKET_TYPE>();
             foreach (PACKET_TYPE type in Enum.GetValues(typeof(PACKET_TYPE)))
             {
-                LOOKUP[type] = Utilities.Commons.CreateObjectFromName<Handler>(Enum.GetName(typeof(PACKET_TYPE), type), typeof(PacketHandler));
+                LOOKUP[type] = Commons.CreateObjectFromName<Handler>(Enum.GetName(typeof(PACKET_TYPE), type), typeof(PacketHandler));
             }
         }
 
@@ -246,7 +245,7 @@ namespace EAC2.Utilities
             public static void Send(int target, int origin, int type)
             {
                 //get packet containing header
-                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
+                ModPacket packet = LOOKUP[ptype].GetPacket(origin);
 
                 //item type
                 packet.Write(type);
@@ -282,7 +281,7 @@ namespace EAC2.Utilities
             public static void Send(int target, int origin, int i, int j)
             {
                 //get packet containing header
-                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
+                ModPacket packet = LOOKUP[ptype].GetPacket(origin);
 
                 //tile coord
                 packet.Write(i);
@@ -318,7 +317,7 @@ namespace EAC2.Utilities
             public static void Send(int target, int origin)
             {
                 //get packet containing header
-                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
+                ModPacket packet = LOOKUP[ptype].GetPacket(origin);
 
                 //send
                 packet.Send(target, origin);
@@ -340,7 +339,7 @@ namespace EAC2.Utilities
             public static void Send(int target, int origin)
             {
                 //get packet containing header
-                ModPacket packet = LOOKUP[(byte)ptype].GetPacket(origin);
+                ModPacket packet = LOOKUP[ptype].GetPacket(origin);
 
                 //tile coord
                 List<int> coords = Systems.XPRewards.TileRewards.GetCoordList();

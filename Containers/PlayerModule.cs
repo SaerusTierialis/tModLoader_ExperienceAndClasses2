@@ -12,11 +12,11 @@ namespace EAC2.Containers
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         public readonly PlayerData ParentPlayerData;
-        protected abstract AutoDataPlayer<float>[] GetFloats();
-        protected abstract AutoDataPlayer<bool>[] GetBools();
-        protected abstract AutoDataPlayer<byte>[] GetBytes();
-        protected abstract AutoDataPlayer<int>[] GetInts();
-        protected abstract AutoDataPlayer<uint>[] GetUInts();
+        protected abstract IEnumerable<AutoDataPlayer<float>> GetFloats();
+        protected abstract IEnumerable<AutoDataPlayer<bool>> GetBools();
+        protected abstract IEnumerable<AutoDataPlayer<byte>> GetBytes();
+        protected abstract IEnumerable<AutoDataPlayer<int>> GetInts();
+        protected abstract IEnumerable<AutoDataPlayer<uint>> GetUInts();
 
         /// <summary>
         /// Index in PlayerData
@@ -49,13 +49,13 @@ namespace EAC2.Containers
         /// <summary>
         /// Look for uninitialized AutoData entries and issue warning
         /// </summary>
-        protected void CheckAutoData()
+        protected void CheckAutoData(int expected_floats, int expected_bools, int expected_bytes, int expected_ints, int expected_uints)
         {
-            foreach (var d in GetFloats()) { if (d == null) Utilities.Logger.Error($"Empty AutoFloat in module {Module_Index}"); }
-            foreach (var d in GetBools()) { if (d == null) Utilities.Logger.Error($"Empty AutoBool in module {Module_Index}"); }
-            foreach (var d in GetBytes()) { if (d == null) Utilities.Logger.Error($"Empty AutoByte in module {Module_Index}"); }
-            foreach (var d in GetInts()) { if (d == null) Utilities.Logger.Error($"Empty AutoInt in module {Module_Index}"); }
-            foreach (var d in GetUInts()) { if (d == null) Utilities.Logger.Error($"Empty AutoUInt in module {Module_Index}"); }
+            if (GetFloats().Count() != expected_floats) Utilities.Logger.Error($"Missing AutoFloat in module {Module_Index}");
+            if (GetBools().Count()  != expected_bools)  Utilities.Logger.Error($"Missing AutoBool in module {Module_Index}");
+            if (GetBytes().Count()  != expected_bytes)  Utilities.Logger.Error($"Missing AutoByte in module {Module_Index}");
+            if (GetInts().Count()   != expected_ints)   Utilities.Logger.Error($"Missing AutoInt in module {Module_Index}");
+            if (GetUInts().Count()  != expected_uints)  Utilities.Logger.Error($"Missing AutoUInt in module {Module_Index}");
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Sync Access ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -65,19 +65,19 @@ namespace EAC2.Containers
             switch (datatype)
             {
                 case DATATYPE.BOOL:
-                    GetBools()[data_index].value = Convert.ToBoolean(value);
+                    GetBools().ElementAt(data_index).value = Convert.ToBoolean(value);
                     break;
                 case DATATYPE.BYTE:
-                    GetBytes()[data_index].value = Convert.ToByte(value);
+                    GetBytes().ElementAt(data_index).value = Convert.ToByte(value);
                     break;
                 case DATATYPE.FLOAT:
-                    GetFloats()[data_index].value = Convert.ToSingle(value);
+                    GetFloats().ElementAt(data_index).value = Convert.ToSingle(value);
                     break;
                 case DATATYPE.INT32:
-                    GetInts()[data_index].value = Convert.ToInt32(value);
+                    GetInts().ElementAt(data_index).value = Convert.ToInt32(value);
                     break;
                 case DATATYPE.UINT32:
-                    GetUInts()[data_index].value = Convert.ToUInt32(value);
+                    GetUInts().ElementAt(data_index).value = Convert.ToUInt32(value);
                     break;
                 default:
                     Utilities.Logger.Error($"Attempted to set AutoData of unsupported type {datatype} in module {Module_Index}");
