@@ -32,12 +32,12 @@ namespace EAC2
         [Range(0f, 10f)]
         [Increment(.05f)]
         [DefaultValue(1f)]
-        public float XPRate { get; set; }
+        public float XPRate;
 
         [Label("$Mods.EAC2.Common.Config_XP_Catchup_Label")]
         [Tooltip("$Mods.EAC2.Common.Config_XP_Catchup_Tooltip")]
         [DefaultValue(true)]
-        public bool AllowXPCatchup { get; set; }
+        public bool AllowXPCatchup;
 
         //DEBUG
         [Header("$Mods.EAC2.Common.Config_Header_Debug")]
@@ -45,7 +45,7 @@ namespace EAC2
         [Label("$Mods.EAC2.Common.Config_Trace_Label")]
         [Tooltip("$Mods.EAC2.Common.Config_Trace_Tooltip")]
         [DefaultValue(false)]
-        public bool Trace { get; set; }
+        public bool Trace;
 
         public override void OnChanged()
         {
