@@ -9,14 +9,6 @@ namespace EAC2.Utilities
 {
     class SaveLoad
     {
-        public static class TAG_NAMES
-        {
-            public const string PREFIX = "eac2_";
-
-            //Character
-            public const string CHARACTER_LEVEL = PREFIX + "character_level";
-        }
-
         /// <summary>
         /// Try to get from tag, else default to specified value.
         /// </summary>

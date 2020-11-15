@@ -93,13 +93,13 @@ namespace EAC2.Systems.PlayerModules
 
         public override TagCompound Save(TagCompound tag)
         {
-            tag.Add(Utilities.SaveLoad.TAG_NAMES.CHARACTER_LEVEL, local_XPLevel);
+            tag.Add(Tags.Get(Tags.ID.Character_XPLevel), local_XPLevel);
             return tag;
         }
 
         public override void Load(TagCompound tag)
         {
-            local_XPLevel = Utilities.SaveLoad.TagTryGet(tag, Utilities.SaveLoad.TAG_NAMES.CHARACTER_LEVEL, new XPLevel(0, 1, 0, Is_Local));
+            local_XPLevel = Utilities.SaveLoad.TagTryGet(tag, Tags.Get(Tags.ID.Character_XPLevel), new XPLevel(0, 1, 0, Is_Local));
         }
     }
 }
