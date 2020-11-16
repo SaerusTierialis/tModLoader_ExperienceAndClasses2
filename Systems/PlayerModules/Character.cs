@@ -58,7 +58,7 @@ namespace EAC2.Systems.PlayerModules
         /// <summary>
         /// Local XP.
         /// </summary>
-        private XPLevel local_XPLevel;
+        public XPLevel local_XPLevel { get; private set; }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

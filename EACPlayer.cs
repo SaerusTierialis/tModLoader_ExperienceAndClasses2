@@ -129,6 +129,9 @@ namespace EAC2
             //mod fields
             tag = PlayerData.Save(tag);
 
+            //also trigger UI save
+            LocalData.UIData?.Save();
+
             //return
             return tag;
         }

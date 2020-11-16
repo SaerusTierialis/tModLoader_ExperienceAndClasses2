@@ -27,6 +27,9 @@ namespace EAC2
         public static EACPlayer LOCAL_PLAYER { get; private set; }
         public static bool LOCAL_PLAYER_VALID { get; private set; }
 
+        //UI
+        public static UIData UIData { get; private set; }
+
         //xp
         public static XP xp_overhead;
 
@@ -44,6 +47,9 @@ namespace EAC2
             LOCAL_PLAYER = null;
             LOCAL_PLAYER_VALID = false;
             WHO_AM_I = -1;
+
+            //ui
+            UIData = null;
 
             //xp
             xp_overhead = null;
@@ -71,6 +77,9 @@ namespace EAC2
             InitializePlayerData();
 
             void InitializePlayerData() {
+                //ui
+                UIData = new UIData();
+
                 //xp
                 xp_overhead = new XP();
             }

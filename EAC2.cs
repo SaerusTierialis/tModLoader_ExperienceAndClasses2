@@ -1,6 +1,9 @@
 using EAC2.Utilities;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using System.IO;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace EAC2
 {
@@ -9,6 +12,28 @@ namespace EAC2
 		public EAC2(){}
 
         public static Mod MOD;
+
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ UI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        public override void UpdateUI(GameTime time)
+        {
+            LocalData.UIData?.Update(time);
+        }
+
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+        {
+            int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
+            if (MouseTextIndex != -1)
+            {
+                layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer("EAC_UIMain",
+                    delegate {
+                        LocalData.UIData?.Draw();
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+            }
+        }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Load/Unload ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -42,9 +67,9 @@ namespace EAC2
             byte packet_type = reader.ReadByte();
             int origin = reader.ReadInt32();
 
-            if (packet_type >= 0 && packet_type < PacketHandler.LOOKUP.Length)
+            if (packet_type >= 0 && packet_type < PacketHandler.LOOKUP.Count)
             {
-                Utilities.PacketHandler.LOOKUP[packet_type].Recieve(reader, origin);
+                Utilities.PacketHandler.LOOKUP[(PacketHandler.PACKET_TYPE)packet_type].Recieve(reader, origin);
             }
             else
             {

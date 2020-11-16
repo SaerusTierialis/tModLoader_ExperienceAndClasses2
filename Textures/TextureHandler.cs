@@ -15,6 +15,7 @@ namespace EAC2.Textures
         {
             Unknown,
             Blank,
+            Solid,
             //add new IDs
         }
 
@@ -22,12 +23,14 @@ namespace EAC2.Textures
         {
             [ID.Unknown] = "Misc/Unknown",
             [ID.Blank] = "Misc/Blank",
+            [ID.Solid] = "Misc/Solid",
             //add path to new IDs
         };
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Shouldn't need to change anything below here ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public Dictionary<ID, Texture2D> Lookup { get; private set; } = new Dictionary<ID, Texture2D>();
+        private readonly Dictionary<ID, Texture2D> _textures = new Dictionary<ID, Texture2D>();
+        public Texture2D Get(ID id) => _textures[id];
 
         public TextureHandler()
         {
@@ -37,16 +40,16 @@ namespace EAC2.Textures
                 //populate
                 foreach (ID id in _paths.Keys)
                 {
-                    Lookup[id] = ModContent.GetTexture($"EAC2/Textures/{_paths[id]}");
+                    _textures[id] = ModContent.GetTexture($"EAC2/Textures/{_paths[id]}");
                 }
 
                 //default to unknown
                 foreach (ID id in (ID[])Enum.GetValues(typeof(ID)))
                 {
-                    if (Lookup[id] == null)
+                    if (_textures[id] == null)
                     {
                         Utilities.Logger.Error($"Did not set texture path for {id}");
-                        Lookup[id] = Lookup[ID.Blank];
+                        _textures[id] = _textures[ID.Blank];
                     }
                 }
             }

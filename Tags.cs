@@ -12,6 +12,7 @@ namespace EAC2
         public enum ID : ushort
         {
             Character_XPLevel,
+            UI_XPOverlay_Location,
             //ADD HERE
         }
 
@@ -21,6 +22,7 @@ namespace EAC2
         private static readonly Dictionary<ID, string> _lookup = new Dictionary<ID, string>()
         {
             [ID.Character_XPLevel] = "Character_XPLevel",
+            [ID.UI_XPOverlay_Location] = "UI_XPOverlay_Location",
             //ADD HERE
         };
 
