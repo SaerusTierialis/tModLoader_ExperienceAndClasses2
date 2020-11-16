@@ -23,7 +23,7 @@ namespace EAC2.Containers
         public readonly EACPlayer EACPlayer;
         public bool Is_Local { get; private set; } = false;
 
-        private readonly ArrayByEnum<PlayerModule, Modules> _modules = new ArrayByEnum<PlayerModule, Modules>();
+        private readonly Dictionary<Modules, PlayerModule> _modules = new Dictionary<Modules, PlayerModule>();
         private enum Modules : byte
         {
             Character,
@@ -40,28 +40,28 @@ namespace EAC2.Containers
         public PlayerData(EACPlayer eacplayer)
         {
             EACPlayer = eacplayer;
-            foreach (Modules m in (Modules[])Enum.GetValues(typeof(Modules)))
+            PopulateModules();
+
+            void PopulateModules()
             {
-                switch (m)
+                //init all modules...
+                _modules[Modules.Character] = new Character(this, (byte)Modules.Character);
+                //ADD FUTURE MODULES HERE <------------------------------------
+
+                //warn if any not set
+                foreach (Modules m in (Modules[])Enum.GetValues(typeof(Modules)))
                 {
-                    case Modules.Character:
-                        _modules[Modules.Character] = new Character(this, (byte)m);
-                        break;
-
-                    //ADD OTHER MODULE INITS HERE
-
-                    default:
-                        Utilities.Logger.Error("Attempted to create non-implemented PlayerModule " + m);
-                        break;
+                    if (_modules[m] == null)
+                        Utilities.Logger.Error($"Did not initialize PlayerModule {m}");
                 }
             }
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Sync Access ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public void SetAutoData<T>(byte module_index, PlayerModule.DATATYPE datatype, byte data_index, T value)
+        public void SetAutoData<T>(byte module_index, DATATYPE datatype, byte data_index, T value)
         {
-            _modules[module_index].SetAutoData<T>(datatype, data_index, value);
+            _modules[(Modules)module_index].SetAutoData<T>(datatype, data_index, value);
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Actions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -87,9 +87,9 @@ namespace EAC2.Containers
             }
 
             //actions on each cycle...
-            foreach (PlayerModule m in _modules)
+            foreach (PlayerModule m in _modules.Values)
             {
-                m.Update();
+                m?.Update();
             }
         }
 
@@ -101,9 +101,9 @@ namespace EAC2.Containers
             }
             else
             {
-                foreach (PlayerModule m in _modules)
+                foreach (PlayerModule m in _modules.Values)
                 {
-                    m.DoSyncs();
+                    m?.DoSyncs();
                 }
             }
         }
@@ -116,9 +116,9 @@ namespace EAC2.Containers
             }
             else
             {
-                foreach (PlayerModule m in _modules)
+                foreach (PlayerModule m in _modules.Values)
                 {
-                    m.DoTargetedSyncFromServer(toWho);
+                    m?.DoTargetedSyncFromServer(toWho);
                 }
             }
         }
@@ -131,9 +131,9 @@ namespace EAC2.Containers
             }
             else
             {
-                foreach (PlayerModule m in _modules)
+                foreach (PlayerModule m in _modules.Values)
                 {
-                    m.FullSync();
+                    m?.FullSync();
                 }
             }
         }
@@ -160,18 +160,18 @@ namespace EAC2.Containers
 
         public TagCompound Save(TagCompound tag)
         {
-            foreach (PlayerModule m in _modules)
+            foreach (PlayerModule m in _modules.Values)
             {
-                tag = m.Save(tag);
+                tag = m?.Save(tag);
             }
             return tag;
         }
 
         public void Load(TagCompound tag)
         {
-            foreach (PlayerModule m in _modules)
+            foreach (PlayerModule m in _modules.Values)
             {
-                m.Load(tag);
+                m?.Load(tag);
             }
         }
     }

@@ -23,7 +23,6 @@ namespace EAC2.Systems.XPRewards
 
         private static float XP_MULTIPLIER = 1.0f;
 
-        private static Containers.XP xp_overhead = new Containers.XP();
         private static int xp_overhead_index = Main.maxCombatText - 1;
 
         private static float incomplete_xp = 0;
@@ -115,11 +114,11 @@ namespace EAC2.Systems.XPRewards
             else
             {
                 //new text
-                xp_overhead.Reset();
+                LocalData.xp_overhead.Reset();
             }
 
             //add to counter
-            xp_overhead.Add(xp);
+            LocalData.xp_overhead.Add(xp);
 
             //change location to player if too far
             if (location.Distance(Main.LocalPlayer.position) > 1000f) //TODO use current screen size and check if on-scren rather than cutoff distance
@@ -128,7 +127,7 @@ namespace EAC2.Systems.XPRewards
             }
 
             //display
-            xp_overhead_index = CombatText.NewText(location, UI.Constants.COLOUR_XP_BRIGHT, "+" + xp_overhead.Value + " XP");
+            xp_overhead_index = CombatText.NewText(location, UI.Constants.COLOUR_XP_BRIGHT, "+" + LocalData.xp_overhead.Value + " XP");
             Main.combatText[xp_overhead_index].crit = true;
         }
 
