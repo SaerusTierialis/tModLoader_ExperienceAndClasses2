@@ -17,6 +17,8 @@ namespace ACE.UI
     {
         public class ACEElement : UIElement
         {
+            public bool visible = true;
+
             public float W => Width.Pixels;
             public float H => Height.Pixels;
             public float T => Top.Pixels;
@@ -24,6 +26,12 @@ namespace ACE.UI
 
             public (float Left, float Top) Location => (L, T);
             public (float Width, float Height) Size => (W, H);
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                if (visible)
+                    base.Draw(spriteBatch);
+            }
 
             public void Resize((float Width, float Height) size)
             {
