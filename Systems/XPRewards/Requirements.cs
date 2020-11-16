@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EAC2.Systems.XPRewards
+namespace ACE.Systems.XPRewards
 {
     public static class Requirements
     {

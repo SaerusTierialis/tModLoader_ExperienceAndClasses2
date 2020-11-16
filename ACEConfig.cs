@@ -18,7 +18,7 @@ using Terraria.ModLoader.Config.UI;
 using Terraria.UI;
 using static Terraria.ModLoader.ModContent;
 
-namespace EAC2
+namespace ACE
 {
     public class ConfigServer : ModConfig
     {
@@ -28,25 +28,25 @@ namespace EAC2
 
 
         //Rewards
-        [Header("$Mods.EAC2.Common.Config_Header_XP")]
+        [Header("$Mods.ACE.Common.Config_Header_XP")]
 
-        [Label("$Mods.EAC2.Common.Config_XP_Rate_Label")]
+        [Label("$Mods.ACE.Common.Config_XP_Rate_Label")]
         [Range(0f, 10f)]
         [Increment(.05f)]
         [DefaultValue(1f)]
         public float XPRate;
 
-        [Label("$Mods.EAC2.Common.Config_XP_Catchup_Label")]
-        [Tooltip("$Mods.EAC2.Common.Config_XP_Catchup_Tooltip")]
+        [Label("$Mods.ACE.Common.Config_XP_Catchup_Label")]
+        [Tooltip("$Mods.ACE.Common.Config_XP_Catchup_Tooltip")]
         [DefaultValue(true)]
         public bool AllowXPCatchup;
 
 
         //DEBUG
-        [Header("$Mods.EAC2.Common.Config_Header_Debug")]
+        [Header("$Mods.ACE.Common.Config_Header_Debug")]
 
-        [Label("$Mods.EAC2.Common.Config_Trace_Label")]
-        [Tooltip("$Mods.EAC2.Common.Config_Trace_Tooltip")]
+        [Label("$Mods.ACE.Common.Config_Trace_Label")]
+        [Tooltip("$Mods.ACE.Common.Config_Trace_Tooltip")]
         [DefaultValue(false)]
         public bool Trace;
 
@@ -65,20 +65,20 @@ namespace EAC2
     
 
         //UI
-        [Header("$Mods.EAC2.Common.Config_Header_UI")]
+        [Header("$Mods.ACE.Common.Config_Header_UI")]
 
-        [Label("$Mods.EAC2.Common.Config_XPOverlay_Show_Label")]
-        [Tooltip("$Mods.EAC2.Common.Config_XPOverlay_Show_Tooltip")]
+        [Label("$Mods.ACE.Common.Config_XPOverlay_Show_Label")]
+        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Show_Tooltip")]
         [DefaultValue(true)]
         public bool XPOverlay_Show;
 
-        [Label("$Mods.EAC2.Common.Config_XPOverlay_Vertical_Label")]
-        [Tooltip("$Mods.EAC2.Common.Config_XPOverlay_Vertical_Tooltip")]
+        [Label("$Mods.ACE.Common.Config_XPOverlay_Vertical_Label")]
+        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Vertical_Tooltip")]
         [DefaultValue(false)]
         public bool XPOverlay_Vertical;
 
-        [Label("$Mods.EAC2.Common.Config_XPOverlay_Dims_Label")]
-        [Tooltip("$Mods.EAC2.Common.Config_XPOverlay_Dims_Tooltip")]
+        [Label("$Mods.ACE.Common.Config_XPOverlay_Dims_Label")]
+        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Dims_Tooltip")]
         public UIDims XPOverlay_Dims = new UIDims(250, 10);
 
 

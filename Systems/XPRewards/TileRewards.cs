@@ -8,7 +8,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace EAC2.Systems.XPRewards
+namespace ACE.Systems.XPRewards
 {
     class TileRewards : GlobalTile
     {

@@ -1,4 +1,4 @@
-﻿using EAC2.Containers;
+﻿using ACE.Containers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader.IO;
 
-namespace EAC2.Systems.PlayerModules
+namespace ACE.Systems.PlayerModules
 {
     public class Character : PlayerModule
     {

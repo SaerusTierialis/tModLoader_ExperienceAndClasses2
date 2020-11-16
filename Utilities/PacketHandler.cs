@@ -8,9 +8,9 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Localization;
-using EAC2.Containers;
+using ACE.Containers;
 
-namespace EAC2.Utilities
+namespace ACE.Utilities
 {
     public static class PacketHandler
     {
@@ -50,7 +50,7 @@ namespace EAC2.Utilities
 
             public ModPacket GetPacket(int origin)
             {
-                ModPacket packet = EAC2.MOD.GetPacket();
+                ModPacket packet = ACE.MOD.GetPacket();
                 packet.Write(ID_Num);
                 packet.Write(origin);
                 return packet;
@@ -67,13 +67,13 @@ namespace EAC2.Utilities
                     Logger.Trace("Handling " + ID + " originating from " + origin);
                 }
 
-                EACPlayer origin_eacplayer = null;
+                ACEPlayer origin_ACEPlayer = null;
                 if ((origin >= 0) && (origin <= Main.maxPlayers))
                 {
-                    origin_eacplayer = Main.player[origin].GetModPlayer<EACPlayer>();
+                    origin_ACEPlayer = Main.player[origin].GetModPlayer<ACEPlayer>();
                 }
 
-                RecieveBody(reader, origin, origin_eacplayer);
+                RecieveBody(reader, origin, origin_ACEPlayer);
 
                 if (do_trace)
                 {
@@ -81,7 +81,7 @@ namespace EAC2.Utilities
                 }
             }
 
-            protected abstract void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer);
+            protected abstract void RecieveBody(BinaryReader reader, int origin, ACEPlayer origin_ACEPlayer);
         }
 
         public sealed class ClientAutoDataPlayer : Handler
@@ -131,7 +131,7 @@ namespace EAC2.Utilities
                 packet.Send(target, origin);
             }
 
-            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            protected override void RecieveBody(BinaryReader reader, int origin, ACEPlayer origin_ACEPlayer)
             {
                 //byte module index
                 byte module_index = reader.ReadByte();
@@ -145,19 +145,19 @@ namespace EAC2.Utilities
                 switch (datatype)
                 {
                     case DATATYPE.BOOL:
-                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadBoolean());
+                        HandleValue(origin, origin_ACEPlayer, module_index, datatype, data_index, reader.ReadBoolean());
                         break;
                     case DATATYPE.BYTE:
-                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadByte());
+                        HandleValue(origin, origin_ACEPlayer, module_index, datatype, data_index, reader.ReadByte());
                         break;
                     case DATATYPE.FLOAT:
-                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadSingle());
+                        HandleValue(origin, origin_ACEPlayer, module_index, datatype, data_index, reader.ReadSingle());
                         break;
                     case DATATYPE.INT32:
-                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadInt32());
+                        HandleValue(origin, origin_ACEPlayer, module_index, datatype, data_index, reader.ReadInt32());
                         break;
                     case DATATYPE.UINT32:
-                        HandleValue(origin, origin_eacplayer, module_index, datatype, data_index, reader.ReadUInt32());
+                        HandleValue(origin, origin_ACEPlayer, module_index, datatype, data_index, reader.ReadUInt32());
                         break;
                     default:
                         Logger.Error($"Received AutoData packet of unsupported type {datatype}");
@@ -165,9 +165,9 @@ namespace EAC2.Utilities
                 }
             }
 
-            private static void HandleValue<T>(int origin, EACPlayer origin_eacplayer, byte module_index, DATATYPE datatype, byte data_index, T value)
+            private static void HandleValue<T>(int origin, ACEPlayer origin_ACEPlayer, byte module_index, DATATYPE datatype, byte data_index, T value)
             {
-                origin_eacplayer.PlayerData.SetAutoData(module_index, datatype, data_index, value);
+                origin_ACEPlayer.PlayerData.SetAutoData(module_index, datatype, data_index, value);
                 //if server, relay to other clients
                 if (LocalData.IS_SERVER)
                     Send(-1, origin, module_index, datatype, data_index, value);
@@ -205,7 +205,7 @@ namespace EAC2.Utilities
                 packet.Send(target, origin);
             }
 
-            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            protected override void RecieveBody(BinaryReader reader, int origin, ACEPlayer origin_ACEPlayer)
             {
                 //type
                 BROADCAST_TYPE type = (BROADCAST_TYPE)reader.ReadByte();
@@ -254,7 +254,7 @@ namespace EAC2.Utilities
                 packet.Send(target, origin);
             }
 
-            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            protected override void RecieveBody(BinaryReader reader, int origin, ACEPlayer origin_ACEPlayer)
             {
                 //type
                 int type = reader.ReadInt32();
@@ -291,7 +291,7 @@ namespace EAC2.Utilities
                 packet.Send(target, origin);
             }
 
-            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            protected override void RecieveBody(BinaryReader reader, int origin, ACEPlayer origin_ACEPlayer)
             {
                 //tile coord
                 int i = reader.ReadInt32();
@@ -323,7 +323,7 @@ namespace EAC2.Utilities
                 packet.Send(target, origin);
             }
 
-            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            protected override void RecieveBody(BinaryReader reader, int origin, ACEPlayer origin_ACEPlayer)
             {
                 //send list of plaved value times
                 ServerPlacedValueTiles.Send(origin, -1);
@@ -353,7 +353,7 @@ namespace EAC2.Utilities
                 packet.Send(target, origin);
             }
 
-            protected override void RecieveBody(BinaryReader reader, int origin, EACPlayer origin_eacplayer)
+            protected override void RecieveBody(BinaryReader reader, int origin, ACEPlayer origin_ACEPlayer)
             {
                 //read tile coord
                 int count = reader.ReadInt32();

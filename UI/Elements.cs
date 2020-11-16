@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EAC2.Containers;
-using EAC2.Textures;
+using ACE.Containers;
+using ACE.Textures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace EAC2.UI
+namespace ACE.UI
 {
     class Elements
     {
-        public class EACElement : UIElement
+        public class ACEElement : UIElement
         {
             public float W => Width.Pixels;
             public float H => Height.Pixels;
@@ -55,7 +55,7 @@ namespace EAC2.UI
             protected virtual void OnMove() { }
         }
 
-        public class RestrictWithinParent : EACElement
+        public class RestrictWithinParent : ACEElement
         {
             public override void Update(GameTime gameTime)
             {

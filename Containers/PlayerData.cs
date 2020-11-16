@@ -1,4 +1,4 @@
-﻿using EAC2.Systems.PlayerModules;
+﻿using ACE.Systems.PlayerModules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader.IO;
 
-namespace EAC2.Containers
+namespace ACE.Containers
 {
     /// <summary>
-    /// Contains EAC-related ModPlayer data
+    /// Contains ACE-related ModPlayer data
     /// </summary>
     public class PlayerData
     {
@@ -20,7 +20,7 @@ namespace EAC2.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public readonly EACPlayer EACPlayer;
+        public readonly ACEPlayer ACEPlayer;
         public bool Is_Local { get; private set; } = false;
 
         private readonly Dictionary<Modules, PlayerModule> _modules = new Dictionary<Modules, PlayerModule>();
@@ -37,9 +37,9 @@ namespace EAC2.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public PlayerData(EACPlayer eacplayer)
+        public PlayerData(ACEPlayer ACEPlayer)
         {
-            EACPlayer = eacplayer;
+            ACEPlayer = ACEPlayer;
             PopulateModules();
 
             void PopulateModules()

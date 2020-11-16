@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader.IO;
 
-namespace EAC2.Containers
+namespace ACE.Containers
 {
     public abstract class PlayerModule
     {

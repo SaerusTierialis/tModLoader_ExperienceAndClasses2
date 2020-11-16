@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EAC2.Systems.XPRewards;
+using ACE.Systems.XPRewards;
 using Terraria.ModLoader.IO;
 
-namespace EAC2.Containers
+namespace ACE.Containers
 {
     public class XPLevel
     {

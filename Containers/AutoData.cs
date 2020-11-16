@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 
-namespace EAC2.Containers
+namespace ACE.Containers
 {
     public enum DATATYPE : byte
     {
@@ -164,7 +164,7 @@ namespace EAC2.Containers
 
         protected override void DoSync(bool from_server, int toWho)
         {
-            int fromWho = from_server ? ParentPlayerModule.ParentPlayerData.EACPlayer.player.whoAmI : LocalData.WHO_AM_I;
+            int fromWho = from_server ? ParentPlayerModule.ParentPlayerData.ACEPlayer.player.whoAmI : LocalData.WHO_AM_I;
             Utilities.PacketHandler.ClientAutoDataPlayer.Send<T>(toWho, fromWho, ParentPlayerModule.Module_Index, DataType, ID, value);
         }
     }

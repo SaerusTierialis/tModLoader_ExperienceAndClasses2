@@ -1,4 +1,4 @@
-﻿using EAC2.UI;
+﻿using ACE.UI;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.IO;
 
-namespace EAC2.Containers
+namespace ACE.Containers
 {
     public class UIData
     {
@@ -21,7 +21,7 @@ namespace EAC2.Containers
         }
 
         private bool initialized = false;
-        public readonly Preferences PersitentData = new Preferences(Path.Combine(Main.SavePath, "Mod Configs", "EAC2_UI.json"));
+        public readonly Preferences PersitentData = new Preferences(Path.Combine(Main.SavePath, "Mod Configs", $"{ACE.MOD_NAME}_UI.json"));
 
         private readonly Dictionary<UIs, UIModule> _modules = new Dictionary<UIs, UIModule>();
         public XPOverlay XPOverlay => (XPOverlay)_modules[UIs.XPOverlay];

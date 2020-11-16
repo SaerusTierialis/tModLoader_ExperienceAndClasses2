@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EAC2.UI
+namespace ACE.UI
 {
     static class Constants
     {
