@@ -1,5 +1,5 @@
-﻿using EAC2.Containers;
-using EAC2.Utilities;
+﻿using ACE.Containers;
+using ACE.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +9,15 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace EAC2
+namespace ACE
 {
-    public class EACPlayer : ModPlayer
+    public class ACEPlayer : ModPlayer
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         /// <summary>
         /// A container to store fields with defaults in a way that is easy to reinitialize
         /// </summary>
-        public Containers.PlayerData PlayerData { get; private set; }
+        public PlayerData PlayerData { get; private set; }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init/Deinit ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         public override void Initialize()
@@ -46,7 +46,7 @@ namespace EAC2
         /// <summary>
         /// When a client joins a world that already has at least once client, each client calls this.
         /// The joining client will call this once per existing player (duplicate calls).
-        /// Passed Player and EACPlayer are not yet initialized (doesn't even have name, whoami, etc.)
+        /// Passed Player and ACEPlayer are not yet initialized (doesn't even have name, whoami, etc.)
         /// Server never calls this.
         /// </summary>
         /// <param name="player"></param>
@@ -59,7 +59,7 @@ namespace EAC2
         }
 
         /// <summary>
-        /// Each client calls this when a different client leaves. Player and EACPlayer data are correct.
+        /// Each client calls this when a different client leaves. Player and ACEPlayer data are correct.
         /// Server never calls this.
         /// </summary>
         /// <param name="player"></param>

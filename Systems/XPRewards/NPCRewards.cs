@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
-using static EAC2.LocalData;
+using static ACE.LocalData;
 using Terraria.ID;
-using EAC2.Utilities;
+using ACE.Utilities;
 
-namespace EAC2.Systems.XPRewards
+namespace ACE.Systems.XPRewards
 {
     class NPCRewards : GlobalNPC
     {

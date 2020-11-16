@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.Localization;
 
-namespace EAC2.Utilities
+namespace ACE.Utilities
 {
     public static class Logger
     {
@@ -31,8 +31,8 @@ namespace EAC2.Utilities
                     Main.NewText("TRACE: " + message, UI.Constants.COLOUR_MESSAGE_TRACE);
                 }
             }
-            if (EAC2.MOD != null)
-                EAC2.MOD.Logger.Debug(message);
+            if (ACE.MOD != null)
+                ACE.MOD.Logger.Debug(message);
         }
 
         public static void Error(string message)
@@ -40,7 +40,7 @@ namespace EAC2.Utilities
             message = message + " (please report)";
             if (LocalData.IS_SERVER)
             {
-                message = "EAC2-ERROR from Server: " + message;
+                message = $"{ACE.MOD_NAME}-ERROR from Server: " + message;
                 Console.WriteLine(message);
                 NetMessage.BroadcastChatMessage(NetworkText.FromLiteral(message), UI.Constants.COLOUR_MESSAGE_ERROR);
             }
@@ -48,7 +48,7 @@ namespace EAC2.Utilities
             {
                 if (LocalData.IS_CLIENT)
                 {
-                    message = "EAC2-ERROR from Client#" + Main.LocalPlayer.whoAmI + ": " + message;
+                    message = $"{ACE.MOD_NAME}-ERROR from Client#" + Main.LocalPlayer.whoAmI + ": " + message;
                     Main.NewText("Sending " + message, UI.Constants.COLOUR_MESSAGE_ERROR);
                     PacketHandler.ClientBroadcast.Send(-1, (byte)Main.LocalPlayer.whoAmI, message, PacketHandler.ClientBroadcast.BROADCAST_TYPE.ERROR);
                 }
@@ -57,7 +57,7 @@ namespace EAC2.Utilities
                     Main.NewText("ExperienceAndClasses-ERROR: " + message, UI.Constants.COLOUR_MESSAGE_TRACE);
                 }
             }
-            EAC2.MOD.Logger.Error(message);
+            ACE.MOD.Logger.Error(message);
         }
     }
 }

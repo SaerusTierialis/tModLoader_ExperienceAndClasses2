@@ -1,4 +1,4 @@
-﻿using EAC2.Containers;
+﻿using ACE.Containers;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
-using static EAC2.UI.Elements;
+using static ACE.UI.Elements;
 
-namespace EAC2.UI
+namespace ACE.UI
 {
     public class XPOverlay : UIModule
     {

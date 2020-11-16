@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
-using EAC2.Containers;
+using ACE.Containers;
 
-namespace EAC2
+namespace ACE
 {
     /// <summary>
     /// Contains misc non-synced local data
@@ -24,7 +24,7 @@ namespace EAC2
         public static int WHO_AM_I { get; private set; }
 
         //ModPlayer
-        public static EACPlayer LOCAL_PLAYER { get; private set; }
+        public static ACEPlayer LOCAL_PLAYER { get; private set; }
         public static bool LOCAL_PLAYER_VALID { get; private set; }
 
         //UI
@@ -60,7 +60,7 @@ namespace EAC2
             Systems.XPRewards.NPCRewards.ClearLoookup();
         }
 
-        public static void SetLocalPlayer(EACPlayer local_player)
+        public static void SetLocalPlayer(ACEPlayer local_player)
         {
             //init
             ResetLocalData();

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 
-namespace EAC2.Utilities
+namespace ACE.Utilities
 {
     static class Commons
     {
@@ -22,12 +22,12 @@ namespace EAC2.Utilities
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Searches ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public static List<EACPlayer> GetEACPlayers(bool require_alive = false, Vector2 position = new Vector2(), float range = -1)
+        public static List<ACEPlayer> GetACEPlayers(bool require_alive = false, Vector2 position = new Vector2(), float range = -1)
         {
-            List<EACPlayer> players = new List<EACPlayer>();
+            List<ACEPlayer> players = new List<ACEPlayer>();
 
             Player player;
-            EACPlayer eacplayer;
+            ACEPlayer ACEPlayer;
             for (int player_index = 0; player_index < Main.maxPlayers; player_index++)
             {
                 player = Main.player[player_index];
@@ -41,14 +41,14 @@ namespace EAC2.Utilities
                 //distance check
                 if ((range > 0) && (player.Distance(position) > range)) continue;
 
-                //get eacplayer...
-                eacplayer = player.GetModPlayer<EACPlayer>();
+                //get ACEPlayer...
+                ACEPlayer = player.GetModPlayer<ACEPlayer>();
 
                 //all good
-                //if ((eacplayer != null) && eacplayer.PlayerData.Initialized)
-                if (eacplayer != null)  
+                //if ((ACEPlayer != null) && ACEPlayer.PlayerData.Initialized)
+                if (ACEPlayer != null)  
                 {
-                    players.Add(eacplayer);
+                    players.Add(ACEPlayer);
                 }
             }
 

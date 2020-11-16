@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 
-namespace EAC2.Systems.XPRewards
+namespace ACE.Systems.XPRewards
 {
     public static class Rewards
     {
@@ -73,9 +73,9 @@ namespace EAC2.Systems.XPRewards
                     {
                         //get highest character level
                         int highest_level = 0;
-                        foreach (EACPlayer eacplayer in Utilities.Commons.GetEACPlayers())
+                        foreach (ACEPlayer ACEPlayer in Utilities.Commons.GetACEPlayers())
                         {
-                            highest_level = (int)Math.Max(highest_level, eacplayer.PlayerData.Character.Character_Level.value);
+                            highest_level = (int)Math.Max(highest_level, ACEPlayer.PlayerData.Character.Character_Level.value);
                         }
 
                         int level_difference = (int)(highest_level - LocalData.LOCAL_PLAYER.PlayerData.Character.Character_Level.value);
@@ -101,7 +101,7 @@ namespace EAC2.Systems.XPRewards
         /// <returns></returns>
         private static int CountEligiblePlayers()
         {
-            return Math.Max(1, Utilities.Commons.GetEACPlayers().Count);
+            return Math.Max(1, Utilities.Commons.GetACEPlayers().Count);
         }
 
         private static void DisplayXPReward(uint xp, Microsoft.Xna.Framework.Rectangle location, bool bonus = false)

@@ -1,11 +1,11 @@
-﻿using EAC2.Containers;
+﻿using ACE.Containers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EAC2.Systems.PlayerModules
+namespace ACE.Systems.PlayerModules
 {
     public class CharacterLevel : AutoDataPlayer<uint>
     {

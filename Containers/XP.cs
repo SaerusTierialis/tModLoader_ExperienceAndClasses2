@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static EAC2.Utilities.Maths;
+using static ACE.Utilities.Maths;
 
-namespace EAC2.Containers
+namespace ACE.Containers
 {
     public class XP
     {

@@ -4,23 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EAC2
+namespace ACE
 {
     public static class Tags
     {
         //IDs can be renamed/reordered without issue
         public enum ID : ushort
         {
+            World_Tiles_Placed,
             Character_XPLevel,
             UI_XPOverlay_Location,
             //ADD HERE
         }
 
         /// <summary>
-        /// These strings must NEVER change - would cause old data to not load. Note that "EAC2_" is added automatically.
+        /// These strings must NEVER change - would cause old data to not load. Note that mod name is added automatically.
         /// </summary>
         private static readonly Dictionary<ID, string> _lookup = new Dictionary<ID, string>()
         {
+            [ID.World_Tiles_Placed] = "Tiles_Placed",
             [ID.Character_XPLevel] = "Character_XPLevel",
             [ID.UI_XPOverlay_Location] = "UI_XPOverlay_Location",
             //ADD HERE
@@ -39,6 +41,6 @@ namespace EAC2
             }
         }
 
-        public static string Get(ID id) => $"EAC2_{_lookup[id]}"; 
+        public static string Get(ID id) => $"{ACE.MOD_NAME}_{_lookup[id]}"; 
     }
 }

@@ -8,7 +8,7 @@ using Terraria;
 using Terraria.IO;
 using Terraria.UI;
 
-namespace EAC2.Containers
+namespace ACE.Containers
 {
     public abstract class UIModule : UIState
     {

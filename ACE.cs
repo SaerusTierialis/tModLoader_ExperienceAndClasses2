@@ -1,17 +1,19 @@
-using EAC2.Utilities;
+using ACE.Utilities;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.IO;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace EAC2
+namespace ACE
 {
-	public class EAC2 : Mod
+	public class ACE : Mod
 	{
-		public EAC2(){}
+		public ACE(){}
 
         public static Mod MOD;
+
+        public const string MOD_NAME = "ACE";
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ UI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -25,7 +27,7 @@ namespace EAC2
             int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
             if (MouseTextIndex != -1)
             {
-                layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer("EAC_UIMain",
+                layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer($"{MOD_NAME}_UIMain",
                     delegate {
                         LocalData.UIData?.Draw();
                         return true;
@@ -40,7 +42,7 @@ namespace EAC2
         public override void Load()
         {
             //shortcut to mod
-            MOD = ModLoader.GetMod("EAC2");
+            MOD = ModLoader.GetMod(MOD_NAME);
 
             //add serializers
             Terraria.ModLoader.IO.TagSerializer.AddSerializer(new Containers.XPLevel.XPLevelSerializer());

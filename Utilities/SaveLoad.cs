@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader.IO;
 
-namespace EAC2.Utilities
+namespace ACE.Utilities
 {
     class SaveLoad
     {

@@ -1,4 +1,4 @@
-﻿using EAC2.Containers;
+﻿using ACE.Containers;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
 
-namespace EAC2.Textures
+namespace ACE.Textures
 {
     public class TextureHandler
     {
@@ -40,7 +40,7 @@ namespace EAC2.Textures
                 //populate
                 foreach (ID id in _paths.Keys)
                 {
-                    _textures[id] = ModContent.GetTexture($"EAC2/Textures/{_paths[id]}");
+                    _textures[id] = ModContent.GetTexture($"{ACE.MOD_NAME}/Textures/{_paths[id]}");
                 }
 
                 //default to unknown

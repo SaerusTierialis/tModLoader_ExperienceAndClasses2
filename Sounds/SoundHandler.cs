@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
 
-namespace EAC2.Sounds
+namespace ACE.Sounds
 {
     public class SoundHandler
     {
