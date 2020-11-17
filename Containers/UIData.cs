@@ -22,6 +22,8 @@ namespace ACE.Containers
 
         private bool initialized = false;
         public readonly Preferences PersitentData = new Preferences(Path.Combine(Main.SavePath, "Mod Configs", $"{ACE.MOD_NAME}_UI.json"));
+        private bool _prior_inventory_state = false;
+        public bool Inventory_State_Changed { get; private set; } = false;
 
         private readonly Dictionary<UIs, UIModule> _modules = new Dictionary<UIs, UIModule>();
         public XPOverlay XPOverlay => (XPOverlay)_modules[UIs.XPOverlay];
@@ -58,6 +60,16 @@ namespace ACE.Containers
         {
             if (initialized)
             {
+                if (Main.playerInventory != _prior_inventory_state)
+                {
+                    _prior_inventory_state = Main.playerInventory;
+                    Inventory_State_Changed = true;
+                }
+                else
+                {
+                    Inventory_State_Changed = false;
+                }
+
                 foreach (UIModule module in _modules.Values)
                 {
                     module?.DoUpdate(time);
