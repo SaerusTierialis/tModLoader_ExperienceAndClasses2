@@ -72,14 +72,20 @@ namespace ACE
         [DefaultValue(true)]
         public bool XPOverlay_Show;
 
-        [Label("$Mods.ACE.Common.Config_XPOverlay_Vertical_Label")]
-        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Vertical_Tooltip")]
-        [DefaultValue(false)]
-        public bool XPOverlay_Vertical;
+        [Label("$Mods.ACE.Common.Config_XPOverlay_Background_Colour_Label")]
+        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Background_Colour_Tooltip")]
+        [DefaultValue(typeof(Color), "50, 50, 200, 255"), ColorNoAlpha]
+        public Color XPOverlay_Background_Colour;
+
+        [Label("$Mods.ACE.Common.Config_XPOverlay_Transparency_Label")]
+        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_XPOverlay_Transparency_Tooltip")]
+        [DefaultValue(0.33f)]
+        [Range(0f, 1f)]
+        public float XPOverlay_Transparency;
 
         [Label("$Mods.ACE.Common.Config_XPOverlay_Dims_Label")]
         [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Dims_Tooltip")]
-        public UIDims XPOverlay_Dims = new UIDims(250, 10);
+        public UIDims XPOverlay_Dims = new UIDims(250, 30);
 
 
         public override void OnChanged()

@@ -13,20 +13,26 @@ namespace ACE.UI
 {
     public class XPOverlay : UIModule
     {
-        private ProgressBar _bar;
+        private ProgressBarBundle _bar;
 
         public XPOverlay(UIData parent, bool visible = false) : base(parent, visible) { }
 
         public override void DoInitialize()
         {
-            _bar = new ProgressBar();
+            _bar = new ProgressBarBundle(3);
             Append(_bar);
+
+            _bar.SetColourForeground(0, new Color(0f, 255f, 0f, 0f));
+            _bar.SetProgress(1, 25, 100);
+            _bar.SetColourForeground(1, new Color(255f, 255f, 0f, 0f));
+            _bar.SetProgress(2, 50, 100);
+            _bar.SetColourForeground(2, new Color(255f, 0f, 0f, 0f));
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            _bar?.SetProgressXP(LocalData.LOCAL_PLAYER?.PlayerData.Character.local_XPLevel);
+            _bar?.SetProgress(0, LocalData.LOCAL_PLAYER?.PlayerData.Character.local_XPLevel);
         }
 
         public override void ApplyModConfig(ConfigClient config)
@@ -34,7 +40,8 @@ namespace ACE.UI
             UpdateVisibility(config.XPOverlay_Show);
 
             _bar.Resize(config.XPOverlay_Dims.width, config.XPOverlay_Dims.height);
-            _bar.SetVerticalModee(config.XPOverlay_Vertical);
+            _bar.SetColourBackground(config.XPOverlay_Background_Colour);
+            _bar.SetTransparency(config.XPOverlay_Transparency);
         }
 
         protected override void Load()

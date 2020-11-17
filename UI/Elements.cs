@@ -154,7 +154,7 @@ namespace ACE.UI
             }
         }
 
-        public class ProgressBar : Draggable
+        public class ProgressBar : ACEElement
         {
             private float _value_current;
             private float _value_max;
@@ -174,36 +174,34 @@ namespace ACE.UI
 
             protected override void DrawSelf(SpriteBatch spriteBatch)
             {
-                if (_vertical_mode)
-                {
-                    spriteBatch.Draw(Assets.Textures.Get(TextureHandler.ID.Solid), _rect_fgd, colour_foreground);
-                    spriteBatch.Draw(Assets.Textures.Get(TextureHandler.ID.Solid), _rect_bgd, colour_background);
-                }
-                else
-                {
-                    spriteBatch.Draw(Assets.Textures.Get(TextureHandler.ID.Solid), _rect_bgd, colour_background);
-                    spriteBatch.Draw(Assets.Textures.Get(TextureHandler.ID.Solid), _rect_fgd, colour_foreground);
-                }
+                spriteBatch.Draw(Assets.Textures.Get(TextureHandler.ID.Solid), _rect_bgd, colour_background);
+                spriteBatch.Draw(Assets.Textures.Get(TextureHandler.ID.Solid), _rect_fgd, colour_foreground);
 
                 if (IsMouseHovering)
                     Main.hoverItemName = $"{label}\n{_value_current} / {_value_max} ({_progress * 100}%)";
             }
 
-            private void UpdateRectangles()
+            public void UpdateRectangles()
             {
-                if (_vertical_mode)
+                if (Parent != null)
                 {
-                    _rect_bgd = new Rectangle((int)L, (int)T, (int)W, (int)(H * (1 - _progress)));
-                    _rect_fgd = new Rectangle((int)L, (int)T, (int)W, (int)H);
-                }
-                else
-                {
-                    _rect_bgd = new Rectangle((int)L, (int)T, (int)W, (int)H);
-                    _rect_fgd = new Rectangle((int)L, (int)T, (int)(W * _progress), (int)H);
+                    int l = (int)(Parent.Left.Pixels + L);
+                    int t = (int)(Parent.Top.Pixels + T);
+
+                    if (_vertical_mode)
+                    {
+                        _rect_bgd = new Rectangle(l, t, (int)W, (int)(H * (1 - _progress)));
+                        _rect_fgd = new Rectangle(l, t + _rect_bgd.Height, (int)W, (int)(H - _rect_bgd.Height));
+                    }
+                    else
+                    {
+                        _rect_fgd = new Rectangle(l, t, (int)(W * _progress), (int)H);
+                        _rect_bgd = new Rectangle(l + _rect_fgd.Width, t, (int)(W - _rect_fgd.Width), (int)H);
+                    }
                 }
             }
 
-            public void SetProgressXP(XPLevel xp)
+            public void SetProgress(XPLevel xp)
             {
                 SetProgress(xp.XP, xp.XP_Needed);
             }
@@ -216,20 +214,131 @@ namespace ACE.UI
                 UpdateRectangles();
             }
 
-            public void SetVerticalModee(bool is_vertical)
-            {
-                _vertical_mode = is_vertical;
-                UpdateRectangles();
-            }
-
             protected override void OnResize()
             {
+                _vertical_mode = H > W;
                 UpdateRectangles();
             }
 
             protected override void OnMove()
             {
                 UpdateRectangles();
+            }
+        }
+
+        public class ProgressBarBundle : Draggable
+        {
+            private readonly ProgressBar[] _bars;
+            private readonly int _number_bars;
+            private bool _vertical_mode = false;
+            private float _transparency = 0f;
+
+            public ProgressBarBundle(int number_bars)
+            {
+                _number_bars = number_bars;
+                _bars = new ProgressBar[_number_bars];
+                for (int i = 0; i < _number_bars; i++)
+                {
+                    _bars[i] = new ProgressBar();
+                    Append(_bars[i]);
+                }
+            }
+
+            public void SetProgress(int bar_index, float current, float max)
+            {
+                if (bar_index < _number_bars)
+                    _bars[bar_index].SetProgress(current, max);
+            }
+
+            public void SetProgress(int bar_index, XPLevel xp)
+            {
+                if (bar_index < _number_bars)
+                    _bars[bar_index].SetProgress(xp.XP, xp.XP_Needed);
+            }
+
+            public void SetLabel(int bar_index, string label)
+            {
+                if (bar_index < _number_bars)
+                    _bars[bar_index].label = label;
+            }
+
+            public void SetColourBackground(int bar_index, Color colour)
+            {
+                if (bar_index < _number_bars)
+                    _bars[bar_index].colour_background = colour;
+                UpdateTransparency();
+            }
+
+            public void SetColourForeground(int bar_index, Color colour)
+            {
+                if (bar_index < _number_bars)
+                    _bars[bar_index].colour_foreground = colour;
+                UpdateTransparency();
+            }
+
+            public void SetColourBackground(Color colour)
+            {
+                foreach (var bar in _bars)
+                    bar.colour_background = colour;
+                UpdateTransparency();
+            }
+
+            public void SetColourForeground(Color colour)
+            {
+                foreach (var bar in _bars)
+                    bar.colour_foreground = colour;
+                UpdateTransparency();
+            }
+
+            public void SetTransparency(float transparency)
+            {
+                _transparency = transparency;
+                UpdateTransparency();
+            }
+
+            private void UpdateTransparency()
+            {
+                foreach (var bar in _bars)
+                {
+                    bar.colour_background.A = (byte)(255 * (1 - _transparency));
+                    bar.colour_foreground.A = (byte)(255 * (1 - _transparency));
+                }
+            }
+
+            protected override void OnMove()
+            {
+                RecalculateBars();
+            }
+
+            protected override void OnResize()
+            {
+                _vertical_mode = H > W;
+                RecalculateBars();
+            }
+
+            private void RecalculateBars()
+            {
+                float w = W;
+                float h = H;
+                if (_vertical_mode)
+                    w /= _number_bars;
+                else
+                    h /= _number_bars;
+
+                float t = h * (_number_bars - 1);
+                float l = 0;
+                foreach (var bar in _bars)
+                {
+                    bar.Left.Set(l, 0);
+                    bar.Top.Set(t, 0);
+
+                    bar.Resize(w, h);
+
+                    if (_vertical_mode)
+                        l += w;
+                    else
+                        t -= h;
+                }
             }
         }
     }
