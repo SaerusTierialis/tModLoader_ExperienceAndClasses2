@@ -28,25 +28,25 @@ namespace ACE
 
 
         //Rewards
-        [Header("$Mods.ACE.Common.Config_Header_XP")]
+        [Header("$Mods.ACE.ConfigServer.Header_XP")]
 
-        [Label("$Mods.ACE.Common.Config_XP_Rate_Label")]
+        [Label("$Mods.ACE.ConfigServer.XP_Rate_Label")]
         [Range(0f, 10f)]
         [Increment(.05f)]
         [DefaultValue(1f)]
         public float XPRate;
 
-        [Label("$Mods.ACE.Common.Config_XP_Catchup_Label")]
-        [Tooltip("$Mods.ACE.Common.Config_XP_Catchup_Tooltip")]
+        [Label("$Mods.ACE.ConfigServer.XP_Catchup_Label")]
+        [Tooltip("$Mods.ACE.ConfigServer.XP_Catchup_Tooltip")]
         [DefaultValue(true)]
         public bool AllowXPCatchup;
 
 
         //DEBUG
-        [Header("$Mods.ACE.Common.Config_Header_Debug")]
+        [Header("$Mods.ACE.ConfigServer.Header_Debug")]
 
-        [Label("$Mods.ACE.Common.Config_Trace_Label")]
-        [Tooltip("$Mods.ACE.Common.Config_Trace_Tooltip")]
+        [Label("$Mods.ACE.ConfigServer.Trace_Label")]
+        [Tooltip("$Mods.ACE.ConfigServer.Trace_Tooltip")]
         [DefaultValue(false)]
         public bool Trace;
 
@@ -65,26 +65,23 @@ namespace ACE
     
 
         //UI
-        [Header("$Mods.ACE.Common.Config_Header_UI")]
+        [Header("$Mods.ACE.ConfigClient.Header_UI")]
 
-        [Label("$Mods.ACE.Common.Config_XPOverlay_Show_Label")]
-        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Show_Tooltip")]
+        [Label("$Mods.ACE.ConfigClient.XPOverlay_Show_Label")]
         [DefaultValue(UIAutoMode.Always)]
         public UIAutoMode XPOverlay_Show;
 
-        [Label("$Mods.ACE.Common.Config_XPOverlay_Background_Colour_Label")]
-        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Background_Colour_Tooltip")]
+        [Label("$Mods.ACE.ConfigClient.XPOverlay_Background_Colour_Label")]
         [DefaultValue(typeof(Color), "50, 50, 200, 255"), ColorNoAlpha]
         public Color XPOverlay_Background_Colour;
 
-        [Label("$Mods.ACE.Common.Config_XPOverlay_Transparency_Label")]
-        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_XPOverlay_Transparency_Tooltip")]
+        [Label("$Mods.ACE.ConfigClient.XPOverlay_Transparency_Label")]
         [DefaultValue(0.33f)]
         [Range(0f, 1f)]
         public float XPOverlay_Transparency;
 
-        [Label("$Mods.ACE.Common.Config_XPOverlay_Dims_Label")]
-        [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Dims_Tooltip")]
+        [Label("$Mods.ACE.ConfigClient.XPOverlay_Dims_Label")]
+        [Tooltip("$Mods.ACE.ConfigClient.XPOverlay_Dims_Tooltip")]
         public UIDims XPOverlay_Dims = new UIDims(250, 30);
 
 
