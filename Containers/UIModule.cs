@@ -56,6 +56,14 @@ namespace ACE.Containers
             UI?.SetState(null);
         }
 
+        public void ToggleVisibility()
+        {
+            if (Visible)
+                Hide();
+            else
+                Show();
+        }
+
         public void DoUpdate(GameTime time)
         {
             UI?.Update(time);
