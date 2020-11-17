@@ -1,4 +1,5 @@
 ﻿using ACE.Containers;
+using ACE.UI.Elements;
 using ACE.Utilities;
 using Microsoft.Xna.Framework;
 using System;
@@ -8,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
-using static ACE.UI.Elements;
 
 namespace ACE.UI
 {
