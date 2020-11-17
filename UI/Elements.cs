@@ -229,47 +229,47 @@ namespace ACE.UI
         public class ProgressBarBundle : Draggable
         {
             private readonly ProgressBar[] _bars;
-            private readonly int _number_bars;
+            private readonly uint _number_bars;
             private bool _vertical_mode = false;
             private float _transparency = 0f;
 
-            public ProgressBarBundle(int number_bars)
+            public ProgressBarBundle(uint number_bars)
             {
                 _number_bars = number_bars;
                 _bars = new ProgressBar[_number_bars];
-                for (int i = 0; i < _number_bars; i++)
+                for (uint i = 0; i < _number_bars; i++)
                 {
                     _bars[i] = new ProgressBar();
                     Append(_bars[i]);
                 }
             }
 
-            public void SetProgress(int bar_index, float current, float max)
+            public void SetProgress(uint bar_index, float current, float max)
             {
                 if (bar_index < _number_bars)
                     _bars[bar_index].SetProgress(current, max);
             }
 
-            public void SetProgress(int bar_index, XPLevel xp)
+            public void SetProgress(uint bar_index, XPLevel xp)
             {
                 if (bar_index < _number_bars)
                     _bars[bar_index].SetProgress(xp.XP, xp.XP_Needed);
             }
 
-            public void SetLabel(int bar_index, string label)
+            public void SetLabel(uint bar_index, string label)
             {
                 if (bar_index < _number_bars)
                     _bars[bar_index].label = label;
             }
 
-            public void SetColourBackground(int bar_index, Color colour)
+            public void SetColourBackground(uint bar_index, Color colour)
             {
                 if (bar_index < _number_bars)
                     _bars[bar_index].colour_background = colour;
                 UpdateTransparency();
             }
 
-            public void SetColourForeground(int bar_index, Color colour)
+            public void SetColourForeground(uint bar_index, Color colour)
             {
                 if (bar_index < _number_bars)
                     _bars[bar_index].colour_foreground = colour;
@@ -303,6 +303,12 @@ namespace ACE.UI
                     bar.colour_background.A = (byte)(255 * (1 - _transparency));
                     bar.colour_foreground.A = (byte)(255 * (1 - _transparency));
                 }
+            }
+
+            public void SetVisibility(uint bar_index, bool is_visible)
+            {
+                if (bar_index < _number_bars)
+                    _bars[bar_index].visible = is_visible;
             }
 
             protected override void OnMove()

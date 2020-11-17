@@ -15,18 +15,23 @@ namespace ACE.UI
     {
         private ProgressBarBundle _bar;
 
+        private enum ID : byte
+        {
+            Character_XP,
+            Primary_XP,
+            Secondary_XP,
+            COUNT,
+        }
+
         public XPOverlay(UIData parent, bool visible = false) : base(parent, visible) { }
 
         public override void DoInitialize()
         {
-            _bar = new ProgressBarBundle(3);
+            _bar = new ProgressBarBundle((uint)ID.COUNT);
             Append(_bar);
 
-            _bar.SetColourForeground(0, new Color(0f, 255f, 0f, 0f));
-            _bar.SetProgress(1, 25, 100);
-            _bar.SetColourForeground(1, new Color(255f, 255f, 0f, 0f));
-            _bar.SetProgress(2, 50, 100);
-            _bar.SetColourForeground(2, new Color(255f, 0f, 0f, 0f));
+            _bar.SetVisibility((uint)ID.Primary_XP, false);
+            _bar.SetVisibility((uint)ID.Secondary_XP, false);
         }
 
         public override void Update(GameTime gameTime)
