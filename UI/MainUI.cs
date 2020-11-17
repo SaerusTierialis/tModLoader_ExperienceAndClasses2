@@ -16,7 +16,9 @@ namespace ACE.UI
 
         private Draggable _main;
 
-        public MainUI(UIData parent) : base(parent)
+        public MainUI(UIData parent) : base(parent) { }
+
+        public override void DoInitialize()
         {
             _main = new Draggable();
             _main.Resize(WIDTH, HEIGHT);
