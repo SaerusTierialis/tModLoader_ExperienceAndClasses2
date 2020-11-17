@@ -86,6 +86,7 @@ namespace ACE.Containers
         public virtual void DoInitialize() { }
         public virtual void Save() { }
         protected virtual void Load() { }
+        public virtual void OnInventoryStateChange(bool state) { }
 
     }
 }

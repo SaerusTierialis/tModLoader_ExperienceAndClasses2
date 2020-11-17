@@ -69,8 +69,8 @@ namespace ACE
 
         [Label("$Mods.ACE.Common.Config_XPOverlay_Show_Label")]
         [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Show_Tooltip")]
-        [DefaultValue(true)]
-        public bool XPOverlay_Show;
+        [DefaultValue(UIAutoMode.Always)]
+        public UIAutoMode XPOverlay_Show;
 
         [Label("$Mods.ACE.Common.Config_XPOverlay_Background_Colour_Label")]
         [Tooltip("$Mods.ACE.Common.Config_XPOverlay_Background_Colour_Tooltip")]
@@ -120,5 +120,13 @@ namespace ACE
         {
             return new { width , height }.GetHashCode();
         }
+    }
+
+    public enum UIAutoMode
+    {
+        Never,
+        InventoryOpen,
+        InventoryClosed,
+        Always
     }
 }

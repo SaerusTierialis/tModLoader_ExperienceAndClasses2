@@ -14,6 +14,7 @@ namespace ACE.UI
     public class XPOverlay : UIModule
     {
         private ProgressBarBundle _bar;
+        private UIAutoMode auto_mode = UIAutoMode.Always;
 
         private enum ID : byte
         {
@@ -40,9 +41,31 @@ namespace ACE.UI
             _bar?.SetProgress(0, LocalData.LOCAL_PLAYER?.PlayerData.Character.local_XPLevel);
         }
 
+        public override void OnInventoryStateChange(bool state)
+        {
+            switch (auto_mode)
+            {
+                case UIAutoMode.Never:
+                    UpdateVisibility(false);
+                    break;
+
+                case UIAutoMode.Always:
+                    UpdateVisibility(true);
+                    break;
+
+                case UIAutoMode.InventoryClosed:
+                    UpdateVisibility(state == false);
+                    break;
+
+                case UIAutoMode.InventoryOpen:
+                    UpdateVisibility(state == true);
+                    break;
+            }
+        }
+
         public override void ApplyModConfig(ConfigClient config)
         {
-            UpdateVisibility(config.XPOverlay_Show);
+            auto_mode = config.XPOverlay_Show;
 
             _bar.Resize(config.XPOverlay_Dims.width, config.XPOverlay_Dims.height);
             _bar.SetColourBackground(config.XPOverlay_Background_Colour);
