@@ -39,6 +39,7 @@ namespace ACE.Containers
             DoInitialize();
             ApplyModConfig(ConfigClient.Instance);
             Load();
+            UpdateVisibility();
             Initialized = true;
         }
 
@@ -68,7 +69,6 @@ namespace ACE.Containers
         {
             UI?.Update(time);
             _time_last_update = time;
-            UpdateVisibility();
         }
 
         public void DoDraw()
