@@ -11,12 +11,15 @@ namespace ACE.Utilities
 {
     public static class Hotkeys
     {
+        public static ModHotKey UI_Toggle { get; private set; }
 
         public static void Load()
         {
+            UI_Toggle = ACE.MOD.RegisterHotKey(LocalizedText.Get("Hotkeys.UI_Toggle"), "P");
         }
         public static void Unload()
         {
+            UI_Toggle = null;
         }
 
         public static void CheckHotkeys(TriggersSet keys)

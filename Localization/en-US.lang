@@ -1,3 +1,6 @@
+//Hotkeys
+Hotkeys.UI_Toggle=Open/Close UI
+
 //ConfigServer
 ConfigServer.Header_XP=Experience
 ConfigServer.XP_Rate_Label=Experience Rate
