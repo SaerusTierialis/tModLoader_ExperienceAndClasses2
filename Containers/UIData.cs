@@ -62,7 +62,7 @@ namespace ACE.Containers
                 if (Main.playerInventory != _prior_inventory_state)
                 {
                     _prior_inventory_state = Main.playerInventory;
-                    InventoryStateChange(Main.playerInventory);
+                    InventoryStateChange();
                 }
 
                 foreach (UIModule module in _modules.Values)
@@ -108,12 +108,12 @@ namespace ACE.Containers
             }
         }
 
-        private void InventoryStateChange(bool state)
+        private void InventoryStateChange()
         {
             if (initialized)
             {
                 foreach (UIModule module in _modules.Values)
-                    module.OnInventoryStateChange(state);
+                    module.OnInventoryStateChange();
             }
         }
 

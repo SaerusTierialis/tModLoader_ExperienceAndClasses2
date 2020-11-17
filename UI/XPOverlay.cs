@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
 
@@ -25,7 +26,7 @@ namespace ACE.UI
             COUNT,
         }
 
-        public XPOverlay(UIData parent, bool visible = false) : base(parent, visible) { }
+        public XPOverlay(UIData parent) : base(parent) { }
 
         public override void DoInitialize()
         {
@@ -42,24 +43,24 @@ namespace ACE.UI
             _bar?.SetProgress(0, LocalData.LOCAL_PLAYER?.PlayerData.Character.local_XPLevel);
         }
 
-        public override void OnInventoryStateChange(bool state)
+        public override void OnInventoryStateChange()
         {
             switch (auto_mode)
             {
                 case UIAutoMode.Never:
-                    UpdateVisibility(false);
+                    Visible = false;
                     break;
 
                 case UIAutoMode.Always:
-                    UpdateVisibility(true);
+                    Visible = true;
                     break;
 
                 case UIAutoMode.InventoryClosed:
-                    UpdateVisibility(state == false);
+                    Visible = (Main.playerInventory == false);
                     break;
 
                 case UIAutoMode.InventoryOpen:
-                    UpdateVisibility(state == true);
+                    Visible = (Main.playerInventory == true);
                     break;
             }
         }
@@ -67,6 +68,7 @@ namespace ACE.UI
         public override void ApplyModConfig(ConfigClient config)
         {
             auto_mode = config.XPOverlay_Show;
+            OnInventoryStateChange();
 
             _bar.Resize(config.XPOverlay_Dims.width, config.XPOverlay_Dims.height);
             _bar.SetColourBackground(config.XPOverlay_Background_Colour);

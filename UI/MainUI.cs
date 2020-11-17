@@ -16,7 +16,7 @@ namespace ACE.UI
 
         private Draggable _main;
 
-        public MainUI(UIData parent, bool visible = false) : base(parent, visible)
+        public MainUI(UIData parent) : base(parent)
         {
             _main = new Draggable();
             _main.Resize(WIDTH, HEIGHT);
@@ -27,7 +27,7 @@ namespace ACE.UI
             _main.Append(panel);
         }
 
-        public override void OnInventoryStateChange(bool state)
+        public override void OnInventoryStateChange()
         {
             Hide();
         }
