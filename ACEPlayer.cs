@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -143,6 +144,13 @@ namespace ACE
 
             //mod fields
             PlayerData.Load(tag);
+        }
+
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Inputs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+            Hotkeys.CheckHotkeys(triggersSet);
         }
 
     }

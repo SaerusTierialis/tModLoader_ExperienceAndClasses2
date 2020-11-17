@@ -50,6 +50,9 @@ namespace ACE
             //reset local data
             LocalData.ResetLocalData();
 
+            //set hotkeys
+            Hotkeys.Load();
+
             //load textures
             Assets.Load();
         }
@@ -57,8 +60,9 @@ namespace ACE
         public override void Unload()
         {
             MOD = null;
-            Assets.Unload();
             LocalData.ResetLocalData(); //should help with garbage collection
+            Hotkeys.Unload();
+            Assets.Unload();
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Packets ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
