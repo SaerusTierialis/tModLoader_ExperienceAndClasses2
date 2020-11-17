@@ -1,11 +1,6 @@
 ﻿using ACE.Containers;
 using ACE.UI.Elements;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent.UI.Elements;
+using ACE.Utilities;
 
 namespace ACE.UI
 {
