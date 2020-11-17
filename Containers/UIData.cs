@@ -18,6 +18,7 @@ namespace ACE.Containers
         public enum UIs : byte
         {
             XPOverlay,
+            MainUI,
         }
 
         private bool initialized = false;
@@ -26,6 +27,7 @@ namespace ACE.Containers
 
         private readonly Dictionary<UIs, UIModule> _modules = new Dictionary<UIs, UIModule>();
         public XPOverlay XPOverlay => (XPOverlay)_modules[UIs.XPOverlay];
+        public MainUI MainUI => (MainUI)_modules[UIs.MainUI];
 
         public UIData()
         {
@@ -42,6 +44,7 @@ namespace ACE.Containers
             {
                 //populate modules...
                 _modules[UIs.XPOverlay] = new XPOverlay(this);
+                _modules[UIs.MainUI] = new MainUI(this);
                 //ADD FUTURE MODULES HERE <------------------------------------
 
                 //warn if any module not set

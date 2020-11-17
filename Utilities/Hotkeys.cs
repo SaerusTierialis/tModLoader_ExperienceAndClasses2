@@ -26,7 +26,7 @@ namespace ACE.Utilities
         {
             if (UI_Toggle.JustPressed)
             {
-                //TODO
+                LocalData.UIData.MainUI.ToggleVisibility();
             }
         }
     }
