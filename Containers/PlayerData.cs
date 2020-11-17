@@ -37,9 +37,9 @@ namespace ACE.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public PlayerData(ACEPlayer ACEPlayer)
+        public PlayerData(ACEPlayer aceplayer)
         {
-            ACEPlayer = ACEPlayer;
+            ACEPlayer = aceplayer;
             PopulateModules();
 
             void PopulateModules()
