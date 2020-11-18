@@ -19,6 +19,7 @@ namespace ACE.Containers
         {
             XPOverlay,
             MainUI,
+            HelpTextPopUp,
         }
 
         public readonly Preferences PersitentData = new Preferences(Path.Combine(Main.SavePath, "Mod Configs", $"{ACE.MOD_NAME}_UI.json"));
@@ -27,6 +28,7 @@ namespace ACE.Containers
         private readonly Dictionary<UIs, UIModule> _modules = new Dictionary<UIs, UIModule>();
         public XPOverlay XPOverlay => (XPOverlay)_modules[UIs.XPOverlay];
         public MainUI MainUI => (MainUI)_modules[UIs.MainUI];
+        public HelpTextPopUp HelpTextPopUp => (HelpTextPopUp)_modules[UIs.HelpTextPopUp];
 
         public UIData()
         {
@@ -41,6 +43,7 @@ namespace ACE.Containers
                 //populate modules...
                 _modules[UIs.XPOverlay] = new XPOverlay(this);
                 _modules[UIs.MainUI] = new MainUI(this);
+                _modules[UIs.HelpTextPopUp] = new HelpTextPopUp(this);
                 //ADD FUTURE MODULES HERE <------------------------------------
 
                 //warn if any module not set
