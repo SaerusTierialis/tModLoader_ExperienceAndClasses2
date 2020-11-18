@@ -362,6 +362,8 @@ namespace ACE.UI.Elements
     public class ACEPanel : ACEElement
     {
         public UIPanel Panel { get; private set; }
+        public Color BackgroundColor { get { return Panel.BackgroundColor; } set { Panel.BackgroundColor = value; } }
+        public Color BorderColor { get { return Panel.BorderColor; } set { Panel.BorderColor = value; } }
 
         public ACEPanel()
         {
