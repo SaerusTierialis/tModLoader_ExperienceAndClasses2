@@ -49,12 +49,14 @@ namespace ACE.Containers
         {
             Visible = true;
             UI?.SetState(this);
+            OnShow();
         }
 
         public void Hide()
         {
             Visible = false;
             UI?.SetState(null);
+            OnHide();
         }
 
         public void ToggleVisibility()
@@ -96,6 +98,8 @@ namespace ACE.Containers
         public virtual void Save() { }
         protected virtual void Load() { }
         public virtual void OnInventoryStateChange() { }
+        protected virtual void OnShow() { }
+        protected virtual void OnHide() { }
 
     }
 }
