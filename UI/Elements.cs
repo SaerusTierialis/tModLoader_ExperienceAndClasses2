@@ -385,6 +385,132 @@ namespace ACE.UI.Elements
             Panel.Append(element);
         }
     }
+
+    public class ACEPanelWithHelpText : ACEPanel
+    {
+        public string text_help_title;
+        public string text_help_body;
+
+        /// <summary>
+        /// Defaults to transparent background if left null.
+        /// </summary>
+        /// <param name="colour_background"></param>
+        public ACEPanelWithHelpText(string body = "Unknown", string title = "Unknown", Color? colour_background = null)
+        {
+            text_help_body = body;
+            text_help_title = title;
+
+            if (colour_background == null)
+                colour_background = Color.Transparent;
+            BackgroundColor = (Color)colour_background;
+        }
+
+        private void StartHelpText()
+        {
+            LocalData.UIData.HelpTextPopUp.Display(this, text_help_body, text_help_title);
+        }
+
+        public void EndHelpText()
+        {
+            LocalData.UIData.HelpTextPopUp.Stop(this);
+        }
+
+        public override void MouseOver(UIMouseEvent evt)
+        {
+            base.MouseOver(evt);
+            StartHelpText();
+        }
+
+        public override void MouseOut(UIMouseEvent evt)
+        {
+            base.MouseOut(evt);
+            EndHelpText();
+        }
+    }
+
+    public class TitledPanel : ACEElement
+    {
+        public ACEPanel Panel_Background { get; private set; }
+        public ACEPanel Panel_Body { get; private set; }
+        public ACEPanelWithHelpText Panel_Title { get; private set; }
+
+        private float _title_height;
+
+        public TitledPanel(float title_height)
+        {
+            _title_height = title_height;
+
+            Panel_Background = new ACEPanel();
+            Append(Panel_Background);
+
+            Panel_Title = new ACEPanelWithHelpText();
+            Panel_Background.Append(Panel_Title);
+
+            Panel_Body = new ACEPanel();
+            Panel_Body.Panel.BorderColor = Color.Transparent;
+            Panel_Body.Panel.BackgroundColor = Color.Transparent;
+            Panel_Background.Append(Panel_Body);
+        }
+
+        protected override void OnResize()
+        {
+            Panel_Background.Resize(W, H);
+            Panel_Title.Resize(W, _title_height);
+            Panel_Body.Resize(W, H - _title_height);
+            Panel_Body.Move(0, _title_height);
+        }
+    }
+
+    public class HelpPanel : TitledPanel
+    {
+        private float _width;
+        private string _title = "Help";
+        private string _body = "Default";
+        private ACEElement _target = null;
+
+        public HelpPanel(float title_height, float width) : base(title_height)
+        {
+            visible = false;
+            _width = width;
+        }
+
+        protected override void OnDraw(SpriteBatch spriteBatch)
+        {
+            if (_target != null)
+            {
+                Rectangle r = _target.GetClippingRectangle(spriteBatch);
+                Move(r.Left + r.Width, r.Top);
+            }
+        }
+
+        public void Show(ACEElement target, string body, string title)
+        {
+            if (target != null)
+            {
+                _target = target;
+
+                _body = body;
+                _title = title;
+                UpdateText();
+
+                visible = true;
+            }
+        }
+
+        public void Hide(ACEElement target)
+        {
+            if (target == _target)
+                Hide();
+        }
+
+        public void Hide()
+        {
+            visible = false;
+        }
+
+        private void UpdateText()
+        {
+            Resize(_width, 100f);
         }
     }
 }
