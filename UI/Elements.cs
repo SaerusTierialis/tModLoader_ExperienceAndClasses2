@@ -30,7 +30,16 @@ namespace ACE.UI.Elements
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (visible)
+            {
                 base.Draw(spriteBatch);
+                OnDraw(spriteBatch);
+            }
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            OnUpdate();
         }
 
         public void Resize((float Width, float Height) size)
@@ -61,13 +70,14 @@ namespace ACE.UI.Elements
 
         protected virtual void OnResize() { }
         protected virtual void OnMove() { }
+        protected virtual void OnDraw(SpriteBatch spriteBatch) { }
+        protected virtual void OnUpdate() { }
     }
 
     public class RestrictWithinParent : ACEElement
     {
-        public override void Update(GameTime gameTime)
+        protected override void OnUpdate()
         {
-            base.Update(gameTime); // don't remove.
             Restrict();
         }
 
@@ -120,10 +130,8 @@ namespace ACE.UI.Elements
             DragEnd(evt);
         }
 
-        public override void Update(GameTime gameTime)
+        protected override void OnUpdate()
         {
-            base.Update(gameTime); // don't remove.
-
             //prevent use of hold items
             if (ContainsPoint(Main.MouseScreen))
             {
@@ -172,7 +180,7 @@ namespace ACE.UI.Elements
             SetProgress(0, 1);
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        protected override void OnDraw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Assets.Textures.Get(TextureHandler.ID.Solid), _rect_bgd, colour_background);
             spriteBatch.Draw(Assets.Textures.Get(TextureHandler.ID.Solid), _rect_fgd, colour_foreground);
