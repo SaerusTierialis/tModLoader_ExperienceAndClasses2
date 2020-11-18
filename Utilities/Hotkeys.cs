@@ -15,7 +15,8 @@ namespace ACE.Utilities
 
         public static void Load()
         {
-            UI_Toggle = ACE.MOD.RegisterHotKey(LocalizedText.Get("Hotkeys.UI_Toggle"), "P");
+            //DO NOT USE LOCALIZATION TEXT HERE - IT ISN'T AVAILABLE AT THIS STAGE OF LOADING
+            UI_Toggle = ACE.MOD.RegisterHotKey("Open/Close UI", "P");
         }
         public static void Unload()
         {
