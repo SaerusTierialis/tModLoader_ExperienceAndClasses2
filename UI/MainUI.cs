@@ -28,5 +28,17 @@ namespace ACE.UI
         {
             Hide();
         }
+
+        protected override void Load()
+        {
+            (float Left, float Top) location = (80, 100);
+            ParentUIData.PersitentData.Get(Tags.Get(Tags.ID.UI_MainUI_Location), ref location);
+            _main.Move(location);
+        }
+
+        public override void Save()
+        {
+            ParentUIData.PersitentData.Put(Tags.Get(Tags.ID.UI_MainUI_Location), _main.Location);
+        }
     }
 }

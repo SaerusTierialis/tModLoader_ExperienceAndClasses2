@@ -14,6 +14,7 @@ namespace ACE.Utilities
             World_Tiles_Placed,
             Character_XPLevel,
             UI_XPOverlay_Location,
+            UI_MainUI_Location,
             //ADD HERE
         }
 
@@ -25,6 +26,7 @@ namespace ACE.Utilities
             [ID.World_Tiles_Placed] = "Tiles_Placed",
             [ID.Character_XPLevel] = "Character_XPLevel",
             [ID.UI_XPOverlay_Location] = "UI_XPOverlay_Location",
+            [ID.UI_MainUI_Location] = "UI_MainUI_Location",
             //ADD HERE
         };
 
