@@ -21,7 +21,6 @@ namespace ACE.Containers
             MainUI,
         }
 
-        private bool initialized = false;
         public readonly Preferences PersitentData = new Preferences(Path.Combine(Main.SavePath, "Mod Configs", $"{ACE.MOD_NAME}_UI.json"));
         private bool _prior_inventory_state = false;
 
@@ -36,9 +35,6 @@ namespace ACE.Containers
 
             //init modules
             PopulateModules();
-
-            //complete
-            initialized = true;
 
             void PopulateModules()
             {
@@ -60,64 +56,49 @@ namespace ACE.Containers
 
         public void Update(GameTime time)
         {
-            if (initialized)
+            if (Main.playerInventory != _prior_inventory_state)
             {
-                if (Main.playerInventory != _prior_inventory_state)
-                {
-                    _prior_inventory_state = Main.playerInventory;
-                    InventoryStateChange();
-                }
+                _prior_inventory_state = Main.playerInventory;
+                InventoryStateChange();
+            }
 
-                foreach (UIModule module in _modules.Values)
-                {
-                    module?.DoUpdate(time);
-                }
+            foreach (UIModule module in _modules.Values)
+            {
+                module?.DoUpdate(time);
             }
         }
 
         public void Draw()
         {
-            if (initialized)
+            foreach (UIModule module in _modules.Values)
             {
-                foreach (UIModule module in _modules.Values)
-                {
-                    module?.DoDraw();
-                }
+                module?.DoDraw();
             }
         }
 
         public void ApplyModConfig(ConfigClient config)
         {
-            if (initialized)
+            foreach (UIModule module in _modules.Values)
             {
-                foreach (UIModule module in _modules.Values)
-                {
-                    if (module?.Initialized == true)
-                        module?.ApplyModConfig(config);
-                }
+                if (module?.Initialized == true)
+                    module?.ApplyModConfig(config);
             }
         }
 
         public void Save()
         {
-            if (initialized)
+            PersitentData.Clear();
+            foreach (UIModule module in _modules.Values)
             {
-                PersitentData.Clear();
-                foreach (UIModule module in _modules.Values)
-                {
-                    module?.Save();
-                }
-                PersitentData.Save();
+                module?.Save();
             }
+            PersitentData.Save();
         }
 
         private void InventoryStateChange()
         {
-            if (initialized)
-            {
-                foreach (UIModule module in _modules.Values)
-                    module.OnInventoryStateChange();
-            }
+            foreach (UIModule module in _modules.Values)
+                module.OnInventoryStateChange();
         }
 
     }
