@@ -356,18 +356,33 @@ namespace ACE.UI.Elements
         }
     }
 
+    /// <summary>
+    /// Wrapper for UIPanel that adds ACEElement functionality
+    /// </summary>
     public class ACEPanel : ACEElement
     {
         public UIPanel Panel { get; private set; }
+
         public ACEPanel()
         {
             Panel = new UIPanel();
-            Append(Panel);
+            Panel.SetPadding(0);
+            base.Append(Panel);
         }
+
         protected override void OnResize()
         {
             Panel.Width.Set(W, 0f);
             Panel.Height.Set(H, 0f);
+            RecalculateChildren();
+        }
+
+        public new void Append(UIElement element)
+        {
+            //Mouse functions break when appending directly to this, append to wrapped panel instead
+            Panel.Append(element);
+        }
+    }
         }
     }
 }
