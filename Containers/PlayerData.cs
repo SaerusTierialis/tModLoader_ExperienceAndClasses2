@@ -27,8 +27,10 @@ namespace ACE.Containers
         private enum Modules : byte
         {
             Character,
+            Attributes,
         }
         public Character Character { get { return (Character)_modules[Modules.Character]; } }
+        public Attributes Attributes { get { return (Attributes)_modules[Modules.Attributes]; } }
         //ADD OTHER MODULE SHORTCUTS HERE
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -46,6 +48,7 @@ namespace ACE.Containers
             {
                 //init all modules...
                 _modules[Modules.Character] = new Character(this, (byte)Modules.Character);
+                _modules[Modules.Attributes] = new Attributes(this, (byte)Modules.Attributes);
                 //ADD FUTURE MODULES HERE <------------------------------------
 
                 //warn if any not set
@@ -73,6 +76,7 @@ namespace ACE.Containers
             {
                 //do any frist update setup
                 Character.Activate();
+                Attributes.Activate();
                 _ticks_until_full_sync = TiCKS_FULL_SYNC;
             }
 
