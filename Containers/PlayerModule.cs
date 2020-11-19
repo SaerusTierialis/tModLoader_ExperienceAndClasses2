@@ -112,6 +112,26 @@ namespace ACE.Containers
         }
 
         /// <summary>
+        /// Called by all. PreUpdate fields, then OnPreUpdate, then OnPreUpdateLocal.
+        /// </summary>
+        public void PreUpdate()
+        {
+            if (Active)
+            {
+                foreach (var d in GetFloats()) { d?.PreUpdate(); }
+                foreach (var d in GetBools()) { d?.PreUpdate(); }
+                foreach (var d in GetBytes()) { d?.PreUpdate(); }
+                foreach (var d in GetInts()) { d?.PreUpdate(); }
+                foreach (var d in GetUInts()) { d?.PreUpdate(); }
+                OnPreUpdate();
+                if (Is_Local)
+                {
+                    OnPreUpdateLocal();
+                }
+            }
+        }
+
+        /// <summary>
         /// Called by all. Update fields, then OnUpdate, then OnUpdateLocal.
         /// </summary>
         public void Update()
@@ -195,6 +215,15 @@ namespace ACE.Containers
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Overrides ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        /// <summary>
+        /// Called by all. PreUpdate fields, then OnPreUpdate, then OnPreUpdateLocal.
+        /// </summary>
+        public virtual void OnPreUpdate() { }
+        /// <summary>
+        /// Called only by local owner. PreUpdate fields, then OnPreUpdate, then OnPreUpdateLocal.
+        /// </summary>
+        public virtual void OnPreUpdateLocal() { }
 
         /// <summary>
         /// Called by all. Update fields, then OnUpdate, then OnUpdateLocal.

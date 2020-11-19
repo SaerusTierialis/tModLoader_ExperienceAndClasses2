@@ -89,7 +89,7 @@ namespace ACE.Systems.PlayerModules
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Overrides ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public override void OnUpdateLocal()
+        public override void OnPreUpdateLocal()
         {
             Character_Level.value = local_XPLevel.Level;
         }

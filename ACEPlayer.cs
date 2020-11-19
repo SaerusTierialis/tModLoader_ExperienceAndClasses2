@@ -109,6 +109,14 @@ namespace ACE
             base.PreUpdate();
 
             //reset values that are calculated each cycle
+            PlayerData.PreUpdate();
+        }
+
+        public override void PreUpdateBuffs()
+        {
+            base.PreUpdateBuffs();
+
+            //apply per-cycle effects from PlayerData
             PlayerData.Update();
         }
 

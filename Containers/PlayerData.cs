@@ -69,7 +69,7 @@ namespace ACE.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Actions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public void Update()
+        public void PreUpdate()
         {
             //check if first update
             if (!Character.Active)
@@ -90,6 +90,15 @@ namespace ACE.Containers
                 }
             }
 
+            //actions on each cycle...
+            foreach (PlayerModule m in _modules.Values)
+            {
+                m?.PreUpdate();
+            }
+        }
+
+        public void Update()
+        {
             //actions on each cycle...
             foreach (PlayerModule m in _modules.Values)
             {

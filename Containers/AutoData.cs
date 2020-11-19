@@ -75,10 +75,19 @@ namespace ACE.Containers
         /// <summary>
         /// To be called by all client+server during PreUpdate
         /// </summary>
-        public void Update()
+        public void PreUpdate()
         {
             DetectChange();
             ResetIfNeeded();
+            OnPreUpdate();
+        }
+
+        /// <summary>
+        /// To be called by all client+server during Update
+        /// </summary>
+        public void Update()
+        {
+            OnUpdate();
         }
 
         private void DetectChange()
@@ -149,6 +158,8 @@ namespace ACE.Containers
 
         protected virtual void OnChange() { }
         protected virtual void OnChangeLocal() { }
+        protected virtual void OnPreUpdate() { }
+        protected virtual void OnUpdate() { }
     }
 
     public class AutoDataPlayer<T> : AutoData<T>
