@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ModLoader.IO;
 
 namespace ACE.Containers
 {
@@ -28,9 +29,11 @@ namespace ACE.Containers
         protected readonly T Value_Default;
         protected readonly byte ID;
 
+        private readonly string _tag_key;
+
         protected abstract bool Is_Local();
 
-        public AutoData(byte id, T value_initial, bool syncs = false, bool resets = false)
+        public AutoData(byte id, T value_initial, bool syncs = false, bool resets = false, string tag_key = null)
         {
             ID = id;
 
@@ -41,6 +44,8 @@ namespace ACE.Containers
 
             Syncs = syncs;
             Resets = resets;
+
+            _tag_key = tag_key;
 
             //detect datatype code
             switch (Type.GetTypeCode(typeof(T)))
@@ -156,6 +161,22 @@ namespace ACE.Containers
             Utilities.Logger.Error("AutoData DoSync not implemented for this object type");
         }
 
+        private bool CanSaveLoad => (_tag_key != null);
+
+        public TagCompound Save(TagCompound tag)
+        {
+            if (CanSaveLoad)
+                tag.Add(_tag_key, value);
+
+            return tag;
+        }
+
+        public void Load(TagCompound tag)
+        {
+            if (CanSaveLoad)
+                value = Utilities.SaveLoad.TagTryGet(tag, _tag_key, value);
+        }
+
         protected virtual void OnChange() { }
         protected virtual void OnChangeLocal() { }
         protected virtual void OnPreUpdate() { }
@@ -168,7 +189,7 @@ namespace ACE.Containers
 
         protected override bool Is_Local() => ParentPlayerModule.Is_Local;
 
-        public AutoDataPlayer(PlayerModule parent, byte id, T value_initial, bool syncs = false, bool resets = false) : base(id, value_initial, syncs, resets)
+        public AutoDataPlayer(PlayerModule parent, byte id, T value_initial, bool syncs = false, bool resets = false, string tag_key = null) : base(id, value_initial, syncs, resets, tag_key)
         {
             ParentPlayerModule = parent;
         }
