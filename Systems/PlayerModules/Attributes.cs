@@ -37,7 +37,13 @@ namespace ACE.Systems.PlayerModules
         protected override IEnumerable<AutoDataPlayer<int>> GetInts() => _ints.Values;
         private enum AutoInt : byte
         {
+            Allocated_Power,
+            Bonus_Power,
+            Final_Power,
         }
+        public AutoDataPlayer<int> Allocated_Power => _ints[AutoInt.Allocated_Power];
+        public AutoDataPlayer<int> Bonus_Power => _ints[AutoInt.Bonus_Power];
+        public AutoDataPlayer<int> Final_Power => _ints[AutoInt.Final_Power];
 
 
         private Dictionary<AutoUInt, AutoDataPlayer<uint>> _uints = new Dictionary<AutoUInt, AutoDataPlayer<uint>>();
@@ -59,6 +65,9 @@ namespace ACE.Systems.PlayerModules
 
 
             //each AutoData must be initialized
+            _ints[AutoInt.Bonus_Power] = new AutoDataPlayer<int>(this, (byte)AutoInt.Bonus_Power, 0, false, true); //resets, recalculated by all
+            _ints[AutoInt.Final_Power] = new AttributeFinalPower(this, (byte)AutoInt.Final_Power);
+            _ints[AutoInt.Allocated_Power] = new AutoDataPlayer<int>(this, (byte)AutoInt.Allocated_Power, 0, true, false); //syncs
 
 
             //check for uninitialized AutoData
@@ -75,14 +84,9 @@ namespace ACE.Systems.PlayerModules
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Overrides ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public override void OnUpdate()
+        public override void OnPreUpdate()
         {
-
-        }
-
-        public override void OnUpdateLocal()
-        {
-
+            _ints[AutoInt.Final_Power].value = Allocated_Power.value + Bonus_Power.value;
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Save/Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
