@@ -29,8 +29,8 @@ namespace ACE.Containers
             Character,
             Attributes,
         }
-        public Character Character { get { return (Character)_modules[Modules.Character]; } }
-        public Attributes Attributes { get { return (Attributes)_modules[Modules.Attributes]; } }
+        public CharacterModule Character { get { return (CharacterModule)_modules[Modules.Character]; } }
+        public AttributeModule Attributes { get { return (AttributeModule)_modules[Modules.Attributes]; } }
         //ADD OTHER MODULE SHORTCUTS HERE
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -47,8 +47,8 @@ namespace ACE.Containers
             void PopulateModules()
             {
                 //init all modules...
-                _modules[Modules.Character] = new Character(this, (byte)Modules.Character);
-                _modules[Modules.Attributes] = new Attributes(this, (byte)Modules.Attributes);
+                _modules[Modules.Character] = new CharacterModule(this, (byte)Modules.Character);
+                _modules[Modules.Attributes] = new AttributeModule(this, (byte)Modules.Attributes);
                 //ADD FUTURE MODULES HERE <------------------------------------
 
                 //warn if any not set
@@ -103,6 +103,15 @@ namespace ACE.Containers
             foreach (PlayerModule m in _modules.Values)
             {
                 m?.Update();
+            }
+        }
+
+        public void PostUpdate()
+        {
+            //actions on each cycle...
+            foreach (PlayerModule m in _modules.Values)
+            {
+                m?.PostUpdate();
             }
         }
 

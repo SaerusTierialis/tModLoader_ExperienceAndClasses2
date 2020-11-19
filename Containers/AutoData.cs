@@ -95,6 +95,14 @@ namespace ACE.Containers
             OnUpdate();
         }
 
+        /// <summary>
+        /// To be called by all client+server during PostUpdate
+        /// </summary>
+        public void PostUpdate()
+        {
+            OnPostUpdate();
+        }
+
         private void DetectChange()
         {
             HasChanged = !value.Equals(Value_Prior);
@@ -181,6 +189,7 @@ namespace ACE.Containers
         protected virtual void OnChangeLocal() { }
         protected virtual void OnPreUpdate() { }
         protected virtual void OnUpdate() { }
+        protected virtual void OnPostUpdate() { }
     }
 
     public class AutoDataPlayer<T> : AutoData<T>

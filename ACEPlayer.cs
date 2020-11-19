@@ -112,12 +112,20 @@ namespace ACE
             PlayerData.PreUpdate();
         }
 
-        public override void PreUpdateBuffs()
+        public override void PostUpdateMiscEffects()
         {
-            base.PreUpdateBuffs();
+            base.PostUpdateMiscEffects();
 
             //apply per-cycle effects from PlayerData
             PlayerData.Update();
+        }
+
+        public override void PostUpdate()
+        {
+            base.PostUpdate();
+
+            //apply per-cycle effects from PlayerData
+            PlayerData.PostUpdate();
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Save/Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

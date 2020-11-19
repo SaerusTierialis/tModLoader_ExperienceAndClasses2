@@ -1,6 +1,10 @@
 //Hotkeys
 //DO NOT USE FOR HOTKEYS - NOT AVAILABLE AT THAT STAGE OF LOADING
 
+//Attributes
+Attributes.Power_Name=Power
+Attributes.Power_Tooltip=Increases all damage by {0}% per point
+
 //ConfigServer
 ConfigServer.Header_XP=Experience
 ConfigServer.XP_Rate_Label=Experience Rate

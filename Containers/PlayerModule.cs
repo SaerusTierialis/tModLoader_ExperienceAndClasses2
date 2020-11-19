@@ -152,6 +152,26 @@ namespace ACE.Containers
         }
 
         /// <summary>
+        /// Called by all. PostUpdate fields, then OnPostUpdate, then OnPostUpdateLocal.
+        /// </summary>
+        public void PostUpdate()
+        {
+            if (Active)
+            {
+                foreach (var d in GetFloats()) { d?.PostUpdate(); }
+                foreach (var d in GetBools()) { d?.PostUpdate(); }
+                foreach (var d in GetBytes()) { d?.PostUpdate(); }
+                foreach (var d in GetInts()) { d?.PostUpdate(); }
+                foreach (var d in GetUInts()) { d?.PostUpdate(); }
+                OnPostUpdate();
+                if (Is_Local)
+                {
+                    OnPostUpdateLocal();
+                }
+            }
+        }
+
+        /// <summary>
         /// Called by local on each cycle. Triggers sync of syncing data if changed.
         /// </summary>
         public void DoSyncs()
@@ -234,8 +254,37 @@ namespace ACE.Containers
         /// </summary>
         public virtual void OnUpdateLocal() { }
 
+        /// <summary>
+        /// Called by all. PostUpdate fields, then OnPostUpdate, then OnPostUpdateLocal.
+        /// </summary>
+        public virtual void OnPostUpdate() { }
+        /// <summary>
+        /// Called only by local owner. PostUpdate fields, then OnPostUpdate, then OnPostUpdateLocal.
+        /// </summary>
+        public virtual void OnPostUpdateLocal() { }
+
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Save/Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-        public virtual TagCompound Save(TagCompound tag) { return tag; }
-        public virtual void Load(TagCompound tag) { }
+        public TagCompound Save(TagCompound tag)
+        {
+            foreach (var d in GetFloats()) { tag = d.Save(tag); }
+            foreach (var d in GetBools()) { tag = d.Save(tag); }
+            foreach (var d in GetBytes()) { tag = d.Save(tag); }
+            foreach (var d in GetInts()) { tag = d.Save(tag); }
+            foreach (var d in GetUInts()) { tag = d.Save(tag); }
+            tag = OnSave(tag);
+            return tag;
+        }
+        public void Load(TagCompound tag)
+        {
+            foreach (var d in GetFloats()) { d.Load(tag); }
+            foreach (var d in GetBools()) { d.Load(tag); }
+            foreach (var d in GetBytes()) { d.Load(tag); }
+            foreach (var d in GetInts()) { d.Load(tag); }
+            foreach (var d in GetUInts()) { d.Load(tag); }
+            OnLoad(tag);
+        }
+
+        protected virtual TagCompound OnSave(TagCompound tag) { return tag; }
+        protected virtual void OnLoad(TagCompound tag) { }
     }
 }

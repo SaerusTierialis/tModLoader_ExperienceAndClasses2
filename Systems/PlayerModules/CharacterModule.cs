@@ -1,17 +1,20 @@
 ﻿using ACE.Containers;
+using ACE.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.ModLoader.IO;
 
 namespace ACE.Systems.PlayerModules
 {
-    public class Attributes : PlayerModule
+    public class CharacterModule : PlayerModule
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AutoData ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+        
         private Dictionary<AutoFloat, AutoDataPlayer<float>> _floats = new Dictionary<AutoFloat, AutoDataPlayer<float>>();
         protected override IEnumerable<AutoDataPlayer<float>> GetFloats() => _floats.Values;
         private enum AutoFloat : byte
@@ -23,7 +26,9 @@ namespace ACE.Systems.PlayerModules
         protected override IEnumerable<AutoDataPlayer<bool>> GetBools() => _bools.Values;
         private enum AutoBool : byte
         {
+            In_Combat,
         }
+        public AutoDataPlayer<bool> In_Combat => _bools[AutoBool.In_Combat];
 
 
         private Dictionary<AutoByte, AutoDataPlayer<byte>> _bytes = new Dictionary<AutoByte, AutoDataPlayer<byte>>();
@@ -37,41 +42,38 @@ namespace ACE.Systems.PlayerModules
         protected override IEnumerable<AutoDataPlayer<int>> GetInts() => _ints.Values;
         private enum AutoInt : byte
         {
-            Allocated_Power,
-            Bonus_Power,
-            Final_Power,
         }
-        public AutoDataPlayer<int> Allocated_Power => _ints[AutoInt.Allocated_Power];
-        public AutoDataPlayer<int> Bonus_Power => _ints[AutoInt.Bonus_Power];
-        public AutoDataPlayer<int> Final_Power => _ints[AutoInt.Final_Power];
 
 
         private Dictionary<AutoUInt, AutoDataPlayer<uint>> _uints = new Dictionary<AutoUInt, AutoDataPlayer<uint>>();
         protected override IEnumerable<AutoDataPlayer<uint>> GetUInts() => _uints.Values;
         private enum AutoUInt : byte
         {
+            Character_Level,
         }
-
+        public CharacterLevel Character_Level => (CharacterLevel)_uints[AutoUInt.Character_Level];
 
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Other Variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+        /// <summary>
+        /// Local XP.
+        /// </summary>
+        public XPLevel local_XPLevel { get; private set; }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public Attributes(PlayerData parent, byte module_index) : base(parent, module_index, false)
+        public CharacterModule(PlayerData parent, byte module_index) : base(parent, module_index, true)
         {
             //any specific init
-
+            local_XPLevel = new XPLevel(0, 1, 0, Is_Local);
 
             //each AutoData must be initialized
-            _ints[AutoInt.Bonus_Power] = new AutoDataPlayer<int>(this, (byte)AutoInt.Bonus_Power, 0, false, true); //resets, recalculated by all
-            _ints[AutoInt.Final_Power] = new AttributeFinalPower(this, (byte)AutoInt.Final_Power);
-            _ints[AutoInt.Allocated_Power] = new AutoDataPlayer<int>(this, (byte)AutoInt.Allocated_Power, 0, true, false); //syncs
-
+            _bools[AutoBool.In_Combat] = new AutoDataPlayer<bool>(this, (byte)AutoBool.In_Combat, false, true);
+            _uints[AutoUInt.Character_Level] = new CharacterLevel(this, (byte)AutoUInt.Character_Level, 1, true);
 
             //check for uninitialized AutoData
-            CheckAutoData(Enum.GetNames(typeof(AutoFloat)).Length,
+            CheckAutoData(  Enum.GetNames(typeof(AutoFloat)).Length,
                             Enum.GetNames(typeof(AutoBool)).Length,
                             Enum.GetNames(typeof(AutoByte)).Length,
                             Enum.GetNames(typeof(AutoInt)).Length,
@@ -80,25 +82,47 @@ namespace ACE.Systems.PlayerModules
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Actions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-
+        public void AddXP(uint xp)
+        {
+            local_XPLevel.AddXP(xp);
+        }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Overrides ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public override void OnPreUpdate()
+        public override void OnPreUpdateLocal()
         {
-            _ints[AutoInt.Final_Power].value = Allocated_Power.value + Bonus_Power.value;
+            Character_Level.value = local_XPLevel.Level;
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Save/Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public override TagCompound Save(TagCompound tag)
+        protected override TagCompound OnSave(TagCompound tag)
         {
+            tag.Add(Tags.Get(Tags.ID.Character_XPLevel), local_XPLevel);
             return tag;
         }
 
-        public override void Load(TagCompound tag)
+        protected override void OnLoad(TagCompound tag)
         {
+            local_XPLevel = Utilities.SaveLoad.TagTryGet(tag, Tags.Get(Tags.ID.Character_XPLevel), new XPLevel(0, 1, 0, Is_Local));
+        }
 
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Unique Classes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        public class CharacterLevel : AutoDataPlayer<uint>
+        {
+            public CharacterLevel(PlayerModule parent, byte id, uint value_initial, bool syncs = false, bool resets = false) : base(parent, id, value_initial, syncs, resets) { }
+            
+            protected override void OnChange()
+            {
+                Systems.XPRewards.Rewards.UpdateXPMultiplier();
+            }
+
+            protected override void OnChangeLocal()
+            {
+                //recalculate available points when local character level changes
+                ParentPlayerModule.ParentPlayerData.Attributes.RecalculatePoints();
+            }
         }
     }
 }
