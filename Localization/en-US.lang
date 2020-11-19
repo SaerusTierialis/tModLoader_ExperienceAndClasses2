@@ -1,0 +1,19 @@
+//Hotkeys
+//DO NOT USE FOR HOTKEYS - NOT AVAILABLE AT THAT STAGE OF LOADING
+
+//ConfigServer
+ConfigServer.Header_XP=Experience
+ConfigServer.XP_Rate_Label=Experience Rate
+ConfigServer.XP_Catchup_Label=Enable Catch-Up Bonus
+ConfigServer.XP_Catchup_Tooltip=(Multiplayer Only) Increases XP gained by players who are several levels behind. The bonus is proportional to the level difference.
+ConfigServer.Header_Debug=Debug
+ConfigServer.Trace_Label=Enable Tracing
+ConfigServer.Trace_Tooltip=Only enable this when troubleshooting a bug
+
+//ConfigClient
+ConfigClient.Header_UI=User Interface
+ConfigClient.XPOverlay_Show_Label=Show XP Overlay
+ConfigClient.XPOverlay_Background_Colour_Label=XP Overlay Background Colour
+ConfigClient.XPOverlay_Transparency_Label=XP Overlay Transparency
+ConfigClient.XPOverlay_Dims_Label=XP Overlay Dimensions
+ConfigClient.XPOverlay_Dims_Tooltip=If the height is set greater than the width, then bars will switch to a bottom-up vertical style.

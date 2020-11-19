@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ACE
+namespace ACE.Utilities
 {
     public static class Tags
     {
@@ -14,6 +14,7 @@ namespace ACE
             World_Tiles_Placed,
             Character_XPLevel,
             UI_XPOverlay_Location,
+            UI_MainUI_Location,
             //ADD HERE
         }
 
@@ -25,6 +26,7 @@ namespace ACE
             [ID.World_Tiles_Placed] = "Tiles_Placed",
             [ID.Character_XPLevel] = "Character_XPLevel",
             [ID.UI_XPOverlay_Location] = "UI_XPOverlay_Location",
+            [ID.UI_MainUI_Location] = "UI_MainUI_Location",
             //ADD HERE
         };
 

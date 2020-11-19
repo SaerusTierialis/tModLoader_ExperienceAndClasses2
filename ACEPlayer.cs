@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -101,7 +102,7 @@ namespace ACE
             }
         }
 
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Temp ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Update ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         public override void PreUpdate()
         {
@@ -109,12 +110,6 @@ namespace ACE
 
             //reset values that are calculated each cycle
             PlayerData.Update();
-
-
-            if (LocalData.IS_PLAYER)
-            {
-                //Main.NewText(player.name + " Level " + PlayerData.Character.Level + ": " + PlayerData.Character.XP + " / " + PlayerData.Character.XP_Needed);
-            }
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Save/Load ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -143,6 +138,13 @@ namespace ACE
 
             //mod fields
             PlayerData.Load(tag);
+        }
+
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Inputs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+        public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+            Hotkeys.CheckHotkeys(triggersSet);
         }
 
     }

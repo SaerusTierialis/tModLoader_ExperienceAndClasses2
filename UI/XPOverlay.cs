@@ -1,40 +1,78 @@
 ﻿using ACE.Containers;
+using ACE.UI.Elements;
+using ACE.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
-using static ACE.UI.Elements;
 
 namespace ACE.UI
 {
     public class XPOverlay : UIModule
     {
-        private ProgressBar _bar;
+        private ProgressBarBundle _bar;
+        private UIAutoMode auto_mode = UIAutoMode.Always;
 
-        public XPOverlay(UIData parent, bool visible = false) : base(parent, visible) { }
+        private enum ID : byte
+        {
+            Character_XP,
+            Primary_XP,
+            Secondary_XP,
+            COUNT,
+        }
+
+        public XPOverlay(UIData parent) : base(parent) { }
 
         public override void DoInitialize()
         {
-            _bar = new ProgressBar();
+            _bar = new ProgressBarBundle((uint)ID.COUNT);
             Append(_bar);
+
+            _bar.SetVisibility((uint)ID.Primary_XP, false);
+            _bar.SetVisibility((uint)ID.Secondary_XP, false);
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            _bar?.SetProgressXP(LocalData.LOCAL_PLAYER?.PlayerData.Character.local_XPLevel);
+            _bar?.SetProgress(0, LocalData.LOCAL_PLAYER?.PlayerData.Character.local_XPLevel);
+        }
+
+        public override void OnInventoryStateChange()
+        {
+            switch (auto_mode)
+            {
+                case UIAutoMode.Never:
+                    Visible = false;
+                    break;
+
+                case UIAutoMode.Always:
+                    Visible = true;
+                    break;
+
+                case UIAutoMode.InventoryClosed:
+                    Visible = (Main.playerInventory == false);
+                    break;
+
+                case UIAutoMode.InventoryOpen:
+                    Visible = (Main.playerInventory == true);
+                    break;
+            }
         }
 
         public override void ApplyModConfig(ConfigClient config)
         {
-            UpdateVisibility(config.XPOverlay_Show);
+            auto_mode = config.XPOverlay_Show;
+            OnInventoryStateChange();
 
             _bar.Resize(config.XPOverlay_Dims.width, config.XPOverlay_Dims.height);
-            _bar.SetVerticalModee(config.XPOverlay_Vertical);
+            _bar.SetColourBackground(config.XPOverlay_Background_Colour);
+            _bar.SetTransparency(config.XPOverlay_Transparency);
         }
 
         protected override void Load()

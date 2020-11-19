@@ -14,7 +14,7 @@ namespace ACE.Containers
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Fields ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public bool Visible { get; private set; } = false;
+        public bool Visible { get; protected set; } = false;
 
         protected UserInterface UI;
 
@@ -24,7 +24,7 @@ namespace ACE.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        public UIModule(UIData parent, bool visible = false)
+        public UIModule(UIData parent)
         {
             ParentUIData = parent;
 
@@ -34,11 +34,12 @@ namespace ACE.Containers
 
         public override void OnInitialize()
         {
+            base.OnInitialize();
             RemoveAllChildren();
             DoInitialize();
             ApplyModConfig(ConfigClient.Instance);
             Load();
-            UpdateVisibility(Visible);
+            UpdateVisibility();
             Initialized = true;
         }
 
@@ -48,12 +49,22 @@ namespace ACE.Containers
         {
             Visible = true;
             UI?.SetState(this);
+            OnShow();
         }
 
         public void Hide()
         {
             Visible = false;
             UI?.SetState(null);
+            OnHide();
+        }
+
+        public void ToggleVisibility()
+        {
+            if (Visible)
+                Hide();
+            else
+                Show();
         }
 
         public void DoUpdate(GameTime time)
@@ -69,11 +80,11 @@ namespace ACE.Containers
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Internal Actions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        protected void UpdateVisibility(bool visible)
+        private void UpdateVisibility()
         {
-            if (Visible != visible)
+            if (Visible != (UI.CurrentState == this))
             {
-                if (visible)
+                if (Visible)
                     Show();
                 else
                     Hide();
@@ -86,6 +97,9 @@ namespace ACE.Containers
         public virtual void DoInitialize() { }
         public virtual void Save() { }
         protected virtual void Load() { }
+        public virtual void OnInventoryStateChange() { }
+        protected virtual void OnShow() { }
+        protected virtual void OnHide() { }
 
     }
 }
