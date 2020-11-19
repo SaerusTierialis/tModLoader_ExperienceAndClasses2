@@ -8,7 +8,7 @@ using Terraria.ModLoader.IO;
 
 namespace ACE.Systems.PlayerModules
 {
-    class Template : PlayerModule
+    public class Template : PlayerModule
     {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AutoData ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
