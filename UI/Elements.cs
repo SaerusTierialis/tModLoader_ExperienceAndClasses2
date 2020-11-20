@@ -435,7 +435,7 @@ namespace ACE.UI.Elements
         }
     }
 
-    public class TitledPanel : ACEElement
+    public class TitledPanel : RestrictWithinParent
     {
         public ACEPanel Panel_Background { get; private set; }
         public ACEPanel Panel_Body { get; private set; }
