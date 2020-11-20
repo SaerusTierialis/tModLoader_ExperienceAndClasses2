@@ -454,8 +454,8 @@ namespace ACE.UI.Elements
             Panel_Background.Append(Panel_Title);
 
             Panel_Body = new ACEPanel();
-            Panel_Body.Panel.BorderColor = Color.Transparent;
-            Panel_Body.Panel.BackgroundColor = Color.Transparent;
+            Panel_Body.BorderColor = Color.Transparent;
+            Panel_Body.BackgroundColor = Color.Transparent;
             Panel_Background.Append(Panel_Body);
         }
 
