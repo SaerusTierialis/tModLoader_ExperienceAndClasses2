@@ -144,7 +144,6 @@ namespace ACE.UI.Elements
             if (dragging)
             {
                 Move(Main.mouseX - offset.X, Main.mouseY - offset.Y);
-                Restrict();
             }
         }
 
@@ -162,6 +161,11 @@ namespace ACE.UI.Elements
                 Move(mouse.X - offset.X, mouse.Y - offset.Y);
             }
             dragging = false;
+        }
+
+        protected override void OnMove()
+        {
+            Restrict();
         }
     }
 
