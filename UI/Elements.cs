@@ -440,10 +440,11 @@ namespace ACE.UI.Elements
         public readonly ACEPanel Panel_Background;
         public readonly ACEPanel Panel_Body;
         public readonly ACEPanelWithHelpText Panel_Title;
+        public readonly UIText Title;
 
         private float _title_height;
 
-        public TitledPanel(float title_height)
+        public TitledPanel(float title_height, string title, float font_scale = 1f, bool font_large = false)
         {
             _title_height = title_height;
 
@@ -457,6 +458,11 @@ namespace ACE.UI.Elements
             Panel_Body.BorderColor = Color.Transparent;
             Panel_Body.BackgroundColor = Color.Transparent;
             Panel_Background.Append(Panel_Body);
+
+            Title = new UIText(title, font_scale, font_large);
+            Title.HAlign = 0.5f;
+            Title.VAlign = 0.5f;
+            Panel_Title.Append(Title);
         }
 
         protected override void OnResize()
@@ -471,11 +477,9 @@ namespace ACE.UI.Elements
     public class HelpPanel : TitledPanel
     {
         private float _width;
-        private string _title = "Help";
-        private string _body = "Default";
         private ACEElement _target = null;
 
-        public HelpPanel(float title_height, float width) : base(title_height)
+        public HelpPanel(float title_height, float width, string title = "Help", float font_scale = 1f, bool font_large = false) : base(title_height, title, font_scale, font_large)
         {
             visible = false;
             _width = width;
@@ -496,8 +500,7 @@ namespace ACE.UI.Elements
             {
                 _target = target;
 
-                _body = body;
-                _title = title;
+                
                 UpdateText();
 
                 visible = true;
