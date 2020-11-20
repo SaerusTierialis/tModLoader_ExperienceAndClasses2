@@ -437,9 +437,9 @@ namespace ACE.UI.Elements
 
     public class TitledPanel : RestrictWithinParent
     {
-        public ACEPanel Panel_Background { get; private set; }
-        public ACEPanel Panel_Body { get; private set; }
-        public ACEPanelWithHelpText Panel_Title { get; private set; }
+        public readonly ACEPanel Panel_Background;
+        public readonly ACEPanel Panel_Body;
+        public readonly ACEPanelWithHelpText Panel_Title;
 
         private float _title_height;
 
