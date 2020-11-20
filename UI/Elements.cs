@@ -23,6 +23,9 @@ namespace ACE.UI.Elements
         public float T => Top.Pixels;
         public float L => Left.Pixels;
 
+        public float B => T + H;
+        public float R => L + W;
+
         public (float Left, float Top) Center => (L+(W/2f), T+(H/2f));
         public (float Left, float Top) Location => (L, T);
         public (float Width, float Height) Size => (W, H);
